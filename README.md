@@ -1,2 +1,2 @@
-#LUC-COMP433 - Ecommerce project
+# LUC-COMP433 - Ecommerce project
 
