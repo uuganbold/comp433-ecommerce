@@ -268,4 +268,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#Visual Paradigm
+*.bak_*
+
 # End of https://www.gitignore.io/api/java,code,linux,macos,maven,windows,eclipse,intellij,java-web
