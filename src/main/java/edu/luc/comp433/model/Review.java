@@ -3,6 +3,7 @@ package edu.luc.comp433.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
@@ -21,11 +22,11 @@ public class Review {
     @JoinColumn(name = "customer_id",nullable = false)
     private Customer customer;
 
-    private short star;
+    private short star = 1;
 
     private String comment;
 
+    @NotNull
     private Instant date;
-
 
 }
