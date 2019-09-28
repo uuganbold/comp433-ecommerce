@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.AbstractEnvironment;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -19,13 +17,10 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.annotation.Resource;
-import javax.annotation.Resources;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.Properties;
 
 @Configuration
@@ -36,7 +31,7 @@ public class PersistenceJPAConfig {
     private Environment env;
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException{
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
 
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
@@ -50,15 +45,15 @@ public class PersistenceJPAConfig {
         return em;
     }
 
-    @Bean(initMethod="start",destroyMethod="stop")
+    @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile("dev")
-    public org.h2.tools.Server h2WebConsonleServer () throws SQLException {
-        return org.h2.tools.Server.createWebServer("-web","-webAllowOthers","-webDaemon","-webPort", "8082");
+    public org.h2.tools.Server h2WebConsonleServer() throws SQLException {
+        return org.h2.tools.Server.createWebServer("-web", "-webAllowOthers", "-webDaemon", "-webPort", "8082");
     }
 
     @Bean("dataSource")
     @Profile("dev")
-    public DataSource h2TestDataSource(){
+    public DataSource h2TestDataSource() {
         return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
     }
 
@@ -71,13 +66,13 @@ public class PersistenceJPAConfig {
     }
 
     @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
     @Bean
     public Properties hibernateProperties() throws IOException {
-        PropertiesFactoryBean factoryBean=new PropertiesFactoryBean();
+        PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
         factoryBean.setLocation(new ClassPathResource("hibernate.properties"));
         factoryBean.afterPropertiesSet();
         return factoryBean.getObject();
