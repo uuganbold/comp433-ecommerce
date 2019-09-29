@@ -2,11 +2,12 @@ package edu.luc.comp433.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -27,12 +28,12 @@ public class Product {
 
     private long availabilityQuantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id",nullable = false)
     private Seller seller;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(
@@ -40,13 +41,13 @@ public class Product {
             fetch = FetchType.LAZY
     )
     @OrderBy("date desc")
-    private Set<Review> reviews = new HashSet<>();
+    private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "product",
             fetch = FetchType.LAZY
     )
-    private Set<OrderItem> orderItems = new HashSet<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     public void addReview(Review review) {
         this.reviews.add(review);
@@ -56,5 +57,20 @@ public class Product {
     public void removeReview(Review review) {
         this.reviews.remove(review);
         review.setProduct(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

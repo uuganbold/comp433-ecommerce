@@ -3,7 +3,8 @@ package edu.luc.comp433.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,27 +25,30 @@ public class Customer {
     @OneToMany(
             mappedBy = "customer",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
-    private Set<Review> reviews;
+    private List<Review> reviews;
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            fetch = FetchType.LAZY
     )
-    private Set<Address> addresses;
+    private List<Address> addresses = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "customer",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
-    private Set<Payment> paymentOptions;
+    private List<Payment> paymentOptions = new ArrayList<>();
 
     @OneToMany(
-            mappedBy = "customer"
+            mappedBy = "customer",
+            fetch = FetchType.LAZY
     )
-    private Set<CustomerOrder> orders;
+    private List<Order> orders;
 
     public void addPaymentOption(Payment payment) {
         paymentOptions.add(payment);

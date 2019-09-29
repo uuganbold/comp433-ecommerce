@@ -1,11 +1,11 @@
 package edu.luc.comp433.model;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,12 +26,13 @@ public class Seller {
             mappedBy = "seller",
             fetch = FetchType.LAZY
     )
-    private Set<Product> products = new HashSet<>();
+    private List<Product> products = new ArrayList<>();
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
-    private Set<Address> addresses = new HashSet<>();
+    private List<Address> addresses = new ArrayList<>();
 
 }
