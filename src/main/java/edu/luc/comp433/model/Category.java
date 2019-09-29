@@ -3,10 +3,10 @@ package edu.luc.comp433.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,8 +21,8 @@ public class Category {
     @NotBlank
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private Set<Product> products;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Product> products;
 
 
 }
