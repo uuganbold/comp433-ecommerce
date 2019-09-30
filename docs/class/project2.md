@@ -1,5 +1,10 @@
 # Project - 2
 
+## Contributors
+* Uuganbold Tsegmed ([utsegmed@luc.edu](mailto:utsegmed@luc.edu)) (http://github.com/uuganbold)
+* Wei Zhang ([wzhang5@luc.edu](mailto:wzhang5@luc.edu)) (http://github.com/clutchfactor94941)
+* Nigel Castelino ([ncastelino@luc.edu](mailto:ncastelino@luc.edu)) (https://github.com/ncastelino)
+
 ## Goal 
 In this project, we are developing eCommerce system which would connect to the parties concerned through
 RESTful web api. 
@@ -39,37 +44,37 @@ In the persistence layer, we are using Spring-Data-Jpa. Each repository object i
 ### 3. Business Layer:
 Objects in this layer are responsible for providing business logic for the system.
 1. CategoryService - 
-..* addCategory(Category)
-..* removeCategory(Long id) 
+    * addCategory(Category)
+    * removeCategory(Long id) 
 
 2. CustomerService
-..* void addCustomer(Customer customer);
-..* void removeCustomer(Long id);
-..* void updateCustomer(Customer customer);
-..* void addPaymentOption(Customer customer, Payment payment);
-..* void removePaymentOption(Customer customer, Long id);
-..* void addAddress(Customer customer, Address address);
-..* void removeAddress(Customer customer, Long id);
-..* Payment getDefaultPayment(Customer customer);
-..* Address getDefaultAddress(Customer customer);
-..* void makeOrder(Customer customer, Cart cart, Payment payment, Address address) 
+    * void addCustomer(Customer customer);
+    * void removeCustomer(Long id);
+    * void updateCustomer(Customer customer);
+    * void addPaymentOption(Customer customer, Payment payment);
+    * void removePaymentOption(Customer customer, Long id);
+    * void addAddress(Customer customer, Address address);
+    * void removeAddress(Customer customer, Long id);
+    * Payment getDefaultPayment(Customer customer);
+    * Address getDefaultAddress(Customer customer);
+    * void makeOrder(Customer customer, Cart cart, Payment payment, Address address) 
 
 3. OrderService
-..* void createOrder(Order order) throws QuantityNotSufficientException;
-..* void updateStatus(Long id, OrderStatus status);
-..*void cancelOrder(Long id);
+    * void createOrder(Order order) throws QuantityNotSufficientException;
+    * void updateStatus(Long id, OrderStatus status);
+    *void cancelOrder(Long id);
 
 4. ProductService
-..* List<Product> search(String query);
-..* Long checkAvailabiliy(Long id);
-..* void addProduct(Product product);
-..* void updateProduct(Product product);
+    * List<Product> search(String query);
+    * Long checkAvailabiliy(Long id);
+    * void addProduct(Product product);
+    * void updateProduct(Product product);
 
 5. ReviewService
-..* void addReview(Review review);
+    * void addReview(Review review);
 
 6. SellerService
-..* void addSeller(Seller seller);
-..* void removeSeller(Long id);
-..* void addProduct(Seller seller, Product product);
-..* void notifySales(Seller seller, OrderItem item);
+    * void addSeller(Seller seller);
+    * void removeSeller(Long id);
+    * void addProduct(Seller seller, Product product);
+    * void notifySales(Seller seller, OrderItem item);
