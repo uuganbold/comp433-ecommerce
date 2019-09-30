@@ -1,24 +1,24 @@
-# LUC-COMP433 - Ecommerce project
+# Project - 2
 
-It is a project which is developed during the Web Services Programming course taught at Loyola University Chicago.
-
-This project is hosted on github.com : [Github.com Repository](https://github.com/uuganbold/comp433-ecommerce)
-
-This project is deployed on the AWS : http://18.220.199.235:8080/ecommerce/   
-
-## Course Assignments
-1. You can find a report for Assignment-2 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw2-domain/docs/class/project2.md)
+## Contributors
+* Uuganbold Tsegmed ([utsegmed@luc.edu](mailto:utsegmed@luc.edu)) (http://github.com/uuganbold)
+* Wei Zhang ([wzhang5@luc.edu](mailto:wzhang5@luc.edu)) (http://github.com/clutchfactor94941)
+* Nigel Castelino ([ncastelino@luc.edu](mailto:ncastelino@luc.edu)) (https://github.com/ncastelino)
 
 ## Goal 
 In this project, we are developing eCommerce system which would connect to the parties concerned through
 RESTful web api. 
+
+This project is hosted on github.com : [Github.com Repository](https://github.com/uuganbold/comp433-ecommerce)
+
+This project is deployed on the AWS : http://18.220.199.235:8080/ecommerce/   
 
 ## Architecture
 
 We are using springframework as an architectural framework and Hibernate as an ORM framework.
 This webapp's architecture would be seen like below so far.
 
-![Architecure](docs/dev/architecture.png)
+![Architecure](../dev/architecture.png)
 
 The application has two layers:business and persistence (We will more layers soon): Business and Persistence.<br/>
 
@@ -27,7 +27,8 @@ And also it has Entities classes which represent data stored and passed between 
 ### 1. Entities:
 
 Entities would be seen like below and each of them represents Hibernate Entity.
-![ERD](docs/dev/COMP433-Ecommerce.jpg)
+![ERD](../dev/COMP433-Ecommerce.jpg)
+
 
 ### 2. Persistence Layer:
 In the persistence layer, we are using Spring-Data-Jpa. Each repository object in this layer is responsible for Database-CRUD operations for the entities.
@@ -77,12 +78,3 @@ Objects in this layer are responsible for providing business logic for the syste
     * void removeSeller(Long id);
     * void addProduct(Seller seller, Product product);
     * void notifySales(Seller seller, OrderItem item);
-
-## Development
-
-1. We are using Visual Paradigm Community Edition as UML Modeling tool. You can download the tool from the link
-[https://www.visual-paradigm.com/editions/community/](https://www.visual-paradigm.com/editions/community/)
-
-2. We are using Springframework as Architectural Framework.
-
-3. We are using Hibernate as ORM framework
