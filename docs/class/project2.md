@@ -1,14 +1,12 @@
-# LUC-COMP433 - Ecommerce project
-
-It is a project which is developed during the Web Services Programming course taught at Loyola University Chicago.
-
-This project is hosted on github.com : [Github.com Repository](https://github.com/uuganbold/comp433-ecommerce)
-
-This project is deployed on the AWS : http://18.220.199.235:8080/ecommerce/   
+# Project - 2
 
 ## Goal 
 In this project, we are developing eCommerce system which would connect to the parties concerned through
 RESTful web api. 
+
+This project is hosted on github.com : [Github.com Repository](https://github.com/uuganbold/comp433-ecommerce)
+
+This project is deployed on the AWS : http://18.220.199.235:8080/ecommerce/   
 
 ## Architecture
 
@@ -25,6 +23,7 @@ And also it has Entities classes which represent data stored and passed between 
 
 Entities would be seen like below and each of them represents Hibernate Entity.
 ![ERD](https://raw.githubusercontent.com/uuganbold/comp433-ecommerce/master/docs/dev/COMP433-Ecommerce.jpg)
+
 
 ### 2. Persistence Layer:
 In the persistence layer, we are using Spring-Data-Jpa. Each repository object in this layer is responsible for Database-CRUD operations for the entities.
@@ -74,12 +73,3 @@ Objects in this layer are responsible for providing business logic for the syste
 ..* void removeSeller(Long id);
 ..* void addProduct(Seller seller, Product product);
 ..* void notifySales(Seller seller, OrderItem item);
-
-## Development
-
-1. We are using Visual Paradigm Community Edition as UML Modeling tool. You can download the tool from the link
-[https://www.visual-paradigm.com/editions/community/](https://www.visual-paradigm.com/editions/community/)
-
-2. We are using Springframework as Architectural Framework.
-
-3. We are using Hibernate as ORM framework
