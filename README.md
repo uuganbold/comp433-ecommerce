@@ -18,7 +18,7 @@ RESTful web api.
 We are using springframework as an architectural framework and Hibernate as an ORM framework.
 This webapp's architecture would be seen like below so far.
 
-![Architecure](https://raw.githubusercontent.com/uuganbold/comp433-ecommerce/master/docs/dev/architecture.png)
+![Architecure](docs/dev/architecture.png)
 
 The application has two layers:business and persistence (We will more layers soon): Business and Persistence.<br/>
 
@@ -27,7 +27,7 @@ And also it has Entities classes which represent data stored and passed between 
 ### 1. Entities:
 
 Entities would be seen like below and each of them represents Hibernate Entity.
-![ERD](https://raw.githubusercontent.com/uuganbold/comp433-ecommerce/master/docs/dev/COMP433-Ecommerce.jpg)
+![ERD](docs/dev/COMP433-Ecommerce.jpg)
 
 ### 2. Persistence Layer:
 In the persistence layer, we are using Spring-Data-Jpa. Each repository object in this layer is responsible for Database-CRUD operations for the entities.
