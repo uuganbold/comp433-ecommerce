@@ -1,6 +1,8 @@
 package edu.luc.comp433.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -8,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Table(name = "customer_order")
 public class Order {
 
@@ -49,5 +53,28 @@ public class Order {
         items.remove(item);
         item.setOrder(null);
         totalValue -= item.getQuantity() * item.getUnitPrice();
+    }
+
+    public void cancelOrder() {
+        this.setStatus(OrderStatus.Cancelled);
+    }
+
+    public void updateStatus(OrderStatus status) {
+        this.setStatus(status);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        return id.equals(order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

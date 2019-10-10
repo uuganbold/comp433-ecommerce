@@ -1,12 +1,16 @@
 package edu.luc.comp433.model;
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Payment {
 
     @Id
@@ -17,8 +21,12 @@ public class Payment {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @NonNull
+    @NotBlank
     private String nameOnCard;
 
+    @NonNull
+    @NotBlank
     private String cardNumber;
 
     private String cardType;
@@ -27,7 +35,7 @@ public class Payment {
 
     private int expireYear;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address billingAddress;
 

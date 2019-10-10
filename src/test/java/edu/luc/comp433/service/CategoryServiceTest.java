@@ -1,24 +1,16 @@
 package edu.luc.comp433.service;
 
-import edu.luc.comp433.business.CategoryService;
-import edu.luc.comp433.business.CategoryServiceImpl;
-import edu.luc.comp433.model.Category;
-import edu.luc.comp433.persistence.CategoryRepository;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class CategoryServiceTest {
 
-    @Configuration
+
+
+   /* @Configuration
     static class ContextConfiguration {
 
         @Bean
@@ -55,5 +47,5 @@ public class CategoryServiceTest {
 
         //when
         categoryService.addCategory(cat);
-    }
+    }*/
 }

@@ -3,14 +3,9 @@ package edu.luc.comp433.config;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -21,16 +16,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories("edu.luc.comp433.persistence")
 @EnableTransactionManagement
-@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.properties")
 public class PersistenceJPAConfig {
-
-    private Environment env;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
@@ -46,19 +38,6 @@ public class PersistenceJPAConfig {
 
         return em;
     }
-
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    @Profile("dev")
-    public org.h2.tools.Server h2WebConsonleServer() throws SQLException {
-        return org.h2.tools.Server.createWebServer("-web", "-webAllowOthers", "-webDaemon", "-webPort", "8082");
-    }
-
-    @Bean("dataSource")
-    @Profile("dev")
-    public DataSource h2TestDataSource() {
-        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
-    }
-
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {

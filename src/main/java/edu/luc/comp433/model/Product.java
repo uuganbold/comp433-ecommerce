@@ -1,7 +1,6 @@
 package edu.luc.comp433.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -12,6 +11,8 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @Id
@@ -19,6 +20,7 @@ public class Product {
     private Long id;
 
     @NotBlank
+    @NonNull
     private String name;
 
     @Column(length = 1000)
@@ -26,7 +28,7 @@ public class Product {
 
     private double listPrice;
 
-    private long availabilityQuantity;
+    private long availableQuantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id",nullable = false)
@@ -38,6 +40,7 @@ public class Product {
 
     @OneToMany(
             mappedBy = "product",
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     @OrderBy("date desc")
@@ -50,8 +53,8 @@ public class Product {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     public void addReview(Review review) {
-        this.reviews.add(review);
         review.setProduct(this);
+        this.reviews.add(review);
     }
 
     public void removeReview(Review review) {
