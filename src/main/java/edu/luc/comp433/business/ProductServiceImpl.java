@@ -21,18 +21,4 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByNameContains(query.trim());
     }
 
-    public Long checkAvailabiliy(Long id) {
-        return productRepository.getOne(id).getAvailabilityQuantity();
-    }
-
-    @Override
-    public void addProduct(Product product) {
-        productRepository.save(product);
-    }
-
-    @Override
-    public void updateProduct(Product product) {
-        productRepository.save(product);
-    }
-
 }

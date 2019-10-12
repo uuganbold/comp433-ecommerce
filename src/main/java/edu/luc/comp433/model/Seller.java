@@ -1,6 +1,9 @@
 package edu.luc.comp433.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -9,6 +12,8 @@ import java.util.List;
 
 @Entity
 @Data
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class Seller {
 
     @Id
@@ -16,6 +21,7 @@ public class Seller {
     private long id;
 
     @NotBlank
+    @NonNull
     private String name;
 
     private String website;
@@ -34,5 +40,23 @@ public class Seller {
             fetch = FetchType.LAZY
     )
     private List<Address> addresses = new ArrayList<>();
+
+    public void addProduct(Product p) {
+        p.setSeller(this);
+        this.products.add(p);
+    }
+
+    public void removeProduct(Product p) {
+        this.products.remove(p);
+        p.setSeller(null);
+    }
+
+    public void addAddress(Address address) {
+        addresses.add(address);
+    }
+
+    public void removeAddress(Address address) {
+        this.addresses.remove(address);
+    }
 
 }
