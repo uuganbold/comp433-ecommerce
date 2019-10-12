@@ -19,7 +19,7 @@ import java.sql.SQLException;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"edu.luc.comp433.controllers"})
+@ComponentScan(basePackages = {"edu.luc.comp433.controllers", "edu.luc.comp433.api.spring", "edu.luc.comp433.api.workflow"})
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private ApplicationContext applicationContext;

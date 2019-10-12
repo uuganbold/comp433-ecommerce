@@ -19,10 +19,16 @@ public class Category {
 
     @NotBlank
     @NonNull
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Product> products;
+
+    public Category(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @Override
     public boolean equals(Object o) {

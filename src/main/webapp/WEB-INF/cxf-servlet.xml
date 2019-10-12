@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://cxf.apache.org/jaxrs
+ 							http://cxf.apache.org/schemas/jaxrs.xsd
+">
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+    <bean id="jacksonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
+
+    <jaxrs:server name="EcommerceRestService" address="http://localhost:8081/">
+        <jaxrs:serviceBeans>
+            <ref bean="categoryServiceRes"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jacksonProvider"/>
+        </jaxrs:providers>
+
+        <jaxrs:schemaLocations>
+            <jaxrs:schemaLocation>edu.luc.comp433.api.representation.CategoryRepresentation</jaxrs:schemaLocation>
+        </jaxrs:schemaLocations>
+
+    </jaxrs:server>
+    <bean id="categoryServiceRes" class="edu.luc.comp433.api.cxf.CategoryResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.CategoryActivity">
+                <constructor-arg ref="categoryServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+</beans>

@@ -19,6 +19,7 @@ import java.util.Properties;
         "edu.luc.comp433.bootstrap"
 })
 @PropertySource("classpath:application.properties")
+@Import(PersistenceJPAConfig.class)
 public class MainConfig implements EnvironmentAware {
 
     private Environment env;
@@ -37,8 +38,7 @@ public class MainConfig implements EnvironmentAware {
     @Bean(value = "dataSource", destroyMethod = "close")
     @Profile("prod")
     public DataSource dataSource() {
-        HikariDataSource ds = new HikariDataSource(hikariConfig());
-        return ds;
+        return new HikariDataSource(hikariConfig());
     }
 
 

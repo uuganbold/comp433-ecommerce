@@ -7,7 +7,7 @@ import edu.luc.comp433.model.Seller;
 import edu.luc.comp433.persistence.CategoryRepository;
 import edu.luc.comp433.persistence.ProductRepository;
 import edu.luc.comp433.persistence.SellerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -17,18 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Slf4j
 public class EntityBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private long start = 0;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private SellerRepository sellerRepository;
+    private final SellerRepository sellerRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    public EntityBootstrap(CategoryRepository categoryRepository, SellerRepository sellerRepository, ProductRepository productRepository) {
+        this.categoryRepository = categoryRepository;
+        this.sellerRepository = sellerRepository;
+        this.productRepository = productRepository;
+    }
 
     @Override
     @Transactional
