@@ -15,13 +15,15 @@
     <jaxrs:server name="EcommerceRestService" address="http://localhost:8081/">
         <jaxrs:serviceBeans>
             <ref bean="categoryServiceRes"/>
+            <ref bean="sellerServiceRes"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jacksonProvider"/>
         </jaxrs:providers>
 
         <jaxrs:schemaLocations>
-            <jaxrs:schemaLocation>edu.luc.comp433.api.representation.CategoryRepresentation</jaxrs:schemaLocation>
+            <jaxrs:schemaLocation>edu.luc.comp433.api.payload.CategoryRepresentation</jaxrs:schemaLocation>
+            <jaxrs:schemaLocation>edu.luc.comp433.api.payload.SellerRepresentation</jaxrs:schemaLocation>
         </jaxrs:schemaLocations>
 
     </jaxrs:server>
@@ -29,6 +31,13 @@
         <constructor-arg>
             <bean class="edu.luc.comp433.api.workflow.CategoryActivity">
                 <constructor-arg ref="categoryServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="sellerServiceRes" class="edu.luc.comp433.api.cxf.SellerResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.SellerActivity">
+                <constructor-arg ref="sellerServiceImpl"/>
             </bean>
         </constructor-arg>
     </bean>

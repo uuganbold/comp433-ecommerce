@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.spring;
 
-import edu.luc.comp433.api.representation.CategoryRepresentation;
-import edu.luc.comp433.api.representation.CategoryRequest;
+import edu.luc.comp433.api.payload.CategoryRepresentation;
+import edu.luc.comp433.api.payload.CategoryRequest;
 import edu.luc.comp433.api.workflow.CategoryActivity;
 import edu.luc.comp433.api.ws.CategoryWebService;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
@@ -43,8 +43,8 @@ public class CategoryRestController implements CategoryWebService {
     }
 
     @Override
-    @PutMapping("/category/{id}")
-    public CategoryRepresentation updateCategory(@PathVariable long id, CategoryRequest categoryRequest) {
+    @PutMapping(value = "/category/{id}", consumes = {"text/xml", "application/json"})
+    public CategoryRepresentation updateCategory(@PathVariable long id, @RequestBody CategoryRequest categoryRequest) {
         try {
             return categoryActivity.update(id, categoryRequest);
         } catch (EntryNotFoundException enf) {
@@ -56,7 +56,7 @@ public class CategoryRestController implements CategoryWebService {
     }
 
     @Override
-    @GetMapping("/categories")
+    @GetMapping(value = "/categories", produces = {"text/xml", "application/json"})
     public List<CategoryRepresentation> allCategories() {
         return categoryActivity.list();
     }

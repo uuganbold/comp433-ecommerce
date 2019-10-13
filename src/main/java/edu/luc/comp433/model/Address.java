@@ -42,6 +42,16 @@ public class Address {
 
     private String phonenumber;
 
+    public Address(@NonNull String country, @NonNull String street, String unit, @NonNull String city, String state, int zipcode, String phonenumber) {
+        this.country = country;
+        this.street = street;
+        this.unit = unit;
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+        this.phonenumber = phonenumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

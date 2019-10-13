@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.cxf;
 
-import edu.luc.comp433.api.representation.CategoryRepresentation;
-import edu.luc.comp433.api.representation.CategoryRequest;
+import edu.luc.comp433.api.payload.CategoryRepresentation;
+import edu.luc.comp433.api.payload.CategoryRequest;
 import edu.luc.comp433.api.workflow.CategoryActivity;
 import edu.luc.comp433.api.ws.CategoryWebService;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
@@ -76,4 +76,6 @@ public class CategoryResource implements CategoryWebService {
             throw new BadRequestException(nre);
         }
     }
+
+
 }

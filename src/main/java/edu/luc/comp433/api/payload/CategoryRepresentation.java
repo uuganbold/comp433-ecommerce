@@ -1,4 +1,4 @@
-package edu.luc.comp433.api.representation;
+package edu.luc.comp433.api.payload;
 
 import lombok.*;
 
