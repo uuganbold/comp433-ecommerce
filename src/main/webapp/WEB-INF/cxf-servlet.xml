@@ -16,9 +16,11 @@
         <jaxrs:serviceBeans>
             <ref bean="categoryServiceRes"/>
             <ref bean="sellerServiceRes"/>
+            <ref bean="customerServiceRes"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jacksonProvider"/>
+            <bean class="edu.luc.comp433.api.cxf.ConstraintViolationExceptionHandler"/>
         </jaxrs:providers>
 
         <jaxrs:schemaLocations>
@@ -38,6 +40,13 @@
         <constructor-arg>
             <bean class="edu.luc.comp433.api.workflow.SellerActivity">
                 <constructor-arg ref="sellerServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="customerServiceRes" class="edu.luc.comp433.api.cxf.CustomerResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.CustomerActivity">
+                <constructor-arg ref="customerServiceImpl"/>
             </bean>
         </constructor-arg>
     </bean>

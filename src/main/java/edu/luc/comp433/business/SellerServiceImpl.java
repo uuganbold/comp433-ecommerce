@@ -66,10 +66,12 @@ public class SellerServiceImpl implements SellerService {
     public void save(SellerDto dto) throws EntryNotFoundException, DuplicatedEntryException {
         Seller c = sellerRepository.findById(dto.getId()).orElseThrow(() -> new EntryNotFoundException("Seller not found with id:" + dto.getId()));
         c.setName(dto.getName());
+        c.setEmail(dto.getEmail());
+        c.setWebsite(dto.getWebsite());
         try {
             sellerRepository.save(c);
         } catch (DataIntegrityViolationException dive) {
-            throw new DuplicatedEntryException("Sellers cannot have same name:" + c.getName(), dive);
+            throw new DuplicatedEntryException("Sellers cannot have same name:" + dto.getName(), dive);
         }
 
     }

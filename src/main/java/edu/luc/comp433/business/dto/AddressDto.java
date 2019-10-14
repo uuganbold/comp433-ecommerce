@@ -1,5 +1,6 @@
 package edu.luc.comp433.business.dto;
 
+import edu.luc.comp433.model.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,22 +16,17 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class AddressDto {
 
-    private long id;
+    private Long id;
 
-    @NotNull
-    @Min(2)
+    @Size(min = 2)
     private String country;
 
-    @NotNull
-    @NonNull
     @Size(min = 5, max = 100)
     private String street;
 
     @Size(min = 3, max = 20)
     private String unit;
 
-    @NotNull
-    @NonNull
     @Size(min = 3, max = 20)
     private String city;
 
@@ -38,7 +34,7 @@ public class AddressDto {
 
     private int zipcode;
 
-    @Max(20)
+    @Size(max = 20)
     private String phonenumber;
 
     public AddressDto(@NotNull @Min(2) String country, @NotNull @NonNull @Size(min = 5, max = 100) String street, @Size(min = 3, max = 20) String unit, @NotNull @NonNull @Size(min = 3, max = 20) String city, String state, int zipcode, @Max(20) String phonenumber) {
@@ -49,5 +45,19 @@ public class AddressDto {
         this.state = state;
         this.zipcode = zipcode;
         this.phonenumber = phonenumber;
+    }
+
+    public AddressDto(long id) {
+        this.id = id;
+    }
+
+    public static AddressDto of(Address a) {
+        return new AddressDto(a.getId(), a.getCountry(), a.getStreet(), a.getUnit(), a.getCity(), a.getState(), a.getZipcode(), a.getPhonenumber());
+    }
+
+    public Address toEntity() {
+        return new Address(this.id, this.country, this.street,
+                this.unit, this.city, this.getState(),
+                this.zipcode, this.phonenumber);
     }
 }

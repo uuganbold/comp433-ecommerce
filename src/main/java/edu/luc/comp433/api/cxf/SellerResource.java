@@ -52,7 +52,7 @@ public class SellerResource implements SellerWebService {
     @PUT
     @Path(value = "/seller/{id}")
     @Consumes({"text/xml", "application/json"})
-    public SellerRepresentation updateCategory(@PathParam("id") long id, SellerRequest sellerRequest) {
+    public SellerRepresentation updateSeller(@PathParam("id") long id, SellerRequest sellerRequest) {
         try {
             return sellerActivity.update(id, sellerRequest);
         } catch (EntryNotFoundException enf) {

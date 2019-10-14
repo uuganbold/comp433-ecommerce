@@ -1,13 +1,15 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import edu.luc.comp433.business.dto.AddressDto;
+import edu.luc.comp433.util.Patterns;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,12 +17,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement(name = "address")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressRepresentation {
 
     private long id;
 
     @NotNull
-    @Min(2)
+    @Size(min = 2)
     private String country;
 
     @NotNull
@@ -40,8 +43,11 @@ public class AddressRepresentation {
 
     private int zipcode;
 
-    @Max(20)
+    @Size(max = 20)
+    @Pattern(regexp = Patterns.PHONE_PATTERN)
     private String phonenumber;
 
-
+    public static AddressRepresentation of(AddressDto dto) {
+        return new AddressRepresentation(dto.getId(), dto.getCountry(), dto.getStreet(), dto.getUnit(), dto.getCity(), dto.getState(), dto.getZipcode(), dto.getPhonenumber());
+    }
 }

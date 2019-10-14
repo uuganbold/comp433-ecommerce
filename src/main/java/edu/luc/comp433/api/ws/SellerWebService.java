@@ -17,7 +17,7 @@ public interface SellerWebService {
 
     List<SellerRepresentation> allSellers();
 
-    SellerRepresentation updateCategory(long id, SellerRequest sellerRequest);
+    SellerRepresentation updateSeller(long id, SellerRequest sellerRequest);
 
     void deleteSeller(long id);
 

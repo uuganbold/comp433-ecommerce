@@ -51,7 +51,7 @@ public class SellerRestController implements SellerWebService {
 
     @Override
     @PutMapping(value = "/seller/{id}", consumes = {"text/xml", "application/json"})
-    public SellerRepresentation updateCategory(@PathVariable("id") long id, @Validated @RequestBody SellerRequest sellerRequest) {
+    public SellerRepresentation updateSeller(@PathVariable("id") long id, @Validated @RequestBody SellerRequest sellerRequest) {
         try {
             return sellerActivity.update(id, sellerRequest);
         } catch (EntryNotFoundException enf) {

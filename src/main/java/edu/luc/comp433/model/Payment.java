@@ -1,9 +1,13 @@
 package edu.luc.comp433.model;
 
+import edu.luc.comp433.util.Patterns;
 import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 @Entity
@@ -27,15 +31,17 @@ public class Payment {
 
     @NonNull
     @NotBlank
+    @Pattern(regexp = Patterns.CARDNUMBER_PATTERN)
     private String cardNumber;
 
-    private String cardType;
-
+    @Min(1)
+    @Max(12)
     private int expireMonth;
 
+    @Min(2019)
     private int expireYear;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private Address billingAddress;
 
