@@ -38,7 +38,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({EntryNotFoundException.class})
-    public ResponseEntity<Object> handleConstraintViolation(
+    public ResponseEntity<Object> handleEntryNotFound(
             EntryNotFoundException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         errors.add(ex.getMessage());
@@ -50,7 +50,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({DuplicatedEntryException.class})
-    public ResponseEntity<Object> handleConstraintViolation(
+    public ResponseEntity<Object> handleDuplicatedEntry(
             DuplicatedEntryException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         errors.add(ex.getMessage());
@@ -61,20 +61,10 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<Object> handleConstraintViolation(
-            Exception ex, WebRequest request) {
-        List<String> errors = new ArrayList<>();
-        errors.add(ex.getMessage());
 
-        ApiError apiError =
-                new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), errors);
-        return new ResponseEntity<>(
-                apiError, new HttpHeaders(), apiError.getStatus());
-    }
 
     @ExceptionHandler({NotRemovableException.class})
-    public ResponseEntity<Object> handleConstraintViolation(
+    public ResponseEntity<Object> handleNotRemovable(
             NotRemovableException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         errors.add(ex.getMessage());
@@ -103,5 +93,17 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
         return handleExceptionInternal(
                 ex, apiError, headers, apiError.getStatus(), request);
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<Object> handleServerSideError(
+            Exception ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        errors.add(ex.getMessage());
+
+        ApiError apiError =
+                new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(
+                apiError, new HttpHeaders(), apiError.getStatus());
     }
 }

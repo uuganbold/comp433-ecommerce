@@ -20,7 +20,11 @@
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jacksonProvider"/>
-            <bean class="edu.luc.comp433.api.cxf.ConstraintViolationExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.ConstraintViolationExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.NotRemovableExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.EntryNotFoundExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.DuplicatedEntryExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.ServerSideExceptionHandler"/>
         </jaxrs:providers>
 
         <jaxrs:schemaLocations>
