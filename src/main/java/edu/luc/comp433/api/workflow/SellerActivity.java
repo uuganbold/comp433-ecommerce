@@ -27,7 +27,7 @@ public class SellerActivity {
 
     public SellerRepresentation getSeller(long id) {
         SellerDto dto = sellerService.getSeller(id);
-        if (dto == null) return null;
+        if (dto == null) throw new EntryNotFoundException("Seller not found with this id:" + id);
         return new SellerRepresentation(dto.getId(), dto.getName(), dto.getWebsite(), dto.getEmail());
     }
 

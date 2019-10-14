@@ -24,7 +24,7 @@ public class CustomerActivity {
 
     public CustomerRepresentation getCustomer(long id) {
         CustomerDto dto = customerService.getCustomer(id);
-        if (dto == null) return null;
+        if (dto == null) throw new EntryNotFoundException("Customer Not Found with this id:" + id);
         return CustomerRepresentation.of(dto);
     }
 

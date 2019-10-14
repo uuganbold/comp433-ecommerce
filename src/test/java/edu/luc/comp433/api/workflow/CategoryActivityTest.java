@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -42,16 +43,14 @@ class CategoryActivityTest {
     private CategoryService categoryService;
 
     @Test
-    void shouldReturnNullWhenCategoryNotFound() {
+    void shouldThrownExceptionWhenCategoryNotFound() {
         //given
         long id = 1;
         when(categoryService.getCategory(id)).thenReturn(null);
 
         //when
-        CategoryRepresentation categoryRepresentation = categoryActivity.getCategory(id);
+        assertThrows(EntryNotFoundException.class, () -> categoryActivity.getCategory(id));
 
-        //then
-        assertNull(categoryRepresentation);
         reset(categoryService);
     }
 

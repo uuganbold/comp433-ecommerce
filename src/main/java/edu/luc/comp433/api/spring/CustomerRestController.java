@@ -3,7 +3,9 @@ package edu.luc.comp433.api.spring;
 import edu.luc.comp433.api.payload.*;
 import edu.luc.comp433.api.workflow.CustomerActivity;
 import edu.luc.comp433.api.ws.CustomerWebService;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,57 +19,72 @@ public class CustomerRestController implements CustomerWebService {
     }
 
     @Override
-    public CustomerRepresentation getCustomer(long id) {
-        return null;
+    @GetMapping("/customer/{id}")
+    public CustomerRepresentation getCustomer(@PathVariable("id") long id) {
+        return customerActivity.getCustomer(id);
     }
 
     @Override
-    public CustomerRepresentation createCustomer(CustomerRequest customerRequest) {
-        return null;
+    @PostMapping(value = "/customers", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    public CustomerRepresentation createCustomer(@RequestBody @Validated CustomerRequest customerRequest) {
+        return customerActivity.createCustomer(customerRequest);
     }
 
     @Override
+    @GetMapping(value = "/customers", produces = {"text/xml", "application/json"})
     public List<CustomerRepresentation> allCustomers() {
-        return null;
+        return customerActivity.listCustomers();
     }
 
     @Override
-    public CustomerRepresentation updateCustomer(long id, CustomerRequest customerRequest) {
-        return null;
+    @PutMapping(value = "/customer/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    public CustomerRepresentation updateCustomer(@PathVariable("id") long id, @RequestBody @Validated CustomerRequest customerRequest) {
+        return customerActivity.update(id, customerRequest);
     }
 
     @Override
-    public void deleteCustomer(long id) {
-
+    @DeleteMapping("/customer/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCustomer(@PathVariable("id") long id) {
+        customerActivity.delete(id);
     }
 
     @Override
-    public AddressRepresentation addAddress(long id, AddressRequest addressRequest) {
-        return null;
+    @PostMapping(value = "/customer/{id}/addresses", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    public AddressRepresentation addAddress(@PathVariable("id") long id, @Validated @RequestBody AddressRequest addressRequest) {
+        return customerActivity.addAddress(id, addressRequest);
     }
 
     @Override
-    public void removeAddress(long id, long addressId) {
-
+    @DeleteMapping("/customer/{id}/address/{addressId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
+        customerActivity.removeAddress(id, addressId);
     }
 
     @Override
-    public List<AddressRepresentation> getAddresses(long id) {
-        return null;
+    @GetMapping(value = "/customer/{id}/addresses", produces = {"text/xml", "application/json"})
+    public List<AddressRepresentation> getAddresses(@PathVariable("id") long id) {
+        return customerActivity.getAddresses(id);
+    }
+
+
+    @Override
+    @PostMapping(value = "/customer/{id}/payments", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    public PaymentRepresentation addPayment(@PathVariable("id") long id, @RequestBody @Validated PaymentRequest paymentRequest) {
+        return customerActivity.addPayment(id, paymentRequest);
     }
 
     @Override
-    public PaymentRepresentation addPayment(long id, PaymentRequest paymentRequest) {
-        return null;
+    @DeleteMapping("/customer/{id}/payment/{paymentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removePayment(@PathVariable("id") long id, @PathVariable("paymentId") long paymentId) {
+        customerActivity.removePayment(id, paymentId);
     }
 
     @Override
-    public void removePayment(long id, long paymentId) {
-
-    }
-
-    @Override
-    public List<PaymentRepresentation> getPayments(long id) {
-        return null;
+    @GetMapping(value = "/customer/{id}/payments", produces = {"text/xml", "application/json"})
+    public List<PaymentRepresentation> getPayments(@PathVariable("id") long id) {
+        return customerActivity.getPayments(id);
     }
 }

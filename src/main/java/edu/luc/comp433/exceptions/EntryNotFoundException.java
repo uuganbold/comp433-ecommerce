@@ -1,6 +1,6 @@
 package edu.luc.comp433.exceptions;
 
-public class EntryNotFoundException extends Exception {
+public class EntryNotFoundException extends RuntimeException {
     public EntryNotFoundException() {
     }
 

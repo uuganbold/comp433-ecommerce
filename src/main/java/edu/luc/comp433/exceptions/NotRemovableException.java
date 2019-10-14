@@ -1,6 +1,6 @@
 package edu.luc.comp433.exceptions;
 
-public class NotRemovableException extends Exception {
+public class NotRemovableException extends RuntimeException {
 
     public NotRemovableException() {
     }

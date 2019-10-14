@@ -3,10 +3,12 @@ package edu.luc.comp433.api.spring;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
 import java.util.List;
 
 @Getter
+@XmlRootElement
 public class ApiError {
 
     private HttpStatus status;

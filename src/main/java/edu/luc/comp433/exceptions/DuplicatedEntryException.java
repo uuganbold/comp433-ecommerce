@@ -1,6 +1,6 @@
 package edu.luc.comp433.exceptions;
 
-public class DuplicatedEntryException extends Exception {
+public class DuplicatedEntryException extends RuntimeException {
 
     public DuplicatedEntryException() {
     }

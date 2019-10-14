@@ -1,6 +1,6 @@
 package edu.luc.comp433.exceptions;
 
-public class InvalidFormatException extends Exception {
+public class InvalidFormatException extends RuntimeException {
 
     public InvalidFormatException() {
     }

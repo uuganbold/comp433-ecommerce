@@ -1,6 +1,6 @@
 package edu.luc.comp433.exceptions;
 
-public class InformationNotSufficientException extends Exception {
+public class InformationNotSufficientException extends RuntimeException {
 
     public InformationNotSufficientException() {
     }

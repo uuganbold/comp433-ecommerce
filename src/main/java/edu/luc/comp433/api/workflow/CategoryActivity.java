@@ -23,7 +23,7 @@ public class CategoryActivity {
 
     public CategoryRepresentation getCategory(long id) {
         CategoryDTO dto = categoryService.getCategory(id);
-        if (dto == null) return null;
+        if (dto == null) throw new EntryNotFoundException("Category not found with this id:" + id);
         return new CategoryRepresentation(dto.getId(), dto.getName());
     }
 

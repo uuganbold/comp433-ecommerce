@@ -1,5 +1,8 @@
 package edu.luc.comp433.api.spring;
 
+import edu.luc.comp433.exceptions.DuplicatedEntryException;
+import edu.luc.comp433.exceptions.EntryNotFoundException;
+import edu.luc.comp433.exceptions.NotRemovableException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,54 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
             errors.add(violation.getRootBeanClass().getName() + " " +
                     violation.getPropertyPath() + ": " + violation.getMessage());
         }
+
+        ApiError apiError =
+                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(
+                apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({EntryNotFoundException.class})
+    public ResponseEntity<Object> handleConstraintViolation(
+            EntryNotFoundException ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        errors.add(ex.getMessage());
+
+        ApiError apiError =
+                new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(
+                apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({DuplicatedEntryException.class})
+    public ResponseEntity<Object> handleConstraintViolation(
+            DuplicatedEntryException ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        errors.add(ex.getMessage());
+
+        ApiError apiError =
+                new ApiError(HttpStatus.CONFLICT, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(
+                apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<Object> handleConstraintViolation(
+            Exception ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        errors.add(ex.getMessage());
+
+        ApiError apiError =
+                new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(
+                apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({NotRemovableException.class})
+    public ResponseEntity<Object> handleConstraintViolation(
+            NotRemovableException ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        errors.add(ex.getMessage());
 
         ApiError apiError =
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
