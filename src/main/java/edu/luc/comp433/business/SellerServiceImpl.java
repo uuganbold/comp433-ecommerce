@@ -1,7 +1,7 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.SellerDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.SellerDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -32,10 +32,10 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public SellerDto getSeller(long id) {
+    public SellerDTO getSeller(long id) {
         Seller seller = sellerRepository.findById(id).orElse(null);
         if (seller == null) return null;
-        return new SellerDto(
+        return new SellerDTO(
                 seller.getId(),
                 seller.getName(),
                 seller.getWebsite(),
@@ -44,7 +44,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public SellerDto createSeller(SellerDto dto) throws DuplicatedEntryException {
+    public SellerDTO createSeller(SellerDTO dto) throws DuplicatedEntryException {
         Seller s = new Seller(dto.getName(), dto.getWebsite(), dto.getEmail());
         try {
             sellerRepository.save(s);
@@ -56,14 +56,14 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public List<SellerDto> listAll() {
-        List<SellerDto> dtos = new ArrayList<>();
-        sellerRepository.findAll().forEach(s -> dtos.add(new SellerDto(s.getId(), s.getName(), s.getWebsite(), s.getEmail())));
+    public List<SellerDTO> listAll() {
+        List<SellerDTO> dtos = new ArrayList<>();
+        sellerRepository.findAll().forEach(s -> dtos.add(new SellerDTO(s.getId(), s.getName(), s.getWebsite(), s.getEmail())));
         return dtos;
     }
 
     @Override
-    public void save(SellerDto dto) throws EntryNotFoundException, DuplicatedEntryException {
+    public void save(SellerDTO dto) throws EntryNotFoundException, DuplicatedEntryException {
         Seller c = sellerRepository.findById(dto.getId()).orElseThrow(() -> new EntryNotFoundException("Seller not found with id:" + dto.getId()));
         c.setName(dto.getName());
         c.setEmail(dto.getEmail());
@@ -89,16 +89,16 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AddressDto> listAddresses(long id) throws EntryNotFoundException {
+    public List<AddressDTO> listAddresses(long id) throws EntryNotFoundException {
         Seller c = sellerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Seller not found with id:" + id));
-        List<AddressDto> dtos = new ArrayList<>();
-        c.getAddresses().forEach(a -> dtos.add(new AddressDto(a.getId(), a.getCountry(), a.getStreet(), a.getUnit(), a.getCity(), a.getState(), a.getZipcode(), a.getPhonenumber())));
+        List<AddressDTO> dtos = new ArrayList<>();
+        c.getAddresses().forEach(a -> dtos.add(new AddressDTO(a.getId(), a.getCountry(), a.getStreet(), a.getUnit(), a.getCity(), a.getState(), a.getZipcode(), a.getPhonenumber())));
         return dtos;
     }
 
     @Override
     @Transactional
-    public AddressDto addAddress(long id, AddressDto dto) throws EntryNotFoundException {
+    public AddressDTO addAddress(long id, AddressDTO dto) throws EntryNotFoundException {
         Seller c = sellerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Seller not found with id:" + id));
         Address a = new Address(dto.getCountry(), dto.getStreet(),
                 dto.getUnit(), dto.getCity(), dto.getState(),

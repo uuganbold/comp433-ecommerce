@@ -1,6 +1,6 @@
 package edu.luc.comp433.api.payload;
 
-import edu.luc.comp433.business.dto.CustomerDto;
+import edu.luc.comp433.business.dto.CustomerDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -35,7 +35,7 @@ public class CustomerRequest {
     @Pattern(regexp = PHONE_PATTERN)
     private String phonenumber;
 
-    public CustomerDto toDto() {
-        return new CustomerDto(this.getFirstName(), this.getLastName(), this.email, this.phonenumber);
+    public CustomerDTO toDTO() {
+        return new CustomerDTO(this.getFirstName(), this.getLastName(), this.email, this.phonenumber);
     }
 }

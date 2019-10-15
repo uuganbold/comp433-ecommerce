@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentDto {
+public class PaymentDTO {
 
     private Long id;
 
@@ -26,17 +26,21 @@ public class PaymentDto {
 
     private int expireYear;
 
-    private AddressDto billingAddress;
+    private AddressDTO billingAddress;
 
-    public static PaymentDto of(Payment a) {
-        PaymentDto paymentDto = new PaymentDto();
+    public static PaymentDTO of(Payment a) {
+        PaymentDTO paymentDto = new PaymentDTO();
         paymentDto.setId(a.getId());
         paymentDto.setNameOnCard(a.getNameOnCard());
         paymentDto.setCardNumber(a.getCardNumber());
         paymentDto.setExpireMonth(a.getExpireMonth());
         paymentDto.setExpireYear(a.getExpireYear());
-        paymentDto.setBillingAddress(AddressDto.of(a.getBillingAddress()));
         return paymentDto;
+    }
+
+    public PaymentDTO setBillingAddress(AddressDTO addressDTO) {
+        this.billingAddress = addressDTO;
+        return this;
     }
 
     public Payment toEntity() {

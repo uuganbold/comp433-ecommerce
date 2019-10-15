@@ -1,8 +1,8 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.CustomerDto;
-import edu.luc.comp433.business.dto.PaymentDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.CustomerDTO;
+import edu.luc.comp433.business.dto.PaymentDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -13,25 +13,25 @@ public interface CustomerService {
 
     //void makeOrder(Customer customer, Cart cart, Payment payment, Address address) throws InformationNotSufficientException, QuantityNotSufficientException;
 
-    CustomerDto getCustomer(long id);
+    CustomerDTO getCustomer(long id);
 
-    CustomerDto createCustomer(CustomerDto dto) throws DuplicatedEntryException;
+    CustomerDTO createCustomer(CustomerDTO dto) throws DuplicatedEntryException;
 
-    List<CustomerDto> listAll();
+    List<CustomerDTO> listAll();
 
-    void save(CustomerDto dto) throws EntryNotFoundException, DuplicatedEntryException;
+    void save(CustomerDTO dto) throws EntryNotFoundException, DuplicatedEntryException;
 
     void delete(long id) throws EntryNotFoundException, NotRemovableException;
 
-    List<AddressDto> listAddresses(long id) throws EntryNotFoundException;
+    List<AddressDTO> listAddresses(long id) throws EntryNotFoundException;
 
-    AddressDto addAddress(long id, AddressDto dto) throws EntryNotFoundException;
+    AddressDTO addAddress(long id, AddressDTO dto) throws EntryNotFoundException;
 
     void removeAddress(long id, long addressId) throws EntryNotFoundException, NotRemovableException;
 
-    List<PaymentDto> listPayments(long id) throws EntryNotFoundException;
+    List<PaymentDTO> listPayments(long id) throws EntryNotFoundException;
 
-    PaymentDto addPayment(long id, PaymentDto dto) throws EntryNotFoundException;
+    PaymentDTO addPayment(long id, PaymentDTO dto) throws EntryNotFoundException;
 
     void removePayment(long id, long paymentId) throws EntryNotFoundException, NotRemovableException;
 

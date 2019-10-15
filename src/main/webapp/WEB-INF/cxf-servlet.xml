@@ -17,6 +17,7 @@
             <ref bean="categoryServiceRes"/>
             <ref bean="sellerServiceRes"/>
             <ref bean="customerServiceRes"/>
+            <ref bean="productServiceRes"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jacksonProvider"/>
@@ -51,6 +52,13 @@
         <constructor-arg>
             <bean class="edu.luc.comp433.api.workflow.CustomerActivity">
                 <constructor-arg ref="customerServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="productServiceRes" class="edu.luc.comp433.api.cxf.ProductResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.ProductActivity">
+                <constructor-arg ref="productServiceImpl"/>
             </bean>
         </constructor-arg>
     </bean>

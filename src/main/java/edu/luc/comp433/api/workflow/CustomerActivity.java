@@ -2,9 +2,9 @@ package edu.luc.comp433.api.workflow;
 
 import edu.luc.comp433.api.payload.*;
 import edu.luc.comp433.business.CustomerService;
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.CustomerDto;
-import edu.luc.comp433.business.dto.PaymentDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.CustomerDTO;
+import edu.luc.comp433.business.dto.PaymentDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -23,26 +23,26 @@ public class CustomerActivity {
     }
 
     public CustomerRepresentation getCustomer(long id) {
-        CustomerDto dto = customerService.getCustomer(id);
+        CustomerDTO dto = customerService.getCustomer(id);
         if (dto == null) throw new EntryNotFoundException("Customer Not Found with this id:" + id);
         return CustomerRepresentation.of(dto);
     }
 
     public CustomerRepresentation createCustomer(CustomerRequest customerRequest) throws DuplicatedEntryException {
-        CustomerDto dto = customerRequest.toDto();
+        CustomerDTO dto = customerRequest.toDTO();
         dto = customerService.createCustomer(dto);
         return CustomerRepresentation.of(dto);
     }
 
     public List<CustomerRepresentation> listCustomers() {
-        List<CustomerDto> dtos = customerService.listAll();
+        List<CustomerDTO> dtos = customerService.listAll();
         List<CustomerRepresentation> result = new ArrayList<>();
         dtos.forEach(d -> result.add(CustomerRepresentation.of(d)));
         return result;
     }
 
     public CustomerRepresentation update(long id, CustomerRequest customerRequest) throws EntryNotFoundException, DuplicatedEntryException {
-        CustomerDto dto = customerRequest.toDto();
+        CustomerDTO dto = customerRequest.toDTO();
         dto.setId(id);
         customerService.save(dto);
         return CustomerRepresentation.of(dto);
@@ -54,14 +54,14 @@ public class CustomerActivity {
     }
 
     public List<AddressRepresentation> getAddresses(long id) throws EntryNotFoundException {
-        List<AddressDto> dtos = customerService.listAddresses(id);
+        List<AddressDTO> dtos = customerService.listAddresses(id);
         List<AddressRepresentation> result = new ArrayList<>();
         dtos.forEach(d -> result.add(AddressRepresentation.of(d)));
         return result;
     }
 
     public AddressRepresentation addAddress(long id, AddressRequest addressRequest) throws EntryNotFoundException {
-        AddressDto dto = addressRequest.toDto();
+        AddressDTO dto = addressRequest.toDTO();
         dto = customerService.addAddress(id, dto);
         return AddressRepresentation.of(dto);
     }
@@ -71,14 +71,14 @@ public class CustomerActivity {
     }
 
     public List<PaymentRepresentation> getPayments(long id) throws EntryNotFoundException {
-        List<PaymentDto> dtos = customerService.listPayments(id);
+        List<PaymentDTO> dtos = customerService.listPayments(id);
         List<PaymentRepresentation> result = new ArrayList<>();
         dtos.forEach(d -> result.add(PaymentRepresentation.of(d)));
         return result;
     }
 
     public PaymentRepresentation addPayment(long id, PaymentRequest paymentRequest) throws EntryNotFoundException {
-        PaymentDto dto = paymentRequest.toDto();
+        PaymentDTO dto = paymentRequest.toDTO();
         dto = customerService.addPayment(id, dto);
         return PaymentRepresentation.of(dto);
     }

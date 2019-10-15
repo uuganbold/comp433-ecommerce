@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.payload;
 
+import edu.luc.comp433.business.dto.CategoryDTO;
 import lombok.*;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,4 +17,9 @@ public class CategoryRepresentation {
 
     @NonNull
     private String name;
+
+    public static CategoryRepresentation of(CategoryDTO categoryDTO) {
+        if (categoryDTO == null) return null;
+        return new CategoryRepresentation(categoryDTO.getId(), categoryDTO.getName());
+    }
 }

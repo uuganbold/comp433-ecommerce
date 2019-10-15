@@ -1,8 +1,8 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.CustomerDto;
-import edu.luc.comp433.business.dto.PaymentDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.CustomerDTO;
+import edu.luc.comp433.business.dto.PaymentDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -37,14 +37,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto getCustomer(long id) {
+    public CustomerDTO getCustomer(long id) {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer == null) return null;
-        return CustomerDto.of(customer);
+        return CustomerDTO.of(customer);
     }
 
     @Override
-    public CustomerDto createCustomer(CustomerDto dto) throws DuplicatedEntryException {
+    public CustomerDTO createCustomer(CustomerDTO dto) throws DuplicatedEntryException {
         Customer s = dto.toEntity();
         try {
             customerRepository.save(s);
@@ -56,14 +56,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerDto> listAll() {
-        List<CustomerDto> dtos = new ArrayList<>();
-        customerRepository.findAll().forEach(s -> dtos.add(CustomerDto.of(s)));
+    public List<CustomerDTO> listAll() {
+        List<CustomerDTO> dtos = new ArrayList<>();
+        customerRepository.findAll().forEach(s -> dtos.add(CustomerDTO.of(s)));
         return dtos;
     }
 
     @Override
-    public void save(CustomerDto dto) throws EntryNotFoundException, DuplicatedEntryException {
+    public void save(CustomerDTO dto) throws EntryNotFoundException, DuplicatedEntryException {
         Customer c = customerRepository.findById(dto.getId()).orElseThrow(() -> new EntryNotFoundException("Customer not found with id:" + dto.getId()));
         c.setFirstName(dto.getFirstName());
         c.setLastName(dto.getLastName());
@@ -90,16 +90,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AddressDto> listAddresses(long id) throws EntryNotFoundException {
+    public List<AddressDTO> listAddresses(long id) throws EntryNotFoundException {
         Customer c = customerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Customer not found with id:" + id));
-        List<AddressDto> dtos = new ArrayList<>();
-        c.getAddresses().forEach(a -> dtos.add(AddressDto.of(a)));
+        List<AddressDTO> dtos = new ArrayList<>();
+        c.getAddresses().forEach(a -> dtos.add(AddressDTO.of(a)));
         return dtos;
     }
 
     @Override
     @Transactional
-    public AddressDto addAddress(long id, AddressDto dto) throws EntryNotFoundException {
+    public AddressDTO addAddress(long id, AddressDTO dto) throws EntryNotFoundException {
         Customer c = customerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Customer not found with id:" + id));
         Address a = dto.toEntity();
         addressRepository.save(a);
@@ -128,16 +128,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PaymentDto> listPayments(long id) throws EntryNotFoundException {
+    public List<PaymentDTO> listPayments(long id) throws EntryNotFoundException {
         Customer c = customerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Customer not found with id:" + id));
-        List<PaymentDto> dtos = new ArrayList<>();
-        c.getPaymentOptions().forEach(a -> dtos.add(PaymentDto.of(a)));
+        List<PaymentDTO> dtos = new ArrayList<>();
+        c.getPaymentOptions().forEach(a -> dtos.add(PaymentDTO.of(a).setBillingAddress(AddressDTO.of(a.getBillingAddress()))));
         return dtos;
     }
 
     @Override
     @Transactional
-    public PaymentDto addPayment(long id, PaymentDto dto) throws EntryNotFoundException {
+    public PaymentDTO addPayment(long id, PaymentDTO dto) throws EntryNotFoundException {
         Customer c = customerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Customer not found with id:" + id));
         Address a = c.getAddress(dto.getBillingAddress().getId());
         if (a == null) throw new EntryNotFoundException("Address not found with id:" + dto.getBillingAddress().getId());
@@ -145,7 +145,7 @@ public class CustomerServiceImpl implements CustomerService {
         payment.setBillingAddress(a);
         c.addPaymentOption(payment);
         customerRepository.save(c);
-        return PaymentDto.of(payment);
+        return PaymentDTO.of(payment).setBillingAddress(AddressDTO.of(payment.getBillingAddress()));
     }
 
     @Override

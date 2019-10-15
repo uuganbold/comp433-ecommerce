@@ -1,6 +1,6 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.CustomerDto;
+import edu.luc.comp433.business.dto.CustomerDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.model.Customer;
 import edu.luc.comp433.persistence.AddressRepository;
@@ -105,8 +105,8 @@ class CustomerServiceTransactionTest {
     @Test
     @Order(2)
     void shouldPersist() throws DuplicatedEntryException {
-        CustomerDto dto = new CustomerDto("FirstName", "LastName", "test@test.com", "");
-        CustomerDto dto1 = customerService.createCustomer(dto);
+        CustomerDTO dto = new CustomerDTO("FirstName", "LastName", "test@test.com", "");
+        CustomerDTO dto1 = customerService.createCustomer(dto);
         assertEquals(1L, dto1.getId());
 
         Customer c = customerRepository.findById(1L).orElse(null);
@@ -120,7 +120,7 @@ class CustomerServiceTransactionTest {
     @Test
     @Order(3)
     void shouldThrowErrorWhenDuplicatedEmail() {
-        CustomerDto dto = new CustomerDto("asdf", "asdfwer", "test@test.com", "2134");
+        CustomerDTO dto = new CustomerDTO("asdf", "asdfwer", "test@test.com", "2134");
         assertThrows(DuplicatedEntryException.class, () -> customerService.createCustomer(dto));
     }
 

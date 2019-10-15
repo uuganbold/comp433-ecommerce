@@ -1,6 +1,6 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.SellerDto;
+import edu.luc.comp433.business.dto.SellerDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.model.Seller;
 import edu.luc.comp433.persistence.AddressRepository;
@@ -57,7 +57,7 @@ public class SellerServiceTest {
         when(sellerRepository.findById(id)).thenReturn(Optional.empty());
 
         //when
-        SellerDto dto = sellerService.getSeller(id);
+        SellerDTO dto = sellerService.getSeller(id);
 
         //then
         assertNull(dto);
@@ -70,7 +70,7 @@ public class SellerServiceTest {
         when(sellerRepository.save(any(Seller.class))).thenThrow(new DataIntegrityViolationException("Some error"));
 
         //when
-        assertThrows(DuplicatedEntryException.class, () -> sellerService.createSeller(new SellerDto()));
+        assertThrows(DuplicatedEntryException.class, () -> sellerService.createSeller(new SellerDTO()));
 
         reset(sellerRepository);
     }
@@ -78,7 +78,7 @@ public class SellerServiceTest {
     @Test
     void shouldSaveWhatItGet() throws DuplicatedEntryException {
         //given
-        SellerDto dto = new SellerDto("some name", "web", "emil");
+        SellerDTO dto = new SellerDTO("some name", "web", "emil");
         when(sellerRepository.save(any(Seller.class))).then(in -> {
             Seller s = (Seller) in.getArguments()[0];
 

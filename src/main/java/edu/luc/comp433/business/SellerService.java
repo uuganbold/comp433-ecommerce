@@ -1,7 +1,7 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.SellerDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.SellerDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -14,19 +14,19 @@ public interface SellerService {
 
     void notifySales(Seller seller, OrderItem item);
 
-    SellerDto getSeller(long id);
+    SellerDTO getSeller(long id);
 
-    SellerDto createSeller(SellerDto dto) throws DuplicatedEntryException;
+    SellerDTO createSeller(SellerDTO dto) throws DuplicatedEntryException;
 
-    List<SellerDto> listAll();
+    List<SellerDTO> listAll();
 
-    void save(SellerDto dto) throws EntryNotFoundException, DuplicatedEntryException;
+    void save(SellerDTO dto) throws EntryNotFoundException, DuplicatedEntryException;
 
     void delete(long id) throws EntryNotFoundException, NotRemovableException;
 
-    List<AddressDto> listAddresses(long id) throws EntryNotFoundException;
+    List<AddressDTO> listAddresses(long id) throws EntryNotFoundException;
 
-    AddressDto addAddress(long id, AddressDto dto) throws EntryNotFoundException;
+    AddressDTO addAddress(long id, AddressDTO dto) throws EntryNotFoundException;
 
     void removeAddress(long id, long addressId) throws EntryNotFoundException, NotRemovableException;
 }

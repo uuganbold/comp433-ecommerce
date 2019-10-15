@@ -5,6 +5,7 @@ import edu.luc.comp433.api.payload.CategoryRequest;
 import edu.luc.comp433.api.workflow.CategoryActivity;
 import edu.luc.comp433.api.ws.CategoryWebService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,13 +27,13 @@ public class CategoryRestController implements CategoryWebService {
 
     @Override
     @PostMapping(value = "/categories", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
-    public CategoryRepresentation createCategory(@RequestBody CategoryRequest categoryRequest) {
+    public CategoryRepresentation createCategory(@RequestBody @Validated CategoryRequest categoryRequest) {
             return categoryActivity.createCategory(categoryRequest);
     }
 
     @Override
     @PutMapping(value = "/category/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
-    public CategoryRepresentation updateCategory(@PathVariable long id, @RequestBody CategoryRequest categoryRequest) {
+    public CategoryRepresentation updateCategory(@PathVariable long id, @RequestBody @Validated CategoryRequest categoryRequest) {
             return categoryActivity.update(id, categoryRequest);
     }
 

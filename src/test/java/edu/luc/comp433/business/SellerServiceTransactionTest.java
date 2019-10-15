@@ -1,7 +1,7 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.SellerDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.SellerDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -96,10 +96,10 @@ class SellerServiceTransactionTest {
     @Test
     void shouldAddAddress() throws EntryNotFoundException, DuplicatedEntryException {
         //given
-        SellerDto s = new SellerDto("seller", "web", "email");
+        SellerDTO s = new SellerDTO("seller", "web", "email");
         s = sellerService.createSeller(s);
 
-        AddressDto dto = new AddressDto("mongolia", "chingeltei", null, "ulaanbaatar", null, 0, null);
+        AddressDTO dto = new AddressDTO("mongolia", "chingeltei", null, "ulaanbaatar", null, 0, null);
 
         //when
         sellerService.addAddress(s.getId(), dto);
@@ -114,7 +114,7 @@ class SellerServiceTransactionTest {
         long id = 1002L;
 
         //when then
-        assertThrows(EntryNotFoundException.class, () -> sellerService.addAddress(id, new AddressDto()));
+        assertThrows(EntryNotFoundException.class, () -> sellerService.addAddress(id, new AddressDTO()));
 
 
     }
@@ -122,10 +122,10 @@ class SellerServiceTransactionTest {
     @Test
     void shouldRemoveAddress() throws EntryNotFoundException, DuplicatedEntryException, NotRemovableException {
         //given
-        SellerDto s = new SellerDto("sell name", "web", "email");
+        SellerDTO s = new SellerDTO("sell name", "web", "email");
         s = sellerService.createSeller(s);
 
-        AddressDto dto = new AddressDto("mongolia", "chingeltei", null, "ulaanbaatar", null, 0, null);
+        AddressDTO dto = new AddressDTO("mongolia", "chingeltei", null, "ulaanbaatar", null, 0, null);
         sellerService.addAddress(s.getId(), dto);
 
         //when

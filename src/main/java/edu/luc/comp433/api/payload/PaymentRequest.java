@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.payload;
 
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.PaymentDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.PaymentDTO;
 import edu.luc.comp433.util.Patterns;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,13 +37,13 @@ public class PaymentRequest {
     @Min(1)
     private long addressId;
 
-    public PaymentDto toDto() {
-        PaymentDto dto = new PaymentDto();
+    public PaymentDTO toDTO() {
+        PaymentDTO dto = new PaymentDTO();
         dto.setNameOnCard(this.nameOnCard);
         dto.setCardNumber(this.cardNumber);
         dto.setExpireMonth(this.expireMonth);
         dto.setExpireYear(this.expireYear);
-        dto.setBillingAddress(new AddressDto(addressId));
+        dto.setBillingAddress(new AddressDTO(addressId));
         return dto;
     }
 }

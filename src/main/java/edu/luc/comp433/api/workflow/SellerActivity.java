@@ -5,8 +5,8 @@ import edu.luc.comp433.api.payload.AddressRequest;
 import edu.luc.comp433.api.payload.SellerRepresentation;
 import edu.luc.comp433.api.payload.SellerRequest;
 import edu.luc.comp433.business.SellerService;
-import edu.luc.comp433.business.dto.AddressDto;
-import edu.luc.comp433.business.dto.SellerDto;
+import edu.luc.comp433.business.dto.AddressDTO;
+import edu.luc.comp433.business.dto.SellerDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -26,26 +26,26 @@ public class SellerActivity {
 
 
     public SellerRepresentation getSeller(long id) {
-        SellerDto dto = sellerService.getSeller(id);
+        SellerDTO dto = sellerService.getSeller(id);
         if (dto == null) throw new EntryNotFoundException("Seller not found with this id:" + id);
         return new SellerRepresentation(dto.getId(), dto.getName(), dto.getWebsite(), dto.getEmail());
     }
 
     public SellerRepresentation createSeller(SellerRequest sellerRequest) throws DuplicatedEntryException {
-        SellerDto dto = new SellerDto(sellerRequest.getName(), sellerRequest.getWebsite(), sellerRequest.getEmail());
+        SellerDTO dto = new SellerDTO(sellerRequest.getName(), sellerRequest.getWebsite(), sellerRequest.getEmail());
         dto = sellerService.createSeller(dto);
         return new SellerRepresentation(dto.getId(), dto.getName(), dto.getWebsite(), dto.getEmail());
     }
 
     public List<SellerRepresentation> listSeller() {
-        List<SellerDto> dtos = sellerService.listAll();
+        List<SellerDTO> dtos = sellerService.listAll();
         List<SellerRepresentation> result = new ArrayList<>();
         dtos.forEach(d -> result.add(new SellerRepresentation(d.getId(), d.getName(), d.getWebsite(), d.getEmail())));
         return result;
     }
 
     public SellerRepresentation update(long id, SellerRequest sellerRequest) throws EntryNotFoundException, DuplicatedEntryException {
-        SellerDto dto = new SellerDto(id, sellerRequest.getName(), sellerRequest.getWebsite(), sellerRequest.getEmail());
+        SellerDTO dto = new SellerDTO(id, sellerRequest.getName(), sellerRequest.getWebsite(), sellerRequest.getEmail());
         sellerService.save(dto);
         return new SellerRepresentation(dto.getId(), dto.getName(), dto.getWebsite(), dto.getEmail());
     }
@@ -56,14 +56,14 @@ public class SellerActivity {
     }
 
     public List<AddressRepresentation> getAddresses(long id) throws EntryNotFoundException {
-        List<AddressDto> dtos = sellerService.listAddresses(id);
+        List<AddressDTO> dtos = sellerService.listAddresses(id);
         List<AddressRepresentation> result = new ArrayList<>();
         dtos.forEach(d -> result.add(new AddressRepresentation(d.getId(), d.getCountry(), d.getStreet(), d.getUnit(), d.getCity(), d.getState(), d.getZipcode(), d.getPhonenumber())));
         return result;
     }
 
     public AddressRepresentation addAddress(long id, AddressRequest addressRequest) throws EntryNotFoundException {
-        AddressDto dto = new AddressDto(addressRequest.getCountry(),
+        AddressDTO dto = new AddressDTO(addressRequest.getCountry(),
                 addressRequest.getStreet(),
                 addressRequest.getUnit(),
                 addressRequest.getCity(),

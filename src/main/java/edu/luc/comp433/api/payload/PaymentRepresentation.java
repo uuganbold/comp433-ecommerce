@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import edu.luc.comp433.business.dto.PaymentDto;
+import edu.luc.comp433.business.dto.PaymentDTO;
 import edu.luc.comp433.util.Patterns;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,7 +37,7 @@ public class PaymentRepresentation {
 
     private AddressRepresentation billingAddress;
 
-    public static PaymentRepresentation of(PaymentDto dto) {
+    public static PaymentRepresentation of(PaymentDTO dto) {
         PaymentRepresentation p = new PaymentRepresentation();
         p.setId(dto.getId());
         p.setNameOnCard(dto.getNameOnCard());

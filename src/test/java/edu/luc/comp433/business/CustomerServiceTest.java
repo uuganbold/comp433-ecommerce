@@ -1,6 +1,6 @@
 package edu.luc.comp433.business;
 
-import edu.luc.comp433.business.dto.CustomerDto;
+import edu.luc.comp433.business.dto.CustomerDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
 import edu.luc.comp433.exceptions.EntryNotFoundException;
 import edu.luc.comp433.exceptions.NotRemovableException;
@@ -81,7 +81,7 @@ class CustomerServiceTest {
         when(customerRepository.findById(id)).thenReturn(Optional.empty());
 
         //when
-        CustomerDto dto = customerService.getCustomer(id);
+        CustomerDTO dto = customerService.getCustomer(id);
 
         //then
         Assertions.assertNull(dto);
@@ -99,7 +99,7 @@ class CustomerServiceTest {
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
 
         //when
-        CustomerDto dto = customerService.getCustomer(id);
+        CustomerDTO dto = customerService.getCustomer(id);
 
         //then
         assertEquals(customer.getId(), dto.getId());
@@ -114,7 +114,7 @@ class CustomerServiceTest {
     void shouldPersistWhatItGet() throws DuplicatedEntryException {
         //given
         long id = 2;
-        CustomerDto dto = new CustomerDto("Firstname", "LastName", "email", "Phonenum");
+        CustomerDTO dto = new CustomerDTO("Firstname", "LastName", "email", "Phonenum");
         when(customerRepository.save(any(Customer.class))).then(invocationOnMock -> {
             Customer c = (Customer) invocationOnMock.getArguments()[0];
 
@@ -128,7 +128,7 @@ class CustomerServiceTest {
         });
 
         //when
-        CustomerDto d1 = customerService.createCustomer(dto);
+        CustomerDTO d1 = customerService.createCustomer(dto);
 
         //then
         assertEquals(id, d1.getId());
@@ -138,7 +138,7 @@ class CustomerServiceTest {
     void shouldTranslateException() {
         //given
         long id = 3;
-        CustomerDto dto = new CustomerDto("Firstname", "LastName", "email", "Phonenum");
+        CustomerDTO dto = new CustomerDTO("Firstname", "LastName", "email", "Phonenum");
         when(customerRepository.save(any(Customer.class))).thenThrow(DataIntegrityViolationException.class);
 
         //when
@@ -148,7 +148,7 @@ class CustomerServiceTest {
     @Test
     void shouldPersistWhatItGetWhenSave() throws EntryNotFoundException, DuplicatedEntryException {
         //given not found
-        CustomerDto dto = new CustomerDto(123L, "Fist", "Last", "eadf@mail.com", "asdf");
+        CustomerDTO dto = new CustomerDTO(123L, "Fist", "Last", "eadf@mail.com", "asdf");
         when(customerRepository.findById(dto.getId())).thenReturn(Optional.empty());
 
         //when

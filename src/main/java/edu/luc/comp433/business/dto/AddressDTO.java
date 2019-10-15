@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressDto {
+public class AddressDTO {
 
     private Long id;
 
@@ -37,7 +37,7 @@ public class AddressDto {
     @Size(max = 20)
     private String phonenumber;
 
-    public AddressDto(@NotNull @Min(2) String country, @NotNull @NonNull @Size(min = 5, max = 100) String street, @Size(min = 3, max = 20) String unit, @NotNull @NonNull @Size(min = 3, max = 20) String city, String state, int zipcode, @Max(20) String phonenumber) {
+    public AddressDTO(@NotNull @Min(2) String country, @NotNull @NonNull @Size(min = 5, max = 100) String street, @Size(min = 3, max = 20) String unit, @NotNull @NonNull @Size(min = 3, max = 20) String city, String state, int zipcode, @Max(20) String phonenumber) {
         this.country = country;
         this.street = street;
         this.unit = unit;
@@ -47,12 +47,12 @@ public class AddressDto {
         this.phonenumber = phonenumber;
     }
 
-    public AddressDto(long id) {
+    public AddressDTO(long id) {
         this.id = id;
     }
 
-    public static AddressDto of(Address a) {
-        return new AddressDto(a.getId(), a.getCountry(), a.getStreet(), a.getUnit(), a.getCity(), a.getState(), a.getZipcode(), a.getPhonenumber());
+    public static AddressDTO of(Address a) {
+        return new AddressDTO(a.getId(), a.getCountry(), a.getStreet(), a.getUnit(), a.getCity(), a.getState(), a.getZipcode(), a.getPhonenumber());
     }
 
     public Address toEntity() {

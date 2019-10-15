@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import edu.luc.comp433.business.dto.AddressDto;
+import edu.luc.comp433.business.dto.AddressDTO;
 import edu.luc.comp433.util.Patterns;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,7 +47,7 @@ public class AddressRepresentation {
     @Pattern(regexp = Patterns.PHONE_PATTERN)
     private String phonenumber;
 
-    public static AddressRepresentation of(AddressDto dto) {
+    public static AddressRepresentation of(AddressDTO dto) {
         return new AddressRepresentation(dto.getId(), dto.getCountry(), dto.getStreet(), dto.getUnit(), dto.getCity(), dto.getState(), dto.getZipcode(), dto.getPhonenumber());
     }
 }

@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import edu.luc.comp433.business.dto.CustomerDto;
+import edu.luc.comp433.business.dto.CustomerDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +41,7 @@ public class CustomerRepresentation {
     @Pattern(regexp = PHONE_PATTERN)
     private String phonenumber;
 
-    public static CustomerRepresentation of(CustomerDto dto) {
+    public static CustomerRepresentation of(CustomerDTO dto) {
         return new CustomerRepresentation(dto.getId(), dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getPhonenumber());
     }
 }

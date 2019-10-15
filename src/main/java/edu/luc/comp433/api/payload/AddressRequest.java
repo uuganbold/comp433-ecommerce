@@ -1,6 +1,6 @@
 package edu.luc.comp433.api.payload;
 
-import edu.luc.comp433.business.dto.AddressDto;
+import edu.luc.comp433.business.dto.AddressDTO;
 import edu.luc.comp433.util.Patterns;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,8 +41,8 @@ public class AddressRequest {
     @Pattern(regexp = Patterns.PHONE_PATTERN)
     private String phonenumber;
 
-    public AddressDto toDto() {
-        return new AddressDto(this.country, this.street, this.unit, this.city, this.state, this.zipcode, this.phonenumber);
+    public AddressDTO toDTO() {
+        return new AddressDTO(this.country, this.street, this.unit, this.city, this.state, this.zipcode, this.phonenumber);
     }
 
 }
