@@ -12,7 +12,7 @@
 
     <bean id="jacksonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
 
-    <jaxrs:server name="EcommerceRestService" address="http://localhost:8081/">
+    <jaxrs:server name="EcommerceRestService" address="/">
         <jaxrs:serviceBeans>
             <ref bean="categoryServiceRes"/>
             <ref bean="sellerServiceRes"/>
@@ -32,7 +32,6 @@
             <jaxrs:schemaLocation>edu.luc.comp433.api.payload.CategoryRepresentation</jaxrs:schemaLocation>
             <jaxrs:schemaLocation>edu.luc.comp433.api.payload.SellerRepresentation</jaxrs:schemaLocation>
         </jaxrs:schemaLocations>
-
     </jaxrs:server>
     <bean id="categoryServiceRes" class="edu.luc.comp433.api.cxf.CategoryResource">
         <constructor-arg>

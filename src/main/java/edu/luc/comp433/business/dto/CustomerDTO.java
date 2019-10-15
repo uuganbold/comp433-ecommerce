@@ -39,6 +39,10 @@ public class CustomerDTO {
         this.phonenumber = phonenumber;
     }
 
+    public CustomerDTO(Long id) {
+        this.id = id;
+    }
+
     public static CustomerDTO of(Customer customer) {
         return new CustomerDTO(customer.getId(),
                 customer.getFirstName(),

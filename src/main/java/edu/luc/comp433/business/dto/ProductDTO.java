@@ -59,4 +59,8 @@ public class ProductDTO {
         this.listPrice = listPrice;
         this.availableQuantity = availableQuantity;
     }
+
+    public ProductDTO(Long id) {
+        this.id = id;
+    }
 }

@@ -15,7 +15,7 @@ public interface ProductWebService {
 
     List<ProductRepresentation> allProducts();
 
-    ProductRepresentation updateProduct(long id, ProductRequest categoryRequest);
+    ProductRepresentation updateProduct(long id, ProductRequest reviewRequest);
 
     void deleteProduct(long id);
 

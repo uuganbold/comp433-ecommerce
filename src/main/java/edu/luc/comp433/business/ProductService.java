@@ -15,7 +15,7 @@ public interface ProductService {
 
     ProductDTO createProduct(ProductDTO productDTO) throws DuplicatedEntryException;
 
-    ProductDTO save(ProductDTO dto) throws EntryNotFoundException, DuplicatedEntryException;
+    ProductDTO save(ProductDTO dto) throws EntryNotFoundException;
 
     List<ProductDTO> list();
 

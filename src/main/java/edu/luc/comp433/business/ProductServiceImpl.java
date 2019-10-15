@@ -44,16 +44,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductDTO getProduct(long id) {
-        try {
             Product product = productRepository.findById(id).orElse(null);
             if (product == null) return null;
             else return ProductDTO.of(product)
                     .setCategoryDTO(CategoryDTO.of(product.getCategory()))
                     .setSellerDTO(SellerDTO.of(product.getSeller()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
 
     }
 

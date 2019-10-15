@@ -4,25 +4,19 @@ import edu.luc.comp433.business.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@XmlRootElement(name = "product")
 public class ProductRepresentation {
 
-    @NotNull
     private Long id;
 
-    @NotNull
-    @NonNull
-    @Size(min = 3, max = 50)
     private String name;
 
-    @Size(min = 10, max = 1000)
     private String description;
 
     private double listPrice;
