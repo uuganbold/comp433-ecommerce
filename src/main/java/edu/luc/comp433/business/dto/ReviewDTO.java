@@ -47,10 +47,8 @@ public class ReviewDTO {
 
     public Review toEntity() {
         Review p = new Review();
-        p.setId(id);
         p.setStar(star);
         p.setComment(comment);
-        p.setDate(date);
         return p;
     }
 }

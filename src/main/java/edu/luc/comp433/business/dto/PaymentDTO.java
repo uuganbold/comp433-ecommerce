@@ -52,4 +52,8 @@ public class PaymentDTO {
         p.setExpireYear(this.expireYear);
         return p;
     }
+
+    public PaymentDTO(Long id) {
+        this.id = id;
+    }
 }

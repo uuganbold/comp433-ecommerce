@@ -26,7 +26,9 @@ public class Order {
 
     private Instant date = Instant.now();
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private Instant updateDate = Instant.now();
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderItem> items = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -41,7 +43,7 @@ public class Order {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    private long totalValue = 0;
+    private double totalValue = 0;
 
     public void addItem(OrderItem item) {
         items.add(item);

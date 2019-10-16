@@ -144,7 +144,7 @@ public class CustomerServiceImpl implements CustomerService {
         Payment payment = dto.toEntity();
         payment.setBillingAddress(a);
         c.addPaymentOption(payment);
-        customerRepository.save(c);
+        paymentRepository.save(payment);
         return PaymentDTO.of(payment).setBillingAddress(AddressDTO.of(payment.getBillingAddress()));
     }
 

@@ -53,7 +53,6 @@ public class CustomerDTO {
 
     public Customer toEntity() {
         Customer customer = new Customer();
-        customer.setId(this.id);
         customer.setFirstName(this.firstName);
         customer.setLastName(this.lastName);
         customer.setEmail(this.email);

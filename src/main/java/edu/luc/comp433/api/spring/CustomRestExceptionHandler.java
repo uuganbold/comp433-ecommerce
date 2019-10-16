@@ -1,8 +1,6 @@
 package edu.luc.comp433.api.spring;
 
-import edu.luc.comp433.exceptions.DuplicatedEntryException;
-import edu.luc.comp433.exceptions.EntryNotFoundException;
-import edu.luc.comp433.exceptions.NotRemovableException;
+import edu.luc.comp433.exceptions.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +55,30 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiError apiError =
                 new ApiError(HttpStatus.CONFLICT, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(
+                apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({QuantityNotSufficientException.class})
+    public ResponseEntity<Object> handleNotSufficientQuantity(
+            QuantityNotSufficientException ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        errors.add(ex.getMessage());
+
+        ApiError apiError =
+                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        return new ResponseEntity<>(
+                apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({InvalidStatusException.class})
+    public ResponseEntity<Object> handleInvalidStatus(
+            InvalidStatusException ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        errors.add(ex.getMessage());
+
+        ApiError apiError =
+                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
         return new ResponseEntity<>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }

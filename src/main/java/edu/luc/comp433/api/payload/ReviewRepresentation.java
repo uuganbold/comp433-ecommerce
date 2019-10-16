@@ -26,7 +26,17 @@ public class ReviewRepresentation {
 
     private CustomerRepresentation customer;
 
+    public ReviewRepresentation(long id, short star, String comment, Instant date) {
+        this.id = id;
+        this.star = star;
+        this.comment = comment;
+        this.date = date;
+    }
+
     public static ReviewRepresentation of(ReviewDTO dto) {
-        return new ReviewRepresentation(dto.getId(), dto.getStar(), dto.getComment(), dto.getDate(), ProductRepresentation.of(dto.getProductDTO()), CustomerRepresentation.of(dto.getCustomerDTO()));
+        ReviewRepresentation result = new ReviewRepresentation(dto.getId(), dto.getStar(), dto.getComment(), dto.getDate());
+        if (dto.getProductDTO() != null) result.setProduct(ProductRepresentation.of(dto.getProductDTO()));
+        if (dto.getCustomerDTO() != null) result.setCustomer(CustomerRepresentation.of(dto.getCustomerDTO()));
+        return result;
     }
 }

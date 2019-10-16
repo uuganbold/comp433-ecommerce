@@ -18,6 +18,8 @@
             <ref bean="sellerServiceRes"/>
             <ref bean="customerServiceRes"/>
             <ref bean="productServiceRes"/>
+            <ref bean="reviewServiceRes"/>
+            <ref bean="orderServiceRes"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jacksonProvider"/>
@@ -26,6 +28,8 @@
             <bean class="edu.luc.comp433.api.cxf.exception.EntryNotFoundExceptionHandler"/>
             <bean class="edu.luc.comp433.api.cxf.exception.DuplicatedEntryExceptionHandler"/>
             <bean class="edu.luc.comp433.api.cxf.exception.ServerSideExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.QuantityNotSufficientHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.InvalidStatusExceptionHandler"/>
         </jaxrs:providers>
 
         <jaxrs:schemaLocations>
@@ -58,6 +62,20 @@
         <constructor-arg>
             <bean class="edu.luc.comp433.api.workflow.ProductActivity">
                 <constructor-arg ref="productServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="reviewServiceRes" class="edu.luc.comp433.api.cxf.ReviewResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.ReviewActivity">
+                <constructor-arg ref="reviewServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="orderServiceRes" class="edu.luc.comp433.api.cxf.OrderResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.OrderActivity">
+                <constructor-arg ref="orderServiceImpl"/>
             </bean>
         </constructor-arg>
     </bean>

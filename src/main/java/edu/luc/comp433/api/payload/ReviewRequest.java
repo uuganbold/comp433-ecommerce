@@ -33,7 +33,7 @@ public class ReviewRequest {
 
     @NonNull
     @NotNull
-    @Size(min = 50, max = 300)
+    @Size(min = 10, max = 300)
     private String comment;
 
     public ReviewDTO toDTO() {
