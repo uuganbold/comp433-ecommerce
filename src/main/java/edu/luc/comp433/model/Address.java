@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Pattern;
+
+import static edu.luc.comp433.util.Patterns.PHONE_PATTERN;
 
 @Entity
 @Getter
@@ -40,20 +43,16 @@ public class Address {
 
     private int zipcode;
 
+    @Pattern(regexp = PHONE_PATTERN, message = "Invalid phone number")
     private String phonenumber;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Address address = (Address) o;
-
-        return id.equals(address.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
+    public Address(@NonNull String country, @NonNull String street, String unit, @NonNull String city, String state, int zipcode, String phonenumber) {
+        this.country = country;
+        this.street = street;
+        this.unit = unit;
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+        this.phonenumber = phonenumber;
     }
 }

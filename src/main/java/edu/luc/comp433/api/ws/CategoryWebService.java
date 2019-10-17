@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.ws;
 
-import edu.luc.comp433.api.representation.CategoryRepresentation;
-import edu.luc.comp433.api.representation.CategoryRequest;
+import edu.luc.comp433.api.payload.CategoryRepresentation;
+import edu.luc.comp433.api.payload.CategoryRequest;
 
 import javax.jws.WebService;
 import java.util.List;

@@ -12,23 +12,70 @@
 
     <bean id="jacksonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
 
-    <jaxrs:server name="EcommerceRestService" address="http://localhost:8081/">
+    <jaxrs:server name="EcommerceRestService" address="/">
         <jaxrs:serviceBeans>
             <ref bean="categoryServiceRes"/>
+            <ref bean="sellerServiceRes"/>
+            <ref bean="customerServiceRes"/>
+            <ref bean="productServiceRes"/>
+            <ref bean="reviewServiceRes"/>
+            <ref bean="orderServiceRes"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jacksonProvider"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.ConstraintViolationExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.NotRemovableExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.EntryNotFoundExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.DuplicatedEntryExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.ServerSideExceptionHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.QuantityNotSufficientHandler"/>
+            <bean class="edu.luc.comp433.api.cxf.exception.InvalidStatusExceptionHandler"/>
         </jaxrs:providers>
 
         <jaxrs:schemaLocations>
-            <jaxrs:schemaLocation>edu.luc.comp433.api.representation.CategoryRepresentation</jaxrs:schemaLocation>
+            <jaxrs:schemaLocation>edu.luc.comp433.api.payload.CategoryRepresentation</jaxrs:schemaLocation>
+            <jaxrs:schemaLocation>edu.luc.comp433.api.payload.SellerRepresentation</jaxrs:schemaLocation>
         </jaxrs:schemaLocations>
-
     </jaxrs:server>
     <bean id="categoryServiceRes" class="edu.luc.comp433.api.cxf.CategoryResource">
         <constructor-arg>
             <bean class="edu.luc.comp433.api.workflow.CategoryActivity">
                 <constructor-arg ref="categoryServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="sellerServiceRes" class="edu.luc.comp433.api.cxf.SellerResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.SellerActivity">
+                <constructor-arg ref="sellerServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="customerServiceRes" class="edu.luc.comp433.api.cxf.CustomerResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.CustomerActivity">
+                <constructor-arg ref="customerServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="productServiceRes" class="edu.luc.comp433.api.cxf.ProductResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.ProductActivity">
+                <constructor-arg ref="productServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="reviewServiceRes" class="edu.luc.comp433.api.cxf.ReviewResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.ReviewActivity">
+                <constructor-arg ref="reviewServiceImpl"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="orderServiceRes" class="edu.luc.comp433.api.cxf.OrderResource">
+        <constructor-arg>
+            <bean class="edu.luc.comp433.api.workflow.OrderActivity">
+                <constructor-arg ref="orderServiceImpl"/>
             </bean>
         </constructor-arg>
     </bean>

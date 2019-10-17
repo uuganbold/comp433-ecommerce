@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.workflow;
 
-import edu.luc.comp433.api.representation.CategoryRepresentation;
-import edu.luc.comp433.api.representation.CategoryRequest;
+import edu.luc.comp433.api.payload.CategoryRepresentation;
+import edu.luc.comp433.api.payload.CategoryRequest;
 import edu.luc.comp433.business.CategoryService;
 import edu.luc.comp433.business.dto.CategoryDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
@@ -23,7 +23,7 @@ public class CategoryActivity {
 
     public CategoryRepresentation getCategory(long id) {
         CategoryDTO dto = categoryService.getCategory(id);
-        if (dto == null) return null;
+        if (dto == null) throw new EntryNotFoundException("Category not found with this id:" + id);
         return new CategoryRepresentation(dto.getId(), dto.getName());
     }
 

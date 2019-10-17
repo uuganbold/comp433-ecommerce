@@ -1,7 +1,7 @@
 package edu.luc.comp433.api.workflow;
 
-import edu.luc.comp433.api.representation.CategoryRepresentation;
-import edu.luc.comp433.api.representation.CategoryRequest;
+import edu.luc.comp433.api.payload.CategoryRepresentation;
+import edu.luc.comp433.api.payload.CategoryRequest;
 import edu.luc.comp433.business.CategoryService;
 import edu.luc.comp433.business.dto.CategoryDTO;
 import edu.luc.comp433.exceptions.DuplicatedEntryException;
@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -42,16 +43,14 @@ class CategoryActivityTest {
     private CategoryService categoryService;
 
     @Test
-    void shouldReturnNullWhenCategoryNotFound() {
+    void shouldThrownExceptionWhenCategoryNotFound() {
         //given
         long id = 1;
         when(categoryService.getCategory(id)).thenReturn(null);
 
         //when
-        CategoryRepresentation categoryRepresentation = categoryActivity.getCategory(id);
+        assertThrows(EntryNotFoundException.class, () -> categoryActivity.getCategory(id));
 
-        //then
-        assertNull(categoryRepresentation);
         reset(categoryService);
     }
 
@@ -103,7 +102,7 @@ class CategoryActivityTest {
     }
 
     @Test
-    public void shouldGiveWhatGetWhenUpdate() throws EntryNotFoundException, DuplicatedEntryException {
+    void shouldGiveWhatGetWhenUpdate() throws EntryNotFoundException, DuplicatedEntryException {
         //given
         long id = 1;
         String name = "Some name";

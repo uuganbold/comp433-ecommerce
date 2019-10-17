@@ -8,6 +8,7 @@ This project is deployed on the AWS : http://18.220.199.235:8080/ecommerce/
 
 ## Course Assignments
 1. You can find a report for Assignment-2 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw2-domain/docs/class/project2.md)
+2. You can find a report for Assignment-3 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw2-domain/docs/class/project3.md)
 
 ## Goal 
 In this project, we are developing eCommerce system which would connect to the parties concerned through
@@ -20,69 +21,122 @@ This webapp's architecture would be seen like below so far.
 
 ![Architecure](docs/dev/architecture.png)
 
-The application has two layers:business and persistence (We will more layers soon): Business and Persistence.<br/>
+The application has three layers: Service, Domain, and Data access layer<br/>
 
-And also it has Entities classes which represent data stored and passed between the layers.
+### 1. Service Layer:
 
-### 1. Entities:
+This layer (**in api directory**), generally contains three kinds of objects.
+* Web Services (as for RESTful - Resources) - We implemented Web services with both SpringMVC (RestControllers) and
+and CXF (Resources) just to learn them.
+* Payloads - Mapped objects of information received from clients (Requests) and information sent to clients (Representation)
+* Activities (workflows) - The interface to access to domain layer. Performs external logic of the system. It maps payloads into DTO and vice versa. 
 
-Entities would be seen like below and each of them represents Hibernate Entity.
-![ERD](docs/dev/COMP433-Ecommerce.jpg)
+### 2. Domain Layer:
 
-### 2. Persistence Layer:
-In the persistence layer, we are using Spring-Data-Jpa. Each repository object in this layer is responsible for Database-CRUD operations for the entities.
-* AddressRepository
-* CategoryRepository
-* CustomerRepository
-* OrderRepository
-* PaymentRepository
-* ProductRepository
-* ReviewRepository
-* SellerRepository
+This layer contains three kinds of objects. 
+* Models (**in domain dir**) -  Performs internal business logic along with Domain Services. We implemented them with Hibernate Entities.
 
-### 3. Business Layer:
-Objects in this layer are responsible for providing business logic for the system.
-1. CategoryService - 
-    * addCategory(Category)
-    * removeCategory(Long id) 
+Entity Relationship Diagram would look like below.
 
-2. CustomerService
-    * void addCustomer(Customer customer);
-    * void removeCustomer(Long id);
-    * void updateCustomer(Customer customer);
-    * void addPaymentOption(Customer customer, Payment payment);
-    * void removePaymentOption(Customer customer, Long id);
-    * void addAddress(Customer customer, Address address);
-    * void removeAddress(Customer customer, Long id);
-    * Payment getDefaultPayment(Customer customer);
-    * Address getDefaultAddress(Customer customer);
-    * void makeOrder(Customer customer, Cart cart, Payment payment, Address address) 
+![ERD](docs/dev/COMP433-Ecommerce.png)
 
-3. OrderService
-    * void createOrder(Order order) throws QuantityNotSufficientException;
-    * void updateStatus(Long id, OrderStatus status);
-    *void cancelOrder(Long id);
+* DTO (Data Transfer Objects) - Represents information sent to service layer and received from service layer.
+We use this objects for that purpose instead of using Entities for reasons listed below. 
+    1. Entities contains business logic within them and we does not want to expose those logic to service layer.
+    2. In our case, Entities can access directly Data Access layer. So we would have allowed service layer 
+     power to stimulate data access operations.
+     
+* Domain Services - Performs internal business logic along with Models.
 
-4. ProductService
-    * List<Product> search(String query);
-    * Long checkAvailabiliy(Long id);
-    * void addProduct(Product product);
-    * void updateProduct(Product product);
+### 3. Data Access Layer:
 
-5. ReviewService
-    * void addReview(Review review);
+We implemented Data Access Layer with Spring-Data-Jpa Repositories. So we have Repository object for each and every Entities.
+These Repositories are responsible for accessing Database and persisting the entities. 
 
-6. SellerService
-    * void addSeller(Seller seller);
-    * void removeSeller(Long id);
-    * void addProduct(Seller seller, Product product);
-    * void notifySales(Seller seller, OrderItem item);
+## Available Services
+
+*Base URI*
+* Spring Implementation: http://18.220.199.235:8080/ecommerce/app
+* CXF Implementation: http://18.220.199.235:8080/ecommerce/cxf
+
+1. Category
+
+| URI  |  METHOD | PAYLOAD  | PURPOSE  |
+|---|---|---|---|
+| `/categories` | POST  | name  |  Creates new category |
+| `/categories`  | GET  |   | Return all categories  |
+| `/category/{id}`  | GET  |   | Return a category having id received  |
+| `/category/{id}` | PUT | name | Update category |
+| `/category/{id}` | DELETE | | Deletes category having id received |
+
+2. Seller
+
+| URI  |  METHOD | PAYLOAD  | PURPOSE  |
+|---|---|---|---|
+| `/sellers` | POST  | name, website, email  |  Creates new seller |
+| `/sellers`  | GET  |   | Return all sellers  |
+| `/seller/{id}`  | GET  |   | Return a seller having id received  |
+| `/seller/{id}` | PUT | name, website, email | Update seller |
+| `/seller/{id}` | DELETE | | Deletes seller having id received |
+| `/seller/{id}/addresses` | POST | country, street, unit, city, state, zipcode, phonenumber | Adds seller's address |
+| `/seller/{id}/addresses` | GET | | Returns seller's all addresses |
+| `/seller/{id}/address/{aid}` | DELETE | | Deletes seller's address |
+
+3. Product
+
+| URI  |  METHOD | PAYLOAD  | PURPOSE  |
+|---|---|---|---|
+| `/products` | POST  | name<br>description<br>listPrice<br>availableQuantity<br>sellerId<br>categoryId  |  Creates new product |
+| `/products`  | GET  |   | Return all products  |
+| `/product/{id}`  | GET  |   | Return a product having id received  |
+| `/product/{id}` | PUT | name<br>description<br>listPrice<br>availableQuantity<br>sellerId<br>categoryId | Update product |
+| `/product/{id}` | DELETE | | Deletes a product having id received |
+| `/products?q={query}`| GET | | Search product with query received |
+
+*CXF implementations URI for Search api: /products/search?q={query}*
+
+4. Customer
+
+| URI  |  METHOD | PAYLOAD  | PURPOSE  |
+|---|---|---|---|
+| `/customers` | POST  | firstName, lastName, email, phonenumber  |  Creates new customer |
+| `/customers`  | GET  |   | Return all customers  |
+| `/customer/{id}`  | GET  |   | Return a customer having id received  |
+| `/customer/{id}` | PUT | firstName, lastName, email, phonenumber| Update customer |
+| `/customer/{id}` | DELETE | | Deletes customer having id received |
+| `/customer/{id}/addresses` | POST | country, street, unit, city, state, zipcode, phonenumber  | Adds customers's address |
+| `/customer/{id}/addresses` | GET | | Returns customer's all addresses |
+| `/customer/{id}/address/{aid}` | DELETE | | Deletes customer's address |
+| `/customer/{id}/payments` | POST | nameOnCard, cardNumber, expireMonth, expireYear, addressId  | Adds customer's payment option |
+| `/customer/{id}/payments` | GET | | Returns customer's all payment options |
+| `/customer/{id}/payment/{pid}` | DELETE | | Deletes customer's payment option |
+
+5. Review
+
+| URI  |  METHOD | PAYLOAD  | PURPOSE  |
+|---|---|---|---|
+| `/reviews` | POST  | productId, customerId, star, comment  |  Creates new review |
+| `/reviews`  | GET  |   | Return all reviews  |
+| `/review/{id}`  | GET  |   | Return a review having id received  |
+| `/review/{id}` | PUT | productId, customerId, star, comment| Update review |
+| `/review/{id}` | DELETE | | Deletes review having id received |
+
+6. Order
+
+| URI  |  METHOD | PAYLOAD  | PURPOSE  |
+|---|---|---|---|
+| `/orders` | POST  | customerId<br>addressId<br>paymentId<br>items:<br>&nbsp;&nbsp;&nbsp;&nbsp;productId<br>&nbsp;&nbsp;&nbsp;&nbsp;quantity |  Creates new order |
+| `/orders`  | GET  |   | Return all orders  |
+| `/order/{id}`  | GET  |   | Return a order having id received  |
+| `/order/{id}/cancel` | PUT | | Cancels a order having id received |
+| `/order/{id}/ship` | DELETE | | Updates order status to shipped |
+| `/order/{id}/deliver` | DELETE | | Updates order status to delivered     |
+
 
 ## Development
 
-1. We are using Visual Paradigm Community Edition as UML Modeling tool. You can download the tool from the link
-[https://www.visual-paradigm.com/editions/community/](https://www.visual-paradigm.com/editions/community/)
+1. We are using [Draw.io](http://draw.io) as UML Modeling tool. 
 
-2. We are using Springframework as Architectural Framework.
+2. We are using [Springframework](spring.io) as Architectural Framework.
 
-3. We are using Hibernate as ORM framework
+3. We are using [Hibernate](http://hibernate.org) as ORM framework

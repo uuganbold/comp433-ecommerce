@@ -3,12 +3,16 @@ package edu.luc.comp433.model;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.luc.comp433.util.Patterns.PHONE_PATTERN;
 
 @Entity
 @Getter
@@ -31,8 +35,12 @@ public class Customer {
     private String lastName;
 
     @NonNull
+    @Email
+    @NotBlank
+    @Column(unique = true)
     private String email;
 
+    @Pattern(regexp = PHONE_PATTERN)
     private String phonenumber;
 
     @OneToMany(
@@ -79,6 +87,12 @@ public class Customer {
         addresses.add(address);
     }
 
+    public Address getAddress(long addressId) {
+        for (Address a : this.addresses) {
+            if (a.getId() == addressId) return a;
+        }
+        return null;
+    }
     public void removeAddress(Address address) {
         addresses.remove(address);
     }
@@ -117,4 +131,5 @@ public class Customer {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
 }

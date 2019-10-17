@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,10 +24,13 @@ public class Seller {
 
     @NotBlank
     @NonNull
+    @Column(unique = true)
     private String name;
 
+    @URL
     private String website;
 
+    @Email
     private String email;
 
     @OneToMany(
@@ -41,6 +46,12 @@ public class Seller {
     )
     private List<Address> addresses = new ArrayList<>();
 
+    public Seller(String name, String website, String email) {
+        this.name = name;
+        this.website = website;
+        this.email = email;
+    }
+
     public void addProduct(Product p) {
         p.setSeller(this);
         this.products.add(p);
@@ -53,6 +64,13 @@ public class Seller {
 
     public void addAddress(Address address) {
         addresses.add(address);
+    }
+
+    public Address getAddress(long addressId) {
+        for (Address a : this.addresses) {
+            if (a.getId() == addressId) return a;
+        }
+        return null;
     }
 
     public void removeAddress(Address address) {

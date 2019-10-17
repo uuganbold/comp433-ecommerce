@@ -11,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class EntityBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         ++start;
         if (start > 1) return;

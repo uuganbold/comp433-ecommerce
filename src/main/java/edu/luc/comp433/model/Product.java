@@ -62,6 +62,14 @@ public class Product {
         review.setProduct(null);
     }
 
+    public void decreaseQuantity(long quantity) {
+        this.availableQuantity -= quantity;
+    }
+
+    public void increaseQuantity(long quantity) {
+        this.availableQuantity += quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

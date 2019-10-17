@@ -19,7 +19,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class Review {
 
-    public Review(@NonNull Product product, @NonNull Customer customer, @NonNull @Size(min = 50, max = 300) String comment, @Max(5) @Min(1) short star) {
+    public Review(@NonNull Product product, @NonNull Customer customer, @NonNull @Size(min = 10, max = 300) String comment, @Max(5) @Min(1) short star) {
         product.addReview(this);
         customer.addReview(this);
         this.comment = comment;
@@ -46,7 +46,7 @@ public class Review {
 
     @NonNull
     @NotBlank
-    @Size(min = 50, max = 300)
+    @Size(min = 10, max = 300)
     private String comment;
 
     @NotNull

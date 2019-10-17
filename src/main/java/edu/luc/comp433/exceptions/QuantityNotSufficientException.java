@@ -1,6 +1,6 @@
 package edu.luc.comp433.exceptions;
 
-public class QuantityNotSufficientException extends Exception {
+public class QuantityNotSufficientException extends RuntimeException {
 
     public QuantityNotSufficientException() {
         super();
