@@ -19,7 +19,7 @@ RESTful web api.
 We are using springframework as an architectural framework and Hibernate as an ORM framework.
 This webapp's architecture would be seen like below so far.
 
-![Architecure](docs/dev/architecture.png)
+![Architecure](docs/dev/architecture.png?)
 
 The application has three layers: Service, Domain, and Data access layer<br/>
 
