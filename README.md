@@ -8,7 +8,7 @@ This project is deployed on the AWS : http://18.220.199.235:8080/ecommerce/
 
 ## Course Assignments
 1. You can find a report for Assignment-2 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw2-domain/docs/class/project2.md)
-2. You can find a report for Assignment-3 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw2-domain/docs/class/project3.md)
+2. You can find a report for Assignment-3 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw3-ws/docs/class/project3.md)
 
 ## Goal 
 In this project, we are developing eCommerce system which would connect to the parties concerned through
@@ -19,7 +19,7 @@ RESTful web api.
 We are using springframework as an architectural framework and Hibernate as an ORM framework.
 This webapp's architecture would be seen like below so far.
 
-![Architecure](docs/dev/architecture.png?)
+![Architecure](docs/dev/architecture.png)
 
 The application has three layers: Service, Domain, and Data access layer<br/>
 
