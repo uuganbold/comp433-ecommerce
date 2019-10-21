@@ -4,7 +4,7 @@ It is a project which is developed during the Web Services Programming course ta
 
 This project is hosted on github.com : [Github.com Repository](https://github.com/uuganbold/comp433-ecommerce)
 
-This project is deployed on the AWS : http://18.220.199.235:8080/ecommerce/   
+This project is deployed on the AWS : http://18.223.188.97:8080/ecommerce/   
 
 ## Course Assignments
 1. You can find a report for Assignment-2 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw2-domain/docs/class/project2.md)
@@ -56,8 +56,8 @@ These Repositories are responsible for accessing Database and persisting the ent
 ## Available Services
 
 *Base URI*
-* Spring Implementation: http://18.220.199.235:8080/ecommerce/app
-* CXF Implementation: http://18.220.199.235:8080/ecommerce/cxf
+* Spring Implementation: http://18.223.188.97:8080/ecommerce/app
+* CXF Implementation: http://18.223.188.97:8080/ecommerce/cxf
 
 1. Category
 
