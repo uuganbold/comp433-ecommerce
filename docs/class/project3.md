@@ -54,8 +54,8 @@ These Repositories are responsible for accessing Database and persisting the ent
 ## Available Services
 
 *Base URI*
-* Spring Implementation: http://18.220.199.235:8080/ecommerce/app
-* CXF Implementation: http://18.220.199.235:8080/ecommerce/cxf
+* Spring Implementation: http://18.223.188.97:8080/ecommerce/app
+* CXF Implementation: http://18.223.188.97:8080/ecommerce/cxf
 
 1. Category
 
