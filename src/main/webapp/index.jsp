@@ -691,6 +691,17 @@
             logger.error(JSON.stringify(await response.json()), "PRODUCT", "/products")
         }
 
+        logger.log("Searching: /" + baseURL + "/products?q=Levi", "PRODUCT", "/products?q={query}");
+        response = await fetch(baseURL + '/products?q=Levi', {headers: HEADER, method: 'GET'});
+        if (response.ok) {
+            json = await response.json();
+            logger.log(JSON.stringify(json, null, 2));
+            logger.log("Product count:" + json.length)
+            logger.log("Product count local:" + products.length);
+        } else {
+            logger.error(JSON.stringify(await response.json()), "PRODUCT", "/products?q={query}")
+        }
+
         logger.log("Adding products /" + baseURL + "/products", "PRODUCT", "POST /products");
         response = await fetch(baseURL + '/products', {
             headers: HEADER,

@@ -43,19 +43,22 @@ public class ProductResource implements ProductWebService {
         return productActivity.update(id, ProductRequest);
     }
 
-    @Override
-    @GET
-    @Path(value = "/products")
-    @Produces({"text/xml", "application/json"})
+    /*    @Override
+        @GET
+        @Path(value = "/products")
+        @Produces({"text/xml", "application/json"})*/
     public List<ProductRepresentation> allProducts() {
         return productActivity.list();
     }
 
     @Override
     @GET
-    @Path(value = "/products/search")
+    @Path(value = "/products")
     @Produces({"text/xml", "application/json"})
     public List<ProductRepresentation> search(@QueryParam("q") String query) {
+        if (query == null || query.length() == 0) {
+            return allProducts();
+        }
         return productActivity.search(query);
     }
 
