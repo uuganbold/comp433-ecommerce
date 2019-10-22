@@ -93,8 +93,6 @@ These Repositories are responsible for accessing Database and persisting the ent
 | `/product/{id}` | DELETE | | Deletes a product having id received |
 | `/products?q={query}`| GET | | Search product with query received |
 
-*CXF implementations URI for Search api: /products/search?q={query}*
-
 4. Customer
 
 | URI  |  METHOD | PAYLOAD  | PURPOSE  |
