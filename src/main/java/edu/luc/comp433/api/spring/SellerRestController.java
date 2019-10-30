@@ -28,19 +28,19 @@ public class SellerRestController implements SellerWebService {
     }
 
     @Override
-    @PostMapping(value = "/sellers", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/sellers", consumes = {"application/json"}, produces = {"application/hal+json"})
     public SellerRepresentation createSeller(@Validated @RequestBody SellerRequest sellerRequest) {
             return sellerActivity.createSeller(sellerRequest);
     }
 
     @Override
-    @GetMapping(value = "/sellers", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/sellers", produces = {"application/hal+json"})
     public List<SellerRepresentation> allSellers() {
         return sellerActivity.listSeller();
     }
 
     @Override
-    @PutMapping(value = "/seller/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/seller/{id}", consumes = {"application/json"}, produces = {"application/hal+json"})
     public SellerRepresentation updateSeller(@PathVariable("id") long id, @Validated @RequestBody SellerRequest sellerRequest) {
             return sellerActivity.update(id, sellerRequest);
     }
@@ -53,7 +53,7 @@ public class SellerRestController implements SellerWebService {
     }
 
     @Override
-    @PostMapping(value = "/seller/{id}/addresses", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/seller/{id}/addresses", consumes = {"application/json"}, produces = {"application/hal+json"})
     public AddressRepresentation addAddress(@PathVariable("id") long id, @RequestBody @Validated AddressRequest addressRequest) {
             return sellerActivity.addAddress(id, addressRequest);
     }
@@ -66,7 +66,7 @@ public class SellerRestController implements SellerWebService {
     }
 
     @Override
-    @GetMapping(value = "/seller/{id}/addresses", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/seller/{id}/addresses", produces = {"application/hal+json"})
     public List<AddressRepresentation> getAddresses(@PathVariable("id") long id) {
             return sellerActivity.getAddresses(id);
     }

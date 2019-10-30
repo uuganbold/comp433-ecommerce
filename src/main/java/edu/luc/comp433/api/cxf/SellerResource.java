@@ -19,6 +19,7 @@ public class SellerResource implements SellerWebService {
     @Override
     @GET
     @Path("/seller/{id}")
+    @Produces("application/hal+json")
     public SellerRepresentation getSeller(@PathParam("id") long id) {
         return sellerActivity.getSeller(id);
     }
@@ -26,7 +27,8 @@ public class SellerResource implements SellerWebService {
     @Override
     @POST
     @Path(value = "/sellers")
-    @Consumes({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public SellerRepresentation createSeller(SellerRequest sellerRequest) {
             return sellerActivity.createSeller(sellerRequest);
     }
@@ -34,7 +36,7 @@ public class SellerResource implements SellerWebService {
     @Override
     @GET
     @Path(value = "/sellers")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<SellerRepresentation> allSellers() {
         return sellerActivity.listSeller();
     }
@@ -42,7 +44,8 @@ public class SellerResource implements SellerWebService {
     @Override
     @PUT
     @Path(value = "/seller/{id}")
-    @Consumes({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public SellerRepresentation updateSeller(@PathParam("id") long id, SellerRequest sellerRequest) {
             return sellerActivity.update(id, sellerRequest);
     }
@@ -58,7 +61,8 @@ public class SellerResource implements SellerWebService {
     @Override
     @POST
     @Path(value = "/seller/{id}/addresses")
-    @Consumes({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public AddressRepresentation addAddress(@PathParam("id") long id, AddressRequest addressRequest) {
             return sellerActivity.addAddress(id, addressRequest);
     }
@@ -74,7 +78,7 @@ public class SellerResource implements SellerWebService {
     @Override
     @GET
     @Path(value = "/seller/{id}/addresses")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<AddressRepresentation> getAddresses(@PathParam("id") long id) {
             return sellerActivity.getAddresses(id);
     }

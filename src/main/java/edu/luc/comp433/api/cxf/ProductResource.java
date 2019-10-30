@@ -21,6 +21,7 @@ public class ProductResource implements ProductWebService {
     @Override
     @GET
     @Path("/product/{id}")
+    @Produces("application/hal+json")
     public ProductRepresentation getProduct(@PathParam("id") long id) {
         return productActivity.getProduct(id);
     }
@@ -28,8 +29,8 @@ public class ProductResource implements ProductWebService {
     @Override
     @POST
     @Path("/products")
-    @Consumes({"text/xml", "application/json"})
-    @Produces({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public ProductRepresentation createProduct(ProductRequest ProductRequest) {
         return productActivity.createProduct(ProductRequest);
     }
@@ -37,16 +38,12 @@ public class ProductResource implements ProductWebService {
     @Override
     @PUT
     @Path("/product/{id}")
-    @Consumes({"text/xml", "application/json"})
-    @Produces({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public ProductRepresentation updateProduct(@PathParam("id") long id, ProductRequest ProductRequest) {
         return productActivity.update(id, ProductRequest);
     }
 
-    /*    @Override
-        @GET
-        @Path(value = "/products")
-        @Produces({"text/xml", "application/json"})*/
     public List<ProductRepresentation> allProducts() {
         return productActivity.list();
     }
@@ -54,7 +51,7 @@ public class ProductResource implements ProductWebService {
     @Override
     @GET
     @Path(value = "/products")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<ProductRepresentation> search(@QueryParam("q") String query) {
         if (query == null || query.length() == 0) {
             return allProducts();

@@ -20,6 +20,7 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @GET
     @Path("/customer/{id}")
+    @Produces("application/hal+json")
     public CustomerRepresentation getCustomer(@PathParam("id") long id) {
         return customerActivity.getCustomer(id);
     }
@@ -27,7 +28,8 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @POST
     @Path(value = "/customers")
-    @Consumes({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public CustomerRepresentation createCustomer(CustomerRequest customerRequest) {
             return customerActivity.createCustomer(customerRequest);
     }
@@ -35,7 +37,7 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @GET
     @Path(value = "/customers")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<CustomerRepresentation> allCustomers() {
         return customerActivity.listCustomers();
     }
@@ -43,7 +45,8 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @PUT
     @Path(value = "/customer/{id}")
-    @Consumes({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public CustomerRepresentation updateCustomer(@PathParam("id") long id, CustomerRequest customerRequest) {
             return customerActivity.update(id, customerRequest);
     }
@@ -59,7 +62,8 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @POST
     @Path(value = "/customer/{id}/addresses")
-    @Consumes({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public AddressRepresentation addAddress(@PathParam("id") long id, AddressRequest addressRequest) {
             return customerActivity.addAddress(id, addressRequest);
     }
@@ -75,7 +79,7 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @GET
     @Path(value = "/customer/{id}/addresses")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<AddressRepresentation> getAddresses(@PathParam("id") long id) {
             return customerActivity.getAddresses(id);
     }
@@ -84,7 +88,8 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @POST
     @Path(value = "/customer/{id}/payments")
-    @Consumes({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public PaymentRepresentation addPayment(@PathParam("id") long id, PaymentRequest paymentRequest) {
             return customerActivity.addPayment(id, paymentRequest);
     }
@@ -100,7 +105,7 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @GET
     @Path(value = "/customer/{id}/payments")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<PaymentRepresentation> getPayments(@PathParam("id") long id) {
             return customerActivity.getPayments(id);
     }

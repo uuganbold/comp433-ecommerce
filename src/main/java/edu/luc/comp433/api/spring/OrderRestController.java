@@ -19,38 +19,38 @@ public class OrderRestController implements OrderWebService {
     }
 
     @Override
-    @GetMapping(value = "/order/{id}", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/order/{id}", produces = { "application/hal+json"})
     public OrderRepresentation getOrder(@PathVariable Long id) {
         return orderActivity.getOrder(id);
     }
 
     @Override
-    @PostMapping(value = "/orders", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/orders", consumes = {"application/json"}, produces = {"application/hal+json"})
     public OrderRepresentation createOrder(@RequestBody @Validated OrderRequest orderRequest) {
         return orderActivity.createOrder(orderRequest);
     }
 
     @Override
-    @PutMapping(value = "/order/{id}/cancel", produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/order/{id}/cancel", produces = { "application/hal+json"})
     public OrderRepresentation cancel(@PathVariable Long id) {
         return orderActivity.cancelOrder(id);
     }
 
     @Override
-    @PutMapping(value = "/order/{id}/ship", produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/order/{id}/ship", produces = {"application/hal+json"})
     public OrderRepresentation ship(@PathVariable Long id) {
 
         return orderActivity.shipOrder(id);
     }
 
     @Override
-    @PutMapping(value = "/order/{id}/deliver", produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/order/{id}/deliver", produces = {"application/hal+json"})
     public OrderRepresentation deliver(@PathVariable Long id) {
         return orderActivity.deliverOrder(id);
     }
 
     @Override
-    @GetMapping(value = "/orders", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/orders", produces = {"application/hal+json"})
     public List<OrderRepresentation> allOrders() {
         return orderActivity.list();
     }

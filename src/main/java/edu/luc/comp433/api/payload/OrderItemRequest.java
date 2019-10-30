@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.luc.comp433.business.dto.OrderItemDTO;
 import edu.luc.comp433.business.dto.ProductDTO;
 import lombok.AllArgsConstructor;
@@ -7,12 +8,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "item")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderItemRequest {
 
     @NotNull

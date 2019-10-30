@@ -4,8 +4,8 @@ import edu.luc.comp433.business.dto.OrderDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "order")
-public class OrderRepresentation {
+public class OrderRepresentation  extends RepresentationModel<OrderRepresentation> {
 
     private Long id;
 

@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.luc.comp433.business.dto.AddressDTO;
 import edu.luc.comp433.util.Patterns;
 import lombok.Data;
@@ -9,11 +10,10 @@ import lombok.NonNull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @NoArgsConstructor
-@XmlRootElement(name = "address")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressRequest {
 
     @NotNull

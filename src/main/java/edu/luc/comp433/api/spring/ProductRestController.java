@@ -26,25 +26,25 @@ public class ProductRestController implements ProductWebService {
     }
 
     @Override
-    @PostMapping(value = "/products", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/products", consumes = {"application/json"}, produces = {"application/hal+json"})
     public ProductRepresentation createProduct(@RequestBody @Validated ProductRequest ProductRequest) {
         return productActivity.createProduct(ProductRequest);
     }
 
     @Override
-    @PutMapping(value = "/product/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/product/{id}", consumes = {"application/json"}, produces = {"application/hal+json"})
     public ProductRepresentation updateProduct(@PathVariable long id, @RequestBody @Validated ProductRequest ProductRequest) {
         return productActivity.update(id, ProductRequest);
     }
 
     @Override
-    @GetMapping(value = "/products", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/products", produces = {"application/hal+json"})
     public List<ProductRepresentation> allProducts() {
         return productActivity.list();
     }
 
     @Override
-    @GetMapping(value = "/products", produces = {"text/xml", "application/json"}, params = {"q"})
+    @GetMapping(value = "/products", produces = {"application/hal+json"}, params = {"q"})
     public List<ProductRepresentation> search(@RequestParam("q") String query) {
         return productActivity.search(query);
     }

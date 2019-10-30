@@ -22,6 +22,7 @@ public class CategoryResource implements CategoryWebService {
 
     @GET
     @Path("category/{id}")
+    @Produces("application/hal+json")
     public CategoryRepresentation getCategory(@PathParam("id") long id) {
         return categoryActivity.getCategory(id);
     }
@@ -29,6 +30,7 @@ public class CategoryResource implements CategoryWebService {
     @Override
     @POST
     @Path("categories")
+    @Produces("application/hal+json")
     public CategoryRepresentation createCategory(CategoryRequest categoryRequest) {
             return categoryActivity.createCategory(categoryRequest);
     }
@@ -36,6 +38,7 @@ public class CategoryResource implements CategoryWebService {
     @Override
     @PUT
     @Path("category/{id}")
+    @Produces("application/hal+json")
     public CategoryRepresentation updateCategory(@PathParam("id") long id, CategoryRequest categoryRequest) {
             return categoryActivity.update(id, categoryRequest);
     }
@@ -43,6 +46,7 @@ public class CategoryResource implements CategoryWebService {
     @Override
     @GET
     @Path("categories")
+    @Produces("application/hal+json")
     public List<CategoryRepresentation> allCategories() {
         return categoryActivity.list();
     }

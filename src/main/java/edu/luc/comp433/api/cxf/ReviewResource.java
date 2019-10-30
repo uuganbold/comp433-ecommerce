@@ -22,6 +22,7 @@ public class ReviewResource implements ReviewWebService {
     @Override
     @GET
     @Path("/review/{id}")
+    @Produces("application/hal+json")
     public ReviewRepresentation getReview(@PathParam("id") long id) {
         return reviewActivity.getReview(id);
     }
@@ -29,8 +30,8 @@ public class ReviewResource implements ReviewWebService {
     @Override
     @POST
     @Path("/reviews")
-    @Consumes({"text/xml", "application/json"})
-    @Produces({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public ReviewRepresentation createReview(ReviewRequest reviewRequest) {
         return reviewActivity.createReview(reviewRequest);
     }
@@ -38,8 +39,8 @@ public class ReviewResource implements ReviewWebService {
     @Override
     @PUT
     @Path("/review/{id}")
-    @Consumes({"text/xml", "application/json"})
-    @Produces({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public ReviewRepresentation updateReview(@PathParam("id") long id, ReviewRequest reviewRequest) {
         return reviewActivity.update(id, reviewRequest);
     }
@@ -47,7 +48,7 @@ public class ReviewResource implements ReviewWebService {
     @Override
     @GET
     @Path(value = "/reviews")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<ReviewRepresentation> allReviews() {
         return reviewActivity.list();
     }

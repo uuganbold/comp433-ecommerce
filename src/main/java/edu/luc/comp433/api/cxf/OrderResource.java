@@ -19,7 +19,7 @@ public class OrderResource implements OrderWebService {
     @Override
     @GET
     @Path(value = "/order/{id}")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public OrderRepresentation getOrder(@PathParam("id") Long id) {
         return orderActivity.getOrder(id);
     }
@@ -27,8 +27,8 @@ public class OrderResource implements OrderWebService {
     @Override
     @POST
     @Path(value = "/orders")
-    @Consumes({"text/xml", "application/json"})
-    @Produces({"text/xml", "application/json"})
+    @Consumes({"application/json"})
+    @Produces("application/hal+json")
     public OrderRepresentation createOrder(OrderRequest orderRequest) {
         return orderActivity.createOrder(orderRequest);
     }
@@ -36,7 +36,7 @@ public class OrderResource implements OrderWebService {
     @Override
     @PUT
     @Path(value = "/order/{id}/cancel")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public OrderRepresentation cancel(@PathParam("id") Long id) {
         return orderActivity.cancelOrder(id);
     }
@@ -44,7 +44,7 @@ public class OrderResource implements OrderWebService {
     @Override
     @PUT
     @Path(value = "/order/{id}/ship")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public OrderRepresentation ship(@PathParam("id") Long id) {
 
         return orderActivity.shipOrder(id);
@@ -53,7 +53,7 @@ public class OrderResource implements OrderWebService {
     @Override
     @PUT
     @Path(value = "/order/{id}/deliver")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public OrderRepresentation deliver(@PathParam("id") Long id) {
         return orderActivity.deliverOrder(id);
     }
@@ -61,7 +61,7 @@ public class OrderResource implements OrderWebService {
     @Override
     @GET
     @Path(value = "/orders")
-    @Produces({"text/xml", "application/json"})
+    @Produces("application/hal+json")
     public List<OrderRepresentation> allOrders() {
         return orderActivity.list();
     }

@@ -26,19 +26,19 @@ public class ReviewRestController implements ReviewWebService {
     }
 
     @Override
-    @PostMapping(value = "/reviews", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/reviews", consumes = {"application/json"}, produces = {"application/hal+json"})
     public ReviewRepresentation createReview(@RequestBody @Validated ReviewRequest ReviewRequest) {
         return reviewActivity.createReview(ReviewRequest);
     }
 
     @Override
-    @PutMapping(value = "/review/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/review/{id}", consumes = {"application/json"}, produces = {"application/hal+json"})
     public ReviewRepresentation updateReview(@PathVariable long id, @RequestBody @Validated ReviewRequest reviewRequest) {
         return reviewActivity.update(id, reviewRequest);
     }
 
     @Override
-    @GetMapping(value = "/reviews", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/reviews", produces = {"application/hal+json"})
     public List<ReviewRepresentation> allReviews() {
         return reviewActivity.list();
     }

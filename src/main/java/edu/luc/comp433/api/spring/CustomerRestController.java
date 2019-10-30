@@ -19,25 +19,25 @@ public class CustomerRestController implements CustomerWebService {
     }
 
     @Override
-    @GetMapping("/customer/{id}")
+    @GetMapping(value = "/customer/{id}", produces = {"application/hal+json"})
     public CustomerRepresentation getCustomer(@PathVariable("id") long id) {
         return customerActivity.getCustomer(id);
     }
 
     @Override
-    @PostMapping(value = "/customers", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/customers", consumes = {"application/json"}, produces = {"application/hal+json"})
     public CustomerRepresentation createCustomer(@RequestBody @Validated CustomerRequest customerRequest) {
         return customerActivity.createCustomer(customerRequest);
     }
 
     @Override
-    @GetMapping(value = "/customers", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/customers", produces = {"application/hal+json"})
     public List<CustomerRepresentation> allCustomers() {
         return customerActivity.listCustomers();
     }
 
     @Override
-    @PutMapping(value = "/customer/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/customer/{id}", consumes = {"application/json"}, produces = {"application/hal+json"})
     public CustomerRepresentation updateCustomer(@PathVariable("id") long id, @RequestBody @Validated CustomerRequest customerRequest) {
         return customerActivity.update(id, customerRequest);
     }
@@ -50,7 +50,7 @@ public class CustomerRestController implements CustomerWebService {
     }
 
     @Override
-    @PostMapping(value = "/customer/{id}/addresses", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/customer/{id}/addresses", consumes = {"application/json"}, produces = {"application/hal+json"})
     public AddressRepresentation addAddress(@PathVariable("id") long id, @Validated @RequestBody AddressRequest addressRequest) {
         return customerActivity.addAddress(id, addressRequest);
     }
@@ -63,14 +63,14 @@ public class CustomerRestController implements CustomerWebService {
     }
 
     @Override
-    @GetMapping(value = "/customer/{id}/addresses", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/customer/{id}/addresses", produces = {"application/hal+json"})
     public List<AddressRepresentation> getAddresses(@PathVariable("id") long id) {
         return customerActivity.getAddresses(id);
     }
 
 
     @Override
-    @PostMapping(value = "/customer/{id}/payments", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/customer/{id}/payments", consumes = { "application/json"}, produces = {"application/hal+json"})
     public PaymentRepresentation addPayment(@PathVariable("id") long id, @RequestBody @Validated PaymentRequest paymentRequest) {
         return customerActivity.addPayment(id, paymentRequest);
     }
@@ -83,7 +83,7 @@ public class CustomerRestController implements CustomerWebService {
     }
 
     @Override
-    @GetMapping(value = "/customer/{id}/payments", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/customer/{id}/payments", produces = {"application/hal+json"})
     public List<PaymentRepresentation> getPayments(@PathVariable("id") long id) {
         return customerActivity.getPayments(id);
     }

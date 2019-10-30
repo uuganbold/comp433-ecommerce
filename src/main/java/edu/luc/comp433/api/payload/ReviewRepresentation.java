@@ -4,15 +4,14 @@ import edu.luc.comp433.business.dto.ReviewDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.time.Instant;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "review")
-public class ReviewRepresentation {
+public class ReviewRepresentation extends RepresentationModel<ReviewRepresentation> {
 
     private long id;
 

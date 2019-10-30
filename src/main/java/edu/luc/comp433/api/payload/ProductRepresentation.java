@@ -4,14 +4,12 @@ import edu.luc.comp433.business.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "product")
-public class ProductRepresentation {
+public class ProductRepresentation extends RepresentationModel<ProductRepresentation> {
 
     private Long id;
 
