@@ -22,10 +22,10 @@ public class OrderRepresentation  extends RepresentationModel<OrderRepresentatio
 
     private CustomerRepresentation customer;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Instant date;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Instant updateDate;
 
     private List<OrderItemRepresentation> items = new ArrayList<>();

@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.cxf;
 
+import edu.luc.comp433.api.cxf.linkbuilder.LinkBuilder;
 import edu.luc.comp433.api.payload.ProductRepresentation;
 import edu.luc.comp433.api.payload.ProductRequest;
 import edu.luc.comp433.api.workflow.ProductActivity;
@@ -7,12 +8,17 @@ import edu.luc.comp433.api.ws.ProductWebService;
 import org.apache.cxf.jaxrs.ext.ResponseStatus;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 public class ProductResource implements ProductWebService {
 
     private ProductActivity productActivity;
+
+    @Context
+    private UriInfo uriInfo;
 
     public ProductResource(ProductActivity productActivity) {
         this.productActivity = productActivity;
@@ -23,7 +29,7 @@ public class ProductResource implements ProductWebService {
     @Path("/product/{id}")
     @Produces("application/hal+json")
     public ProductRepresentation getProduct(@PathParam("id") long id) {
-        return productActivity.getProduct(id);
+        return withLinks(productActivity.getProduct(id));
     }
 
     @Override
@@ -32,7 +38,7 @@ public class ProductResource implements ProductWebService {
     @Consumes({"application/json"})
     @Produces("application/hal+json")
     public ProductRepresentation createProduct(ProductRequest ProductRequest) {
-        return productActivity.createProduct(ProductRequest);
+        return withLinks(productActivity.createProduct(ProductRequest));
     }
 
     @Override
@@ -41,11 +47,11 @@ public class ProductResource implements ProductWebService {
     @Consumes({"application/json"})
     @Produces("application/hal+json")
     public ProductRepresentation updateProduct(@PathParam("id") long id, ProductRequest ProductRequest) {
-        return productActivity.update(id, ProductRequest);
+        return withLinks(productActivity.update(id, ProductRequest));
     }
 
     public List<ProductRepresentation> allProducts() {
-        return productActivity.list();
+        return withLinks(productActivity.list());
     }
 
     @Override
@@ -56,7 +62,7 @@ public class ProductResource implements ProductWebService {
         if (query == null || query.length() == 0) {
             return allProducts();
         }
-        return productActivity.search(query);
+        return withLinks(productActivity.search(query));
     }
 
     @Override
@@ -65,5 +71,18 @@ public class ProductResource implements ProductWebService {
     @ResponseStatus(Response.Status.NO_CONTENT)
     public void deleteProduct(@PathParam("id") long id) {
         productActivity.delete(id);
+    }
+
+    protected ProductRepresentation withLinks(ProductRepresentation productRepresentation) {
+        productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(ProductResource.class, "getProduct").withSelfRel().build(productRepresentation.getId()));
+        productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(ProductResource.class, "search").withRel("all").build());
+        productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(CategoryResource.class, "getCategory").withRel("category").build(productRepresentation.getCategory().getId()));
+        productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getSeller").withRel("seller").build(productRepresentation.getSeller().getId()));
+        return productRepresentation;
+    }
+
+    protected List<ProductRepresentation> withLinks(List<ProductRepresentation> list) {
+        list.forEach(this::withLinks);
+        return list;
     }
 }

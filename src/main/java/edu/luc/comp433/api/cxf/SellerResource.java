@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.cxf;
 
+import edu.luc.comp433.api.cxf.linkbuilder.LinkBuilder;
 import edu.luc.comp433.api.payload.AddressRepresentation;
 import edu.luc.comp433.api.payload.AddressRequest;
 import edu.luc.comp433.api.payload.SellerRepresentation;
@@ -9,7 +10,9 @@ import edu.luc.comp433.api.ws.SellerWebService;
 import org.apache.cxf.jaxrs.ext.ResponseStatus;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 public class SellerResource implements SellerWebService {
@@ -21,7 +24,7 @@ public class SellerResource implements SellerWebService {
     @Path("/seller/{id}")
     @Produces("application/hal+json")
     public SellerRepresentation getSeller(@PathParam("id") long id) {
-        return sellerActivity.getSeller(id);
+        return withLinks(sellerActivity.getSeller(id));
     }
 
     @Override
@@ -30,7 +33,7 @@ public class SellerResource implements SellerWebService {
     @Consumes({"application/json"})
     @Produces("application/hal+json")
     public SellerRepresentation createSeller(SellerRequest sellerRequest) {
-            return sellerActivity.createSeller(sellerRequest);
+        return withLinks(sellerActivity.createSeller(sellerRequest));
     }
 
     @Override
@@ -38,7 +41,7 @@ public class SellerResource implements SellerWebService {
     @Path(value = "/sellers")
     @Produces("application/hal+json")
     public List<SellerRepresentation> allSellers() {
-        return sellerActivity.listSeller();
+        return withLinks(sellerActivity.listSeller());
     }
 
     @Override
@@ -47,7 +50,7 @@ public class SellerResource implements SellerWebService {
     @Consumes({"application/json"})
     @Produces("application/hal+json")
     public SellerRepresentation updateSeller(@PathParam("id") long id, SellerRequest sellerRequest) {
-            return sellerActivity.update(id, sellerRequest);
+        return withLinks(sellerActivity.update(id, sellerRequest));
     }
 
     @Override
@@ -64,7 +67,7 @@ public class SellerResource implements SellerWebService {
     @Consumes({"application/json"})
     @Produces("application/hal+json")
     public AddressRepresentation addAddress(@PathParam("id") long id, AddressRequest addressRequest) {
-            return sellerActivity.addAddress(id, addressRequest);
+        return withLinks(id, sellerActivity.addAddress(id, addressRequest));
     }
 
     @Override
@@ -72,8 +75,7 @@ public class SellerResource implements SellerWebService {
     @Path("/seller/{id}/address/{addressId}")
     @Produces({"application/hal+json"})
     public AddressRepresentation getAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
-        AddressRepresentation address = sellerActivity.getAddress(id, addressId);
-        return address;
+        return withLinks(id, sellerActivity.getAddress(id, addressId));
     }
 
     @Override
@@ -89,10 +91,37 @@ public class SellerResource implements SellerWebService {
     @Path(value = "/seller/{id}/addresses")
     @Produces("application/hal+json")
     public List<AddressRepresentation> getAddresses(@PathParam("id") long id) {
-            return sellerActivity.getAddresses(id);
+        return withLinks(id, sellerActivity.getAddresses(id));
     }
 
     public SellerResource(SellerActivity sellerActivity) {
         this.sellerActivity = sellerActivity;
+    }
+
+    @Context
+    private UriInfo uriInfo;
+
+    protected SellerRepresentation withLinks(SellerRepresentation seller) {
+        seller.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getSeller").withSelfRel().build(seller.getId()));
+        seller.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "allSellers").withRel("all").build());
+        seller.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getAddresses").withRel("addresses").build(seller.getId()));
+        return seller;
+    }
+
+    protected AddressRepresentation withLinks(long sellerId, AddressRepresentation address) {
+        address.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getAddress").withSelfRel().build(sellerId, address.getId()));
+        address.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getSeller").withRel("seller").build(sellerId));
+        address.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getAddresses").withRel("all").build(sellerId));
+        return address;
+    }
+
+    protected List<AddressRepresentation> withLinks(long id, List<AddressRepresentation> addresses) {
+        addresses.forEach(a -> withLinks(id, a));
+        return addresses;
+    }
+
+    protected List<SellerRepresentation> withLinks(List<SellerRepresentation> sellers) {
+        sellers.forEach(this::withLinks);
+        return sellers;
     }
 }
