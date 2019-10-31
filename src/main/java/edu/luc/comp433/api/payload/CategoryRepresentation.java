@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.luc.comp433.business.dto.CategoryDTO;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
@@ -8,6 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CategoryRepresentation extends RepresentationModel<CategoryRepresentation> {
 
     @NonNull

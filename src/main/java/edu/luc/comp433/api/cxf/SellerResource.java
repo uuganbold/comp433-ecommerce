@@ -68,6 +68,15 @@ public class SellerResource implements SellerWebService {
     }
 
     @Override
+    @GET
+    @Path("/seller/{id}/address/{addressId}")
+    @Produces({"application/hal+json"})
+    public AddressRepresentation getAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
+        AddressRepresentation address = sellerActivity.getAddress(id, addressId);
+        return address;
+    }
+
+    @Override
     @DELETE
     @Path("/seller/{id}/address/{addressId}")
     @ResponseStatus(Response.Status.NO_CONTENT)

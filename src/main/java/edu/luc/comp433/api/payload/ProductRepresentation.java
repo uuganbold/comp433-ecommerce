@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.luc.comp433.business.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductRepresentation extends RepresentationModel<ProductRepresentation> {
 
     private Long id;
