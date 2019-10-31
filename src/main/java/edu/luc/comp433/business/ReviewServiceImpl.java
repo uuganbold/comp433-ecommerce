@@ -51,17 +51,11 @@ public class ReviewServiceImpl implements ReviewService {
         Product product = productRepository.findById(reviewDTO.getProductDTO().getId())
                 .orElseThrow(() -> new EntryNotFoundException("Product not found with this id:" + reviewDTO.getProductDTO().getId()));
 
-        System.out.println("!!!!!!!!!!!!!!!!!");
         Review review = reviewDTO.toEntity();
-        System.out.println("%%%%%%%%%%%");
         review.setDate(Instant.now());
-        System.out.println("****************");
         review.setProduct(product);
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@");
         review.setCustomer(customer);
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$");
         reviewRepository.save(review);
-        System.out.println("#####################");
         return ReviewDTO.of(review).setCustomerDTO(CustomerDTO.of(customer)).setProductDTO(ProductDTO.of(product));
     }
 
@@ -85,7 +79,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewDTO> list() {
         List<ReviewDTO> list = new ArrayList<>();
-        reviewRepository.findAll().forEach(c -> list.add(ReviewDTO.of(c)));
+        reviewRepository.findAll().forEach(c -> list.add(ReviewDTO.of(c)
+                .setCustomerDTO(CustomerDTO.of(c.getCustomer()))
+                .setProductDTO(ProductDTO.of(c.getProduct()))));
         return list;
     }
 

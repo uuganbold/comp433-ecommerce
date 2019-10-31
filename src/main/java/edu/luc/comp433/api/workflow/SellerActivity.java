@@ -78,4 +78,12 @@ public class SellerActivity {
     public void removeAddress(long id, long addressId) throws EntryNotFoundException, NotRemovableException {
         sellerService.removeAddress(id, addressId);
     }
+
+    public AddressRepresentation getAddress(long id, long addressId) {
+        AddressDTO dto = sellerService.getAddress(id, addressId);
+        if (dto == null)
+            throw new EntryNotFoundException("This seller does not have the address with this id:" + addressId);
+        return new AddressRepresentation(dto.getId(), dto.getCountry(), dto.getStreet(),
+                dto.getUnit(), dto.getCity(), dto.getState(), dto.getZipcode(), dto.getPhonenumber());
+    }
 }

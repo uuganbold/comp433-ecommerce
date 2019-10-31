@@ -35,9 +35,12 @@ public class ProductServiceImpl implements ProductService {
         this.sellerRepository = sellerRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductDTO> search(String query) {
         List<ProductDTO> list = new ArrayList<>();
-        productRepository.findByNameContains(query.trim()).forEach(c -> list.add(ProductDTO.of(c)));
+        productRepository.findByNameContains(query.trim()).forEach(c -> list.add(ProductDTO.of(c)
+                .setCategoryDTO(CategoryDTO.of(c.getCategory()))
+                .setSellerDTO(SellerDTO.of(c.getSeller()))));
         return list;
     }
 
@@ -90,7 +93,9 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public List<ProductDTO> list() {
         List<ProductDTO> list = new ArrayList<>();
-        productRepository.findAll().forEach(c -> list.add(ProductDTO.of(c)));
+        productRepository.findAll().forEach(c -> list.add(ProductDTO.of(c).
+                setCategoryDTO(CategoryDTO.of(c.getCategory()))
+                .setSellerDTO(SellerDTO.of(c.getSeller()))));
         return list;
     }
 

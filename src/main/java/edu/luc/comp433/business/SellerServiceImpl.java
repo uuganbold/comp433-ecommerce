@@ -111,6 +111,12 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
+    public AddressDTO getAddress(long id, long addressId) {
+        Seller c = sellerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Seller not found with id:" + id));
+        return AddressDTO.of(c.getAddress(addressId));
+    }
+
+    @Override
     @Transactional
     public void removeAddress(long id, long addressId) throws EntryNotFoundException, NotRemovableException {
         Seller c = sellerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Seller not found with id:" + id));
