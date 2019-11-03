@@ -19,7 +19,7 @@ const Home: MyPage = ({}) => {
         <Layout>
             <div>
                 <h1>Hello world!</h1>
-                <Alert color="info">We can two implementations of the web service. Which one would you like to
+                <Alert color="info">We have two implementations of the web service. Which one would you like to
                     use?</Alert>
                 <Form>
                     <FormGroup tag="fieldset">
