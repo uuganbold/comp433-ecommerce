@@ -6,6 +6,7 @@ import edu.luc.comp433.api.payload.ReviewRequest;
 import edu.luc.comp433.api.workflow.ReviewActivity;
 import edu.luc.comp433.api.ws.ReviewWebService;
 import org.apache.cxf.jaxrs.ext.ResponseStatus;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -13,6 +14,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
+@CrossOriginResourceSharing(
+        allowAllOrigins = true,
+        maxAge = 200
+)
 public class ReviewResource implements ReviewWebService {
 
 

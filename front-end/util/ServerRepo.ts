@@ -4,7 +4,7 @@ import nextCookie from "next-cookies";
 import {NextPageContext} from "next";
 
 const SPRING_SERVER = Server.create(BASE_URI + SPRING_BASE_URI);
-const JAXRS_SERVER = Server.create(JAXRS_BASE_URI);
+const JAXRS_SERVER = Server.create(BASE_URI + JAXRS_BASE_URI);
 
 type Props = {
     api: string,

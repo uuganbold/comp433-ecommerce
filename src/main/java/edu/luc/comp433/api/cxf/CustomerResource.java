@@ -5,6 +5,7 @@ import edu.luc.comp433.api.payload.*;
 import edu.luc.comp433.api.workflow.CustomerActivity;
 import edu.luc.comp433.api.ws.CustomerWebService;
 import org.apache.cxf.jaxrs.ext.ResponseStatus;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -12,6 +13,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
+@CrossOriginResourceSharing(
+        allowAllOrigins = true,
+        maxAge = 200
+)
 public class CustomerResource implements CustomerWebService {
 
     private CustomerActivity customerActivity;
@@ -62,7 +67,7 @@ public class CustomerResource implements CustomerWebService {
     @Path("/customer/{id}")
     @ResponseStatus(Response.Status.NO_CONTENT)
     public void deleteCustomer(@PathParam("id") long id) {
-            customerActivity.delete(id);
+        customerActivity.delete(id);
     }
 
     @Override
@@ -79,7 +84,7 @@ public class CustomerResource implements CustomerWebService {
     @Path("/customer/{id}/address/{addressId}")
     @ResponseStatus(Response.Status.NO_CONTENT)
     public void removeAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
-            customerActivity.removeAddress(id, addressId);
+        customerActivity.removeAddress(id, addressId);
     }
 
     @Override
@@ -105,7 +110,7 @@ public class CustomerResource implements CustomerWebService {
     @Path("/customer/{id}/payment/{paymentId}")
     @ResponseStatus(Response.Status.NO_CONTENT)
     public void removePayment(@PathParam("id") long id, @PathParam("paymentId") long paymentId) {
-            customerActivity.removePayment(id, paymentId);
+        customerActivity.removePayment(id, paymentId);
     }
 
     @Override

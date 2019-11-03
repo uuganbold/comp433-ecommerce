@@ -7,6 +7,7 @@ import edu.luc.comp433.api.workflow.CategoryActivity;
 import edu.luc.comp433.api.ws.CategoryWebService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.jaxrs.ext.ResponseStatus;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -16,6 +17,10 @@ import java.util.List;
 
 
 @Slf4j
+@CrossOriginResourceSharing(
+        allowAllOrigins = true,
+        maxAge = 200
+)
 public class CategoryResource implements CategoryWebService {
 
     private CategoryActivity categoryActivity;

@@ -5,12 +5,17 @@ import edu.luc.comp433.api.payload.OrderRepresentation;
 import edu.luc.comp433.api.payload.OrderRequest;
 import edu.luc.comp433.api.workflow.OrderActivity;
 import edu.luc.comp433.api.ws.OrderWebService;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
+@CrossOriginResourceSharing(
+        allowAllOrigins = true,
+        maxAge = 200
+)
 public class OrderResource implements OrderWebService {
 
     private OrderActivity orderActivity;

@@ -8,6 +8,7 @@ import edu.luc.comp433.api.payload.SellerRequest;
 import edu.luc.comp433.api.workflow.SellerActivity;
 import edu.luc.comp433.api.ws.SellerWebService;
 import org.apache.cxf.jaxrs.ext.ResponseStatus;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -15,6 +16,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
+@CrossOriginResourceSharing(
+        allowAllOrigins = true,
+        maxAge = 200
+)
 public class SellerResource implements SellerWebService {
 
     private SellerActivity sellerActivity;
@@ -58,7 +63,7 @@ public class SellerResource implements SellerWebService {
     @Path("/seller/{id}")
     @ResponseStatus(Response.Status.NO_CONTENT)
     public void deleteSeller(@PathParam("id") long id) {
-            sellerActivity.delete(id);
+        sellerActivity.delete(id);
     }
 
     @Override
@@ -83,7 +88,7 @@ public class SellerResource implements SellerWebService {
     @Path("/seller/{id}/address/{addressId}")
     @ResponseStatus(Response.Status.NO_CONTENT)
     public void removeAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
-            sellerActivity.removeAddress(id, addressId);
+        sellerActivity.removeAddress(id, addressId);
     }
 
     @Override
