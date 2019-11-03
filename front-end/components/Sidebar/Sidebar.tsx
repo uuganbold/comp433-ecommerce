@@ -163,10 +163,6 @@ const submenus: Array<Array<{ title: string, target: string }>> = [
         {
             title: "All Products",
             target: "/product/list",
-        },
-        {
-            title: "Search Products",
-            target: "/product/search"
         }
     ],
     [

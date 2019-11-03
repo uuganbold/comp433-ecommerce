@@ -22,7 +22,7 @@ const PaymentNew: NextPage<Props> = (props) => {
     const [cardNumber, setCardNumber] = useState('');
     const [expireMonth, setExpireMonth] = useState('');
     const [expireYear, setExpireYear] = useState('');
-    const [addressId, setAddressId] = useState('');
+    const [addressId, setAddressId] = useState(0);
 
     const [error, setError] = useState('');
     const {server} = useContext(AppContext);
@@ -41,8 +41,8 @@ const PaymentNew: NextPage<Props> = (props) => {
             case 'expireYear':
                 setExpireYear(e.target.value);
                 break;
-            case 'addressName':
-                setAddressId(e.target.value);
+            case 'addressId':
+                setAddressId(e.target.value as unknown as number);
                 break;
         }
     };
@@ -115,7 +115,7 @@ const PaymentNew: NextPage<Props> = (props) => {
                                 Address
                             </th>
                             <td>
-                                <Input type={"select"} name={'addressName'} onChange={handleChange}>
+                                <Input type={"select"} name={'addressId'} onChange={handleChange} value={addressId}>
                                     <option value={0} key={0}>Select Address</option>
                                     {
                                         props.addresses.map(a =>
