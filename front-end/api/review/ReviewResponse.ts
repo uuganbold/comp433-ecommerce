@@ -1,59 +1,87 @@
 import IResponse from "../IResponse";
+import ProductResponse from "../product/ProductResponse";
+import CustomerResponse from "../customer/CustomerResponse";
 
 export default class ReviewResponse implements IResponse {
-    private _id: number;
-    private _productId: number;
-    private _customerId: number;
-    private _star: number;
-    private _comment: string;
+
+    private id: number;
+    private star: number;
+    private comment: string;
+    private date: Date;
+    private productResponse: ProductResponse;
+    private customerResponse: CustomerResponse;
 
 
-    constructor(id: number, productId: number, customerId: number, star: number, comment: string) {
-        this._id = id;
-        this._productId = productId;
-        this._customerId = customerId;
-        this._star = star;
-        this._comment = comment;
+    constructor(id: number, productId: number, customerId: number, star: number, comment: string, date: Date, productResponse: ProductResponse, customerResponse: CustomerResponse) {
+        this.id = id;
+        this.star = star;
+        this.comment = comment;
+        this.date = date;
+        this.productResponse = productResponse;
+        this.customerResponse = customerResponse
+
     }
 
 
-    get id(): number {
-        return this._id;
+    get getId(): number {
+        return this.id;
     }
 
-    set id(value: number) {
-        this._id = value;
+    set setId(value: number) {
+        this.id = value;
     }
 
     get productId(): number {
-        return this._productId;
+        return this.productId;
     }
 
     set productId(value: number) {
-        this._productId = value;
+        this.productId = value;
     }
 
     get customerId(): number {
-        return this._customerId;
+        return this.customerId;
     }
 
     set customerId(value: number) {
-        this._customerId = value;
+        this.customerId = value;
     }
 
-    get star(): number {
-        return this._star;
+    get getStar(): number {
+        return this.star;
     }
 
-    set star(value: number) {
-        this._star = value;
+    set setStar(value: number) {
+        this.star = value;
     }
 
-    get comment(): string {
-        return this._comment;
+    get getComment(): string {
+        return this.comment;
     }
 
-    set comment(value: string) {
-        this._comment = value;
+    set setComment(value: string) {
+        this.comment = value;
+    }
+
+    get getCustomerReponse(): CustomerResponse {
+        return this.customerResponse;
+    }
+
+    set setCustomerReponse(value: CustomerResponse) {
+        this.customerResponse = value;
+    }
+    get getProductResponse(): ProductResponse {
+        return this.productResponse;
+    }
+    set setProductResponse(value: ProductResponse) {
+        this.productResponse = value;
+    }
+
+    get getDate(): Date {
+        return this.date;
+    }
+
+    set setDate(value: Date) {
+        this.date = value;
     }
 }

@@ -12,7 +12,6 @@ type Props = {
 }
 
 const CustomerList: NextPage<Props> = (props) => {
-
     return (
         <Layout>
             <div>
