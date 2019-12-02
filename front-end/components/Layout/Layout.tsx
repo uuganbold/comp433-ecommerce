@@ -9,7 +9,6 @@ type Props = {}
 const Layout: FunctionComponent<Props> = ({
                                               children
                                           }) => {
-
     const [isOpen, setOpen] = useState(true)
     const toggle = () => setOpen(!isOpen)
     return (

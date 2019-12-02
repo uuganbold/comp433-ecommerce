@@ -1,143 +1,151 @@
 import ProductResponse from "../../api/product/ProductResponse";
 import {NextPage} from "next";
 import Layout from "../../components/Layout/Layout";
-import {Alert, Button, Container, Table} from "reactstrap";
-import Link from "next/link";
+import {Alert, Button, Container, Input, Table} from "reactstrap";
 import ServerRepo from "../../util/ServerRepo";
 import ProductApi from "../../api/product/ProductApi";
-import Router from "next/router";
 import Toolbar from "../../components/ToolBar";
-import {useContext, useState} from "react";
+import {ChangeEvent, useContext, useState} from "react";
 import AppContext from "../../components/AppContext/AppContext";
-import ApiError from "../../api/ApiError";
+import Router from "next/router";
+import Link from "next/link";
+import ReviewResponse from "../../api/review/ReviewResponse";
+import CustomerResponse from "../../api/customer/CustomerResponse";
+import ReviewApi from "../../api/review/ReviewApi";
+import CustomerApi from "../../api/customer/CustomerApi";
+import ReviewRequest from "../../api/review/ReviewRequest";
 
 type Props = {
-    product: ProductResponse
+    review: ReviewResponse | undefined,
+    customers: CustomerResponse[],
+    products: ProductResponse[]
 }
 
-const ProductView: NextPage<Props> = (props) => {
+const ReviewEdit: NextPage<Props> = ({
+                                         review,
+                                         products,
+                                         customers
+                                     }) => {
 
+    const [comment, setComment] = useState(review ? review.comment : '');
+    const [star, setStar] = useState(review ? review.star : '');
+    const [productId, setProductId] = useState(review ? review.product.id : 0);
+    const [customerId, setCustomerId] = useState(review ? review.customer.id : 0);
+    const [error, setError] = useState('');
     const {server} = useContext(AppContext);
 
-    const [error, setError] = useState('');
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        switch (e.target.name) {
+            case 'comment':
+                setComment(e.target.value);
+                break;
+            case 'star':
+                setStar(e.target.value);
+                break;
+            case 'productId':
+                setProductId(e.target.value as unknown as number);
+                break;
+            case 'customerId':
+                setCustomerId(e.target.value as unknown as number);
+                break;
+        }
+    };
 
-    const handleDelete = () => {
-        server.getApi(ProductApi).delete(props.product.id).then(() => {
-            Router.push('/product/list');
-        }).catch((error: ApiError) => {
-            setError(error.message);
+    const handleSave = () => {
+        const api = server.getApi(ReviewApi);
+        if (review) {
+            const id = review.id;
+            api.update(id, new ReviewRequest(productId,
+                customerId,
+                star as unknown as number,
+                comment)).then(() => {
+                Router.push(`/review/[id]`, `/review/${id}`)
+            }).catch((error) => {
+                setError(error.message)
+            });
+        } else api.create(new ReviewRequest(productId,
+            customerId,
+            star as unknown as number,
+            comment)).then((cat: ReviewResponse) => {
+            Router.push(`/review/[id]`, `/review/${cat.id}`)
+        }).catch((error) => {
+            setError(error.message)
         });
     };
-
-    const handleEdit = () => {
-        Router.push(`/product/edit?id=${props.product.id}`);
-    };
-
     return (
         <Layout>
             <div>
-                <h1>Products</h1>
+                <h1>{review ? 'Editing' : 'New'} Review</h1>
                 <Container>
                     <Table>
                         <tbody>
-                        <tr>
+                        {review && <tr>
                             <th scope="row">
                                 ID
                             </th>
                             <td>
-                                {props.product.id}
+                                {review.id}
                             </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                Name
-                            </th>
-                            <td>
-                                {props.product.name}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                List Price
-                            </th>
-                            <td>
-                                {props.product.listPrice}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                Available Quantity
-                            </th>
-                            <td>
-                                {props.product.availableQuantity}
-                            </td>
-                        </tr>
+                        </tr>}
                         <tr>
                             <th scope="row" colSpan={2}>
-                                Description
+                                Comment
                             </th>
                         </tr>
                         <tr>
                             <td colSpan={2}>
-                                {props.product.description}
+                                <Input width={100} height={50} type={'textarea'} name={'comment'}
+                                       value={comment} onChange={handleChange}/>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row" colSpan={2} style={{background: "#7386D5", color: "white"}}>
-                                Category
+                            <th scope="row">
+                                Star
                             </th>
-                        </tr>
-                        <tr>
-                            <th scope="row">ID</th>
                             <td>
-                                {props.product.category.id}
+                                <Input type={"select"} name={'star'} value={star} onChange={handleChange}>
+                                    <option value={0} key={0}>Choose Star</option>
+                                    {
+                                        [1, 2, 3, 4, 5].map(s =>
+                                            <option key={s} value={s}>{s}</option>)
+                                    }
+                                </Input>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">Name</th>
-                            <td>
-                                <Link href={'/category/[id]'}
-                                      as={`/category/${props.product.category.id}`}><a>{props.product.category.name}</a></Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" colSpan={2} style={{background: "#7386D5", color: "white"}}>
-                                Seller
+                            <th scope="row">
+                                Product
                             </th>
-                        </tr>
-                        <tr>
-                            <th scope="row">ID</th>
                             <td>
-                                {props.product.seller.id}
+                                <Input type={"select"} name={'productId'} value={productId} onChange={handleChange}>
+                                    <option value={0} key={0}>Choose Product</option>
+                                    {
+                                        products.map(s =>
+                                            <option key={s.id} value={s.id}>{s.name}</option>)
+                                    }
+                                </Input>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">Name</th>
+                            <th scope="row">
+                                Customer
+                            </th>
                             <td>
-                                <Link href={'/seller/[id]'}
-                                      as={`/seller/${props.product.seller.id}`}><a>{props.product.seller.name}</a></Link>
+                                <Input type={'select'} name={'customerId'} value={customerId} onChange={handleChange}>
+                                    <option value={0} key={0}>Choose Customer</option>
+                                    {
+                                        customers.map(c =>
+                                            <option value={c.id} key={c.id}>{c.firstName}</option>)
+                                    }
+                                </Input>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">Website</th>
-                            <td>
-                                {props.product.seller.website}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Email</th>
-                            <td>
-                                {props.product.seller.email}
-                            </td>
-                        </tr>
-
                         </tbody>
                     </Table>
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
-                        <Button onClick={handleEdit} color={'primary'}>Edit</Button>
-                        <Button onClick={handleDelete} color={'danger'}>Delete</Button>
-                        <Link href={'/product/list'}><Button color={'secondary'}>List</Button></Link>
+                        <Button onClick={handleSave} color={'primary'}>Save</Button>
+                        <Link href={'/review/list'}><Button color={'secondary'}>Cancel</Button></Link>
                     </Toolbar>
                 </Container>
             </div>
@@ -145,11 +153,19 @@ const ProductView: NextPage<Props> = (props) => {
     )
 };
 
-ProductView.getInitialProps = async (ctx) => {
+ReviewEdit.getInitialProps = async (ctx) => {
+    const id = ctx.query.id;
     const {server} = ServerRepo(ctx);
-    const api = server.getApi(ProductApi);
-    const product = await api.get(ctx.query.id as string as unknown as number);
-    return {product};
-}
+    let review;
+    if (id) {
+        const api = server.getApi(ReviewApi);
+        review = await api.get(id as string as unknown as number);
+    }
 
-export default ProductView;
+    const products = await server.getApi(ProductApi).list();
+    const customers = await server.getApi(CustomerApi).list();
+
+    return {review: review, products: products, customers: customers}
+};
+
+export default ReviewEdit;

@@ -1,42 +1,42 @@
-import ProductResponse from "../../api/product/ProductResponse";
 import {NextPage} from "next";
 import Layout from "../../components/Layout/Layout";
 import {Alert, Button, Container, Table} from "reactstrap";
 import Link from "next/link";
 import ServerRepo from "../../util/ServerRepo";
-import ProductApi from "../../api/product/ProductApi";
 import Router from "next/router";
 import Toolbar from "../../components/ToolBar";
 import {useContext, useState} from "react";
 import AppContext from "../../components/AppContext/AppContext";
 import ApiError from "../../api/ApiError";
+import ReviewResponse from "../../api/review/ReviewResponse";
+import ReviewApi from "../../api/review/ReviewApi";
 
 type Props = {
-    product: ProductResponse
+    review: ReviewResponse
 }
 
-const ProductView: NextPage<Props> = (props) => {
+const ReviewView: NextPage<Props> = (props) => {
 
     const {server} = useContext(AppContext);
 
     const [error, setError] = useState('');
 
     const handleDelete = () => {
-        server.getApi(ProductApi).delete(props.product.id).then(() => {
-            Router.push('/product/list');
+        server.getApi(ReviewApi).delete(props.review.id).then(() => {
+            Router.push('/review/list');
         }).catch((error: ApiError) => {
             setError(error.message);
         });
     };
 
     const handleEdit = () => {
-        Router.push(`/product/edit?id=${props.product.id}`);
+        Router.push(`/review/edit?id=${props.review.id}`);
     };
 
     return (
         <Layout>
             <div>
-                <h1>Products</h1>
+                <h1>Review</h1>
                 <Container>
                     <Table>
                         <tbody>
@@ -45,99 +45,78 @@ const ProductView: NextPage<Props> = (props) => {
                                 ID
                             </th>
                             <td>
-                                {props.product.id}
+                                {props.review.id}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">
-                                Name
+                                Date
                             </th>
                             <td>
-                                {props.product.name}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                List Price
-                            </th>
-                            <td>
-                                {props.product.listPrice}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                Available Quantity
-                            </th>
-                            <td>
-                                {props.product.availableQuantity}
+                                {props.review.date}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" colSpan={2}>
-                                Description
+                                Comment
                             </th>
                         </tr>
                         <tr>
                             <td colSpan={2}>
-                                {props.product.description}
+                                {props.review.comment}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                Star
+                            </th>
+                            <td>
+                                {props.review.star}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" colSpan={2} style={{background: "#7386D5", color: "white"}}>
-                                Category
+                                Product
                             </th>
                         </tr>
                         <tr>
                             <th scope="row">ID</th>
                             <td>
-                                {props.product.category.id}
+                                {props.review.product.id}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">Name</th>
                             <td>
-                                <Link href={'/category/[id]'}
-                                      as={`/category/${props.product.category.id}`}><a>{props.product.category.name}</a></Link>
+                                <Link href={'/product/[id]'}
+                                      as={`/product/${props.review.product.id}`}><a>{props.review.product.name}</a></Link>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" colSpan={2} style={{background: "#7386D5", color: "white"}}>
-                                Seller
+                                Customer
                             </th>
                         </tr>
                         <tr>
                             <th scope="row">ID</th>
                             <td>
-                                {props.product.seller.id}
+                                {props.review.customer.id}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">Name</th>
                             <td>
-                                <Link href={'/seller/[id]'}
-                                      as={`/seller/${props.product.seller.id}`}><a>{props.product.seller.name}</a></Link>
+                                <Link href={'/customer/[id]'}
+                                      as={`/customer/${props.review.customer.id}`}><a>{props.review.customer.firstName}</a></Link>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">Website</th>
-                            <td>
-                                {props.product.seller.website}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Email</th>
-                            <td>
-                                {props.product.seller.email}
-                            </td>
-                        </tr>
-
                         </tbody>
                     </Table>
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleEdit} color={'primary'}>Edit</Button>
                         <Button onClick={handleDelete} color={'danger'}>Delete</Button>
-                        <Link href={'/product/list'}><Button color={'secondary'}>List</Button></Link>
+                        <Link href={'/review/list'}><Button color={'secondary'}>List</Button></Link>
                     </Toolbar>
                 </Container>
             </div>
@@ -145,11 +124,11 @@ const ProductView: NextPage<Props> = (props) => {
     )
 };
 
-ProductView.getInitialProps = async (ctx) => {
+ReviewView.getInitialProps = async (ctx) => {
     const {server} = ServerRepo(ctx);
-    const api = server.getApi(ProductApi);
-    const product = await api.get(ctx.query.id as string as unknown as number);
-    return {product};
+    const api = server.getApi(ReviewApi);
+    const review = await api.get(ctx.query.id as string as unknown as number);
+    return {review};
 }
 
-export default ProductView;
+export default ReviewView;

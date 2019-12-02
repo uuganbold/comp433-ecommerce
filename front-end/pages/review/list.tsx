@@ -2,19 +2,17 @@ import {NextPage} from 'next';
 import Layout from "../../components/Layout/Layout";
 import {Button, Container, Table} from "reactstrap";
 import ServerRepo from "../../util/ServerRepo";
-import CategoryApi from "../../api/category/CategoryApi";
-import CategoryResponse from "../../api/category/CategoryResponse";
 import Link from "next/link";
 import Toolbar from "../../components/ToolBar";
-import CustomerApi from "../../api/customer/CustomerApi";
-import CustomerView from "../customer/[id]";
-
+import ReviewResponse from "../../api/review/ReviewResponse";
+import ReviewApi from "../../api/review/ReviewApi";
 
 type Props = {
-    reviews: Array<CategoryResponse>
+    reviews: Array<ReviewResponse>
 }
 
 const ReviewList: NextPage<Props> = (props) => {
+
     return (
         <Layout>
             <div>
@@ -25,27 +23,31 @@ const ReviewList: NextPage<Props> = (props) => {
                         <tr>
                             <th>#</th>
                             <th>ID</th>
+                            <th>Comment</th>
                             <th>Product Name</th>
                             <th>Customer Name</th>
                             <th>Date</th>
                             <th>Star</th>
                         </tr>
                         </thead>
+
                         <tbody>
                         {
                             props.reviews.map((row, i) =>
                                 <tr key={row.id}>
                                     <td>{i + 1}</td>
+                                    <td><Link href={'/review/[id]'} as={'/review/' + row.id}><a>{row.id}</a></Link>
+                                    </td>
+                                    <td><Link href={'/review/[id]'}
+                                              as={'/review/' + row.id}><a>{row.comment.substring(0, 40)}</a></Link>
+                                    </td>
                                     <td><Link href={'/product/[id]'}
-                                              as={'/product/' + row.id}><a>{row.name}</a></Link></td>
+                                              as={'/product/' + row.product.id}><a>{row.product.name}</a></Link></td>
                                     <td><Link href={'/customer/[id]'}
-                                              as={'/customer/' + row.id}><a>{row.name}</a></Link></td>
-
-                                    <td><Link href={'/review/[id]'}
-                                              as={'/review/' + row.id}><a>{row.date}</a></Link></td>
-
-                                    <td><Link href={'/review/[id]'}
-                                              as={'/review/' + row.id}><a>{row.star}</a></Link></td>
+                                              as={'/customer/' + row.customer.id}><a>{row.customer.firstName}</a></Link>
+                                    </td>
+                                    <td>{row.date}</td>
+                                    <td>{row.star}</td>
                                 </tr>
                             )
                         }
@@ -60,19 +62,11 @@ const ReviewList: NextPage<Props> = (props) => {
     )
 };
 
-// CategoryList.getInitialProps = async (ctx) => {
-//     const {server} = ServerRepo(ctx);
-//     const api = server.getApi(CategoryApi);
-//     const categories = await api.list();
-//     return {categories};
-// }
-
 ReviewList.getInitialProps = async (ctx) => {
     const {server} = ServerRepo(ctx);
-    const api = server.getApi(CustomerApi);
-    const customer = await api.get(ctx.query.id as string as unknown as number);
-    return {customer};
+    const api = server.getApi(ReviewApi);
+    const reviews = await api.list();
+    return {reviews};
 }
 
 export default ReviewList;
-
