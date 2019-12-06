@@ -9,7 +9,6 @@ import Router from "next/router";
 import CustomerApi from "../../api/customer/CustomerApi";
 import CustomerResponse from "../../api/customer/CustomerResponse";
 import CustomerRequest from "../../api/customer/CustomerRequest";
-import Link from "next/link";
 
 type Props = {
     customer: CustomerResponse | undefined
@@ -24,6 +23,7 @@ const CustomerEdit: NextPage<Props> = (props) => {
 
     const [error, setError] = useState('');
     const {server} = useContext(AppContext);
+    const api = server.getApi(CustomerApi);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         switch (e.target.name) {
@@ -43,20 +43,27 @@ const CustomerEdit: NextPage<Props> = (props) => {
     };
 
     const handleSave = () => {
-        const api = server.getApi(CustomerApi);
         if (props.customer) {
-            const id = props.customer.id;
-            api.update(id, new CustomerRequest(firstName, lastName, email, phonenumber)).then(() => {
-                Router.push(`/customer/[id]`, `/customer/${id}`)
+            api.updateUri(api.getLink(props.customer, 'self').href, new CustomerRequest(firstName, lastName, email, phonenumber)).then((cus) => {
+                Router.push(`/customer/[id]?uri=${api.getLink(cus, 'self').href}`, `/customer/${cus.id}`)
             }).catch((error) => {
                 setError(error.message)
             });
         } else api.create(new CustomerRequest(firstName, lastName, email, phonenumber)).then((cat: CustomerResponse) => {
-            Router.push(`/customer/[id]`, `/customer/${cat.id}`)
+            Router.push(`/customer/[id]?uri=${api.getLink(cat, 'self').href}`, `/customer/${cat.id}`)
         }).catch((error) => {
             setError(error.message)
         });
     };
+
+    const handleCancel = () => {
+        if (props.customer) {
+            Router.push(`/customer/list?uri=${api.getLink(props.customer, 'all').href}`, `/customer/list`);
+        } else {
+            Router.push(`/customer/list`);
+        }
+    };
+
     return (
         <Layout>
             <div>
@@ -108,7 +115,7 @@ const CustomerEdit: NextPage<Props> = (props) => {
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleSave} color={'primary'}>Save</Button>
-                        <Link href={'/customer/list'}><Button color={'secondary'}>Cancel</Button></Link>
+                        <Button onClick={handleCancel} color={'secondary'}>Cancel</Button>
                     </Toolbar>
                 </Container>
             </div>
@@ -118,13 +125,17 @@ const CustomerEdit: NextPage<Props> = (props) => {
 
 CustomerEdit.getInitialProps = async (ctx) => {
     const id = ctx.query.id;
+    const uri = ctx.query.uri;
+
+    const {server} = ServerRepo(ctx);
+    const api = server.getApi(CustomerApi);
     let customer;
-    if (id) {
-        const {server} = ServerRepo(ctx);
-        const api = server.getApi(CustomerApi);
+    if (uri) {
+        customer = await api.getUri(uri as string);
+    } else if (id) {
         customer = await api.get(id as string as unknown as number);
     }
     return {customer}
-}
+};
 
 export default CustomerEdit;

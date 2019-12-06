@@ -6,12 +6,18 @@ import Link from "next/link";
 import CustomerApi from "../../api/customer/CustomerApi";
 import CustomerResponse from "../../api/customer/CustomerResponse";
 import Toolbar from "../../components/ToolBar";
+import {useContext} from "react";
+import AppContext from "../../components/AppContext/AppContext";
 
 type Props = {
     customers: Array<CustomerResponse>
 }
 
 const CustomerList: NextPage<Props> = (props) => {
+
+    const {server} = useContext(AppContext);
+    const api = server.getApi(CustomerApi);
+
     return (
         <Layout>
             <div>
@@ -33,9 +39,11 @@ const CustomerList: NextPage<Props> = (props) => {
                             props.customers.map((row, i) =>
                                 <tr key={row.id}>
                                     <td>{i + 1}</td>
-                                    <td><Link href={'/customer/[id]'} as={'/customer/' + row.id}><a>{row.id}</a></Link>
+                                    <td><Link href={`/customer/[id]?uri=${api.getLink(row, 'self').href}`}
+                                              as={'/customer/' + row.id}><a>{row.id}</a></Link>
                                     </td>
-                                    <td><Link href={'/customer/[id]'} as={'/customer/' + row.id}><a>{row.firstName}</a></Link>
+                                    <td><Link href={`/customer/[id]?uri=${api.getLink(row, 'self').href}`}
+                                              as={'/customer/' + row.id}><a>{row.firstName}</a></Link>
                                     </td>
                                     <td>{row.lastName}</td>
                                     <td>{row.email}</td>
@@ -57,8 +65,13 @@ const CustomerList: NextPage<Props> = (props) => {
 CustomerList.getInitialProps = async (ctx) => {
     const {server} = ServerRepo(ctx);
     const api = server.getApi(CustomerApi);
-    const customers = await api.list();
+    const uri = ctx.query.uri;
+
+    let customers;
+    if (uri) {
+        customers = await api.listUri(uri as string);
+    } else customers = await api.list();
     return {customers};
-}
+};
 
 export default CustomerList;

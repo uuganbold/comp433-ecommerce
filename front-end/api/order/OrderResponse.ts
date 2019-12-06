@@ -2,8 +2,10 @@ import IResponse from "../IResponse";
 import CustomerResponse from "../customer/CustomerResponse";
 import OrderItemResponse from "./OrderItemResponse";
 import AddressResponse from "../valueobjects/AddressResponse";
+import PaymentResponse from "../valueobjects/PaymentResponse";
+import HateoasResponse from "../HateoasResponse";
 
-export default class OrderResponse implements IResponse {
+export default class OrderResponse extends HateoasResponse implements IResponse {
     private _id: number;
     private _customer: CustomerResponse;
     private _date: Date;
@@ -16,6 +18,7 @@ export default class OrderResponse implements IResponse {
 
 
     constructor(id: number, customer: CustomerResponse, date: Date, updateDate: Date, items: Array<OrderItemResponse>, status: string, address: AddressResponse, payment: PaymentResponse, totalValue: number) {
+        super();
         this._id = id;
         this._customer = customer;
         this._date = date;

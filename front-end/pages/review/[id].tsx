@@ -18,19 +18,16 @@ type Props = {
 const ReviewView: NextPage<Props> = (props) => {
 
     const {server} = useContext(AppContext);
+    const api = server.getApi(ReviewApi);
 
     const [error, setError] = useState('');
 
     const handleDelete = () => {
-        server.getApi(ReviewApi).delete(props.review.id).then(() => {
-            Router.push('/review/list');
+        api.deleteObject(props.review).then(() => {
+            Router.push(`/review/list?uri=${api.getLink(props.review, 'all').href}`, `/review/list`);
         }).catch((error: ApiError) => {
             setError(error.message);
         });
-    };
-
-    const handleEdit = () => {
-        Router.push(`/review/edit?id=${props.review.id}`);
     };
 
     return (
@@ -88,7 +85,7 @@ const ReviewView: NextPage<Props> = (props) => {
                         <tr>
                             <th scope="row">Name</th>
                             <td>
-                                <Link href={'/product/[id]'}
+                                <Link href={`/product/[id]?uri=${api.getLink(props.review, 'product').href}`}
                                       as={`/product/${props.review.product.id}`}><a>{props.review.product.name}</a></Link>
                             </td>
                         </tr>
@@ -106,7 +103,7 @@ const ReviewView: NextPage<Props> = (props) => {
                         <tr>
                             <th scope="row">Name</th>
                             <td>
-                                <Link href={'/customer/[id]'}
+                                <Link href={`/customer/[id]?uri=${api.getLink(props.review, 'customer').href}`}
                                       as={`/customer/${props.review.customer.id}`}><a>{props.review.customer.firstName}</a></Link>
                             </td>
                         </tr>
@@ -114,9 +111,11 @@ const ReviewView: NextPage<Props> = (props) => {
                     </Table>
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
-                        <Button onClick={handleEdit} color={'primary'}>Edit</Button>
+                        <Link href={`/review/edit?uri=${api.getLink(props.review, 'self').href}`}
+                              as={`/review/edit?id=${props.review.id}`}><Button color={'primary'}>Edit</Button></Link>
                         <Button onClick={handleDelete} color={'danger'}>Delete</Button>
-                        <Link href={'/review/list'}><Button color={'secondary'}>List</Button></Link>
+                        <Link href={`/review/list?uri=${api.getLink(props.review, 'all').href}`}
+                              as={'/review/list'}><Button color={'secondary'}>List</Button></Link>
                     </Toolbar>
                 </Container>
             </div>
@@ -127,8 +126,12 @@ const ReviewView: NextPage<Props> = (props) => {
 ReviewView.getInitialProps = async (ctx) => {
     const {server} = ServerRepo(ctx);
     const api = server.getApi(ReviewApi);
-    const review = await api.get(ctx.query.id as string as unknown as number);
+
+    const uri = ctx.query.uri;
+    let review;
+    if (uri) review = await api.getUri(uri as string);
+    else review = await api.get(ctx.query.id as string as unknown as number);
     return {review};
-}
+};
 
 export default ReviewView;

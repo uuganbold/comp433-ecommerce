@@ -82,9 +82,9 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @DELETE
     @Path("/customer/{id}/address/{addressId}")
-    @ResponseStatus(Response.Status.NO_CONTENT)
-    public void removeAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
+    public Response removeAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
         customerActivity.removeAddress(id, addressId);
+        return Response.noContent().build();
     }
 
     @Override
@@ -108,9 +108,9 @@ public class CustomerResource implements CustomerWebService {
     @Override
     @DELETE
     @Path("/customer/{id}/payment/{paymentId}")
-    @ResponseStatus(Response.Status.NO_CONTENT)
-    public void removePayment(@PathParam("id") long id, @PathParam("paymentId") long paymentId) {
+    public Response removePayment(@PathParam("id") long id, @PathParam("paymentId") long paymentId) {
         customerActivity.removePayment(id, paymentId);
+        return Response.noContent().build();
     }
 
     @Override
@@ -137,6 +137,7 @@ public class CustomerResource implements CustomerWebService {
     protected AddressRepresentation withLinks(long customerId, AddressRepresentation address) {
         address.add(LinkBuilder.get(uriInfo).linkTo(CustomerResource.class, "getCustomer").withRel("customer").build(customerId));
         address.add(LinkBuilder.get(uriInfo).linkTo(CustomerResource.class, "getAddresses").withRel("all").build(customerId));
+        address.add(LinkBuilder.get(uriInfo).linkTo(CustomerResource.class, "removeAddress").withRel("remove").build(customerId, address.getId()));
         return address;
     }
 
@@ -148,6 +149,7 @@ public class CustomerResource implements CustomerWebService {
     protected PaymentRepresentation withLinks(long customerId, PaymentRepresentation payment) {
         payment.add(LinkBuilder.get(uriInfo).linkTo(CustomerResource.class, "getCustomer").withRel("customer").build(customerId));
         payment.add(LinkBuilder.get(uriInfo).linkTo(CustomerResource.class, "getPayments").withRel("all").build(customerId));
+        payment.add(LinkBuilder.get(uriInfo).linkTo(CustomerResource.class, "removePayment").withRel("remove").build(customerId, payment.getId()));
         return payment;
     }
 

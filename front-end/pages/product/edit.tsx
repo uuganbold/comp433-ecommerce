@@ -9,7 +9,6 @@ import {ChangeEvent, useContext, useState} from "react";
 import AppContext from "../../components/AppContext/AppContext";
 import ProductRequest from "../../api/product/ProductRequest";
 import Router from "next/router";
-import Link from "next/link";
 import SellerApi from "../../api/seller/SellerApi";
 import CategoryApi from "../../api/category/CategoryApi";
 import SellerResponse from "../../api/seller/SellerResponse";
@@ -35,6 +34,7 @@ const ProductEdit: NextPage<Props> = ({
     const [categoryId, setCategoryId] = useState(product ? product.category.id : 0);
     const [error, setError] = useState('');
     const {server} = useContext(AppContext);
+    const api = server.getApi(ProductApi);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         switch (e.target.name) {
@@ -59,27 +59,28 @@ const ProductEdit: NextPage<Props> = ({
         }
     };
 
+    const handleCancel = () => {
+        if (product == null) {
+            Router.push('/product/list');
+        } else {
+            Router.push('/product/list?uri=' + api.getLink(product, 'all').href, '/product/list');
+        }
+    }
+
     const handleSave = () => {
-        const api = server.getApi(ProductApi);
-        if (product) {
-            const id = product.id;
-            api.update(id, new ProductRequest(name,
-                description,
-                listPrice as unknown as number,
-                availableQuantity as unknown as number,
-                sellerId,
-                categoryId)).then(() => {
-                Router.push(`/product/[id]`, `/product/${id}`)
-            }).catch((error) => {
-                setError(error.message)
-            });
-        } else api.create(new ProductRequest(name,
+        let response: Promise<ProductResponse>;
+        const request = new ProductRequest(name,
             description,
             listPrice as unknown as number,
             availableQuantity as unknown as number,
             sellerId,
-            categoryId)).then((cat: ProductResponse) => {
-            Router.push(`/product/[id]`, `/product/${cat.id}`)
+            categoryId);
+        if (product)
+            response = api.updateUri(api.getLink(product, 'self').href, request);
+        else response = api.create(request);
+
+        response.then((cat: ProductResponse) => {
+            Router.push(`/product/[id]?uri=${api.getLink(cat, 'self').href}`, `/product/${cat.id}`)
         }).catch((error) => {
             setError(error.message)
         });
@@ -167,7 +168,7 @@ const ProductEdit: NextPage<Props> = ({
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleSave} color={'primary'}>Save</Button>
-                        <Link href={'/product/list'}><Button color={'secondary'}>Cancel</Button></Link>
+                        <Button onClick={handleCancel} color={'secondary'}>Cancel</Button>
                     </Toolbar>
                 </Container>
             </div>
@@ -177,10 +178,13 @@ const ProductEdit: NextPage<Props> = ({
 
 ProductEdit.getInitialProps = async (ctx) => {
     const id = ctx.query.id;
+    const uri = ctx.query.uri;
     const {server} = ServerRepo(ctx);
+    const api = server.getApi(ProductApi);
+
     let product;
-    if (id) {
-        const api = server.getApi(ProductApi);
+    if (uri) product = await api.getUri(uri as string);
+    else if (id) {
         product = await api.get(id as string as unknown as number);
     }
 

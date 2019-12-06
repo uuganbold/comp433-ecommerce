@@ -6,7 +6,7 @@ import Link from "next/link";
 import SellerApi from "../../../api/seller/SellerApi";
 import Toolbar from "../../../components/ToolBar";
 import AddressResponse from "../../../api/valueobjects/AddressResponse";
-import {useRouter} from "next/router";
+import Router, {useRouter} from "next/router";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {useContext, useState} from "react";
@@ -25,15 +25,22 @@ const styles = {
 const AddressList: NextPage<Props> = (props) => {
 
     const sellerId = useRouter().query.id as string;
+    const uri = useRouter().query.uri;
 
     const {server} = useContext(AppContext);
+    const api = server.getApi(SellerApi);
 
     const [list, setList] = useState(props.addresses);
 
-    const handleDelete = async (id: number) => {
-        const api = server.getApi(SellerApi);
-        await api.removeAddress(sellerId as unknown as number, id);
-        setList(list.filter(el => el.id != id))
+    const handleDelete = async (address: AddressResponse) => {
+        await api.removeAddressObject(address);
+        setList(list.filter(el => el.id != address.id))
+    };
+
+    const handleNew = () => {
+        let url = `/seller/address/new?id=${sellerId}`;
+        if (uri) url += `&uri=${uri}`;
+        Router.push(url, `new?id=${sellerId}`);
     };
 
     return (
@@ -67,7 +74,7 @@ const AddressList: NextPage<Props> = (props) => {
                                     <td>{row.country}</td>
                                     <td>{row.zipcode}</td>
                                     <td>{row.phonenumber}</td>
-                                    <td><a onClick={() => handleDelete(row.id)} style={styles.a}><FontAwesomeIcon
+                                    <td><a onClick={() => handleDelete(row)} style={styles.a}><FontAwesomeIcon
                                         icon={faTrash} color={'red'}/></a></td>
                                 </tr>
                             )
@@ -75,8 +82,8 @@ const AddressList: NextPage<Props> = (props) => {
                         </tbody>
                     </Table>
                     <Toolbar>
-                        <Link href={{pathname: 'new', query: {id: sellerId}}}><Button
-                            color={'primary'}>New</Button></Link>
+                        <Button onClick={handleNew}
+                                color={'primary'}>New</Button>
                         <Link href={`/seller/[id]`} as={`/seller/${sellerId}`}><Button
                             color={'secondary'}>Seller</Button></Link>
                     </Toolbar>
@@ -88,10 +95,13 @@ const AddressList: NextPage<Props> = (props) => {
 
 AddressList.getInitialProps = async (ctx) => {
     const id = ctx.query.id as string;
+    const uri = ctx.query.uri;
     const {server} = ServerRepo(ctx);
     const api = server.getApi(SellerApi);
 
-    const addresses = await api.getAddresses(id as unknown as number);
+    let addresses;
+    if (uri) addresses = await api.getAddressesUri(uri as string);
+    else addresses = await api.getAddresses(id as unknown as number);
     return {addresses};
 }
 

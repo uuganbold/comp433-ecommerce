@@ -86,9 +86,9 @@ public class SellerResource implements SellerWebService {
     @Override
     @DELETE
     @Path("/seller/{id}/address/{addressId}")
-    @ResponseStatus(Response.Status.NO_CONTENT)
-    public void removeAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
+    public Response removeAddress(@PathParam("id") long id, @PathParam("addressId") long addressId) {
         sellerActivity.removeAddress(id, addressId);
+        return Response.noContent().build();
     }
 
     @Override
@@ -117,6 +117,7 @@ public class SellerResource implements SellerWebService {
         address.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getAddress").withSelfRel().build(sellerId, address.getId()));
         address.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getSeller").withRel("seller").build(sellerId));
         address.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getAddresses").withRel("all").build(sellerId));
+        address.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "removeAddress").withRel("remove").build(sellerId, address.getId()));
         return address;
     }
 

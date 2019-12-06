@@ -25,7 +25,7 @@ public interface SellerWebService {
 
     AddressRepresentation getAddress(long id, long addressId);
 
-    void removeAddress(long id, long addressId);
+    Object removeAddress(long id, long addressId);
 
     List<AddressRepresentation> getAddresses(long id);
 

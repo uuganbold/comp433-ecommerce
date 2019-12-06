@@ -16,4 +16,8 @@ export default class ProductApi extends CrudApi<ProductRequest, ProductResponse>
         return this.sendRequest<Array<ProductResponse>>(ProductApi.PLURAL_BASEURI + "?q=" + encodeURIComponent(query));
     }
 
+    public async searchUri(query: string, uri: string): Promise<Array<ProductResponse>> {
+        return this.sendURIRequest<Array<ProductResponse>>(`${uri}?q=${encodeURIComponent(query)}`);
+    }
+
 }

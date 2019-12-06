@@ -18,19 +18,16 @@ type Props = {
 const SellerView: NextPage<Props> = (props) => {
 
     const {server} = useContext(AppContext);
+    const api = server.getApi(SellerApi);
 
     const [error, setError] = useState('');
 
     const handleDelete = () => {
-        server.getApi(SellerApi).delete(props.seller.id).then(() => {
-            Router.push('/seller/list');
+        api.deleteObject(props.seller).then(() => {
+            Router.push(`/seller/list?uri=${api.getLink(props.seller, 'all').href}`, `/seller/list`);
         }).catch((error: ApiError) => {
             setError(error.message);
         });
-    };
-
-    const handleEdit = () => {
-        Router.push(`/seller/edit?id=${props.seller.id}`);
     };
 
     return (
@@ -76,11 +73,13 @@ const SellerView: NextPage<Props> = (props) => {
                     </Table>
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
-                        <Button onClick={handleEdit} color={'primary'}>Edit</Button>
+                        {<Link href={`/seller/edit?uri=${api.getLink(props.seller, 'self').href}`}
+                               as={`/seller/edit?id=${props.seller.id}`}><Button color={'primary'}>Edit</Button></Link>}
                         <Button onClick={handleDelete} color={'danger'}>Delete</Button>
                         <Link href={{pathname: '/seller/address/list', query: {id: props.seller.id}}}><Button
                             color={'secondary'}>Addresses</Button></Link>
-                        <Link href={'/seller/list'}><Button color={'secondary'}>List</Button></Link>
+                        <Link href={`/seller/list?uri=${api.getLink(props.seller, 'all').href}`}
+                              as={'/seller/list'}><Button color={'secondary'}>List</Button></Link>
                     </Toolbar>
                 </Container>
             </div>
@@ -91,8 +90,12 @@ const SellerView: NextPage<Props> = (props) => {
 SellerView.getInitialProps = async (ctx) => {
     const {server} = ServerRepo(ctx);
     const api = server.getApi(SellerApi);
-    const seller = await api.get(ctx.query.id as string as unknown as number);
+
+    const uri = ctx.query.uri;
+    let seller;
+    if (uri) seller = await api.getUri(uri as string);
+    else seller = await api.get(ctx.query.id as string as unknown as number);
     return {seller};
-}
+};
 
 export default SellerView;

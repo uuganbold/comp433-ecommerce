@@ -18,19 +18,20 @@ type Props = {
 const CustomerView: NextPage<Props> = (props) => {
 
     const {server} = useContext(AppContext);
+    const api = server.getApi(CustomerApi);
 
     const [error, setError] = useState('');
 
     const handleDelete = () => {
-        server.getApi(CustomerApi).delete(props.customer.id).then(() => {
-            Router.push('/customer/list');
+        api.deleteObject(props.customer).then(() => {
+            Router.push(`/customer/list?uri=${api.getLink(props.customer, 'all').href}`, '/customer/list');
         }).catch((error: ApiError) => {
             setError(error.message);
         });
     };
 
     const handleEdit = () => {
-        Router.push(`/customer/edit?id=${props.customer.id}`);
+        Router.push(`/customer/edit?uri=${api.getLink(props.customer, 'self').href}`, `/customer/edit?id=${props.customer.id}`);
     };
 
     return (
@@ -86,11 +87,16 @@ const CustomerView: NextPage<Props> = (props) => {
                     <Toolbar>
                         <Button onClick={handleEdit} color={'primary'}>Edit</Button>
                         <Button onClick={handleDelete} color={'danger'}>Delete</Button>
-                        <Link href={{pathname: '/customer/address/list', query: {id: props.customer.id}}}><Button
+                        <Link
+                            href={`/customer/address/list?id=${props.customer.id}&uri=${api.getLink(props.customer, 'addresses').href}`}
+                            as={{pathname: '/customer/address/list', query: {id: props.customer.id}}}><Button
                             color={'secondary'}>Addresses</Button></Link>
-                        <Link href={{pathname: '/customer/payment/list', query: {id: props.customer.id}}}><Button
+                        <Link
+                            href={`/customer/payment/list?id=${props.customer.id}&uri=${api.getLink(props.customer, 'payments').href}`}
+                            as={`/customer/payment/list?id=${props.customer.id}`}><Button
                             color={'secondary'}>Payments</Button></Link>
-                        <Link href={'/customer/list'}><Button color={'secondary'}>List</Button></Link>
+                        <Link href={`/customer/list?uri=${api.getLink(props.customer, 'all').href}`}
+                              as={'/customer/list'}><Button color={'secondary'}>List</Button></Link>
                     </Toolbar>
                 </Container>
             </div>
@@ -101,7 +107,11 @@ const CustomerView: NextPage<Props> = (props) => {
 CustomerView.getInitialProps = async (ctx) => {
     const {server} = ServerRepo(ctx);
     const api = server.getApi(CustomerApi);
-    const customer = await api.get(ctx.query.id as string as unknown as number);
+    const uri = ctx.query.uri;
+    let customer;
+    if (uri) {
+        customer = await api.getUri(uri as string);
+    } else customer = await api.get(ctx.query.id as string as unknown as number);
     return {customer};
 }
 

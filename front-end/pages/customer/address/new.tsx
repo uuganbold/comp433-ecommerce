@@ -6,7 +6,6 @@ import {ChangeEvent, useContext, useState} from "react";
 import AppContext from "../../../components/AppContext/AppContext";
 import Router, {useRouter} from "next/router";
 import CustomerApi from "../../../api/customer/CustomerApi";
-import Link from "next/link";
 import AddressResponse from "../../../api/valueobjects/AddressResponse";
 import AddressRequest from "../../../api/valueobjects/AddressRequest";
 
@@ -52,10 +51,17 @@ const AddressNew: NextPage<Props> = (props) => {
     };
 
     const customerId = useRouter().query.id as string as unknown as number;
+    const uri = useRouter().query.uri;
+
+    const handleCancel = () => {
+        let url = `/customer/address/list?id=${customerId}`;
+        if (uri) url += `&uri=${uri}`;
+        Router.push(url, `/customer/address/list?id=${customerId}`);
+    }
 
     const handleSave = () => {
         const api = server.getApi(CustomerApi);
-        api.addAddress(customerId, new AddressRequest(
+        const request = new AddressRequest(
             country,
             street,
             unit,
@@ -63,8 +69,15 @@ const AddressNew: NextPage<Props> = (props) => {
             state,
             zipcode as unknown as number,
             phonenumber
-        )).then((cat: AddressResponse) => {
-            Router.push(`/customer/address/list?id=${customerId}`)
+        );
+        let response: Promise<AddressResponse>;
+        if (uri) {
+            response = api.addAddressUri(uri as string, request);
+        } else {
+            response = api.addAddress(customerId, request);
+        }
+        response.then((cat: AddressResponse) => {
+            Router.push(`/customer/address/list?id=${customerId}&uri=${api.getLink(cat, 'all').href}`, `/customer/address/list?id=${customerId}`);
         }).catch((error) => {
             setError(error.message)
         });
@@ -145,8 +158,8 @@ const AddressNew: NextPage<Props> = (props) => {
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleSave} color={'primary'}>Save</Button>
-                        <Link href={{pathname: '/customer/address/list', query: {id: customerId}}}><Button
-                            color={'secondary'}>Cancel</Button></Link>
+                        <Button onClick={handleCancel}
+                                color={'secondary'}>Cancel</Button>
                     </Toolbar>
                 </Container>
             </div>

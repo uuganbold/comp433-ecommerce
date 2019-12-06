@@ -6,7 +6,7 @@ import Link from "next/link";
 import CustomerApi from "../../../api/customer/CustomerApi";
 import Toolbar from "../../../components/ToolBar";
 import PaymentResponse from "../../../api/valueobjects/PaymentResponse";
-import {useRouter} from "next/router";
+import Router, {useRouter} from "next/router";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {useContext, useState} from "react";
@@ -25,15 +25,22 @@ const styles = {
 const PaymentList: NextPage<Props> = (props) => {
 
     const customerId = useRouter().query.id;
+    const uri = useRouter().query.uri;
 
     const {server} = useContext(AppContext);
+    const api = server.getApi(CustomerApi);
 
     const [list, setList] = useState(props.payments);
 
-    const handleDelete = async (id: number) => {
-        const api = server.getApi(CustomerApi);
-        await api.removePayment(customerId as unknown as number, id);
-        setList(list.filter(el => el.id != id))
+    const handleDelete = async (payment: PaymentResponse) => {
+        await api.removePaymentObject(payment);
+        setList(list.filter(el => el.id != payment.id));
+    };
+
+    const handleNew = () => {
+        let url = `/customer/payment/new?id=${customerId}`;
+        if (uri) url += `&uri=${uri}`;
+        Router.push(url, `new?id=${customerId}`);
     };
 
     return (
@@ -62,7 +69,7 @@ const PaymentList: NextPage<Props> = (props) => {
                                     <td>{row.cardNumber}</td>
                                     <td>{row.expireMonth}/{row.expireYear}</td>
                                     <td>{row.billingAddress.street} {row.billingAddress.city}</td>
-                                    <td><a onClick={() => handleDelete(row.id)} style={styles.a}><FontAwesomeIcon
+                                    <td><a onClick={() => handleDelete(row)} style={styles.a}><FontAwesomeIcon
                                         icon={faTrash} color={'red'}/></a></td>
                                 </tr>
                             )
@@ -70,8 +77,8 @@ const PaymentList: NextPage<Props> = (props) => {
                         </tbody>
                     </Table>
                     <Toolbar>
-                        <Link href={{pathname: 'new', query: {id: customerId as string}}}><Button
-                            color={'primary'}>New</Button></Link>
+                        <Button onClick={handleNew}
+                                color={'primary'}>New</Button>
                         <Link href={`/customer/[id]`} as={`/customer/${customerId}`}><Button
                             color={'secondary'}>Customer</Button></Link>
                     </Toolbar>
@@ -83,10 +90,14 @@ const PaymentList: NextPage<Props> = (props) => {
 
 PaymentList.getInitialProps = async (ctx) => {
     const id = ctx.query.id as string;
+    const uri = ctx.query.uri;
     const {server} = ServerRepo(ctx);
     const api = server.getApi(CustomerApi);
 
-    const payments = await api.getPayments(id as unknown as number);
+    let payments;
+    if (uri) {
+        payments = await api.getPaymentsUri(uri as string);
+    } else payments = await api.getPayments(id as unknown as number);
     return {payments};
 }
 

@@ -21,16 +21,14 @@ const CategoryView: NextPage<Props> = (props) => {
 
     const [error, setError] = useState('');
 
+    const api = server.getApi<CategoryApi>(CategoryApi);
+
     const handleDelete = () => {
-        server.getApi(CategoryApi).delete(props.category.id).then(() => {
-            Router.push('/category/list');
+        api.deleteObject(props.category).then(() => {
+            Router.push('/category/list?uri=' + api.getLink(props.category, 'all').href, '/category/list');
         }).catch((error: ApiError) => {
             setError(error.message);
         });
-    };
-
-    const handleEdit = () => {
-        Router.push(`/category/edit?id=${props.category.id}`);
     };
 
     return (
@@ -60,9 +58,12 @@ const CategoryView: NextPage<Props> = (props) => {
                     </Table>
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
-                        <Button onClick={handleEdit} color={'primary'}>Edit</Button>
+                        <Link href={'/category/edit?uri=' + api.getLink(props.category, 'self').href}
+                              as={'/category/edit?id=' + props.category.id}><Button
+                            color={'primary'}>Edit</Button></Link>
                         <Button onClick={handleDelete} color={'danger'}>Delete</Button>
-                        <Link href={'/category/list'}><Button color={'secondary'}>List</Button></Link>
+                        <Link href={'/category/list?uri=' + api.getLink(props.category, 'all').href}
+                              as={'/category/list'}><Button color={'secondary'}>List</Button></Link>
                     </Toolbar>
                 </Container>
             </div>
@@ -73,7 +74,12 @@ const CategoryView: NextPage<Props> = (props) => {
 CategoryView.getInitialProps = async (ctx) => {
     const {server} = ServerRepo(ctx);
     const api = server.getApi(CategoryApi);
-    const category = await api.get(ctx.query.id as string as unknown as number);
+
+    const uri = ctx.query.uri;
+    let category;
+    if (uri) {
+        category = await api.getUri(uri as string);
+    } else category = await api.get(ctx.query.id as string as unknown as number);
     return {category};
 }
 

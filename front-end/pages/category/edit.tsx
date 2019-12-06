@@ -9,7 +9,6 @@ import {ChangeEvent, useContext, useState} from "react";
 import AppContext from "../../components/AppContext/AppContext";
 import CategoryRequest from "../../api/category/CategoryRequest";
 import Router from "next/router";
-import Link from "next/link";
 
 type Props = {
     category: CategoryResponse | undefined
@@ -25,17 +24,25 @@ const CategoryEdit: NextPage<Props> = (props) => {
         setName(e.target.value);
     };
 
+    const api = server.getApi(CategoryApi);
+
+    const handleList = () => {
+        if (props.category == null) {
+            Router.push('/category/list');
+        } else {
+            Router.push('/category/list?uri=' + api.getLink(props.category, 'all').href, '/category/list');
+        }
+    }
+
     const handleSave = () => {
-        const api = server.getApi(CategoryApi);
         if (props.category) {
-            const id = props.category.id;
-            api.update(id, new CategoryRequest(name)).then(() => {
-                Router.push(`/category/[id]`, `/category/${id}`)
+            api.updateUri(api.getLink(props.category, 'self').href, new CategoryRequest(name)).then((cat: CategoryResponse) => {
+                Router.push(`/category/[id]?uri=` + api.getLink(cat, 'self').href, `/category/${cat.id}`)
             }).catch((error) => {
                 setError(error.message)
             });
         } else api.create(new CategoryRequest(name)).then((cat: CategoryResponse) => {
-            Router.push(`/category/[id]`, `/category/${cat.id}`)
+            Router.push(`/category/[id]?uri=` + api.getLink(cat, 'self').href, `/category/${cat.id}`)
         }).catch((error) => {
             setError(error.message)
         });
@@ -68,7 +75,7 @@ const CategoryEdit: NextPage<Props> = (props) => {
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleSave} color={'primary'}>Save</Button>
-                        <Link href={'/category/list'}><Button color={'secondary'}>Cancel</Button></Link>
+                        <Button color={'secondary'} onClick={handleList}>Cancel</Button>
                     </Toolbar>
                 </Container>
             </div>
@@ -78,13 +85,16 @@ const CategoryEdit: NextPage<Props> = (props) => {
 
 CategoryEdit.getInitialProps = async (ctx) => {
     const id = ctx.query.id;
+    const uri = ctx.query.uri;
     let category;
-    if (id) {
-        const {server} = ServerRepo(ctx);
-        const api = server.getApi(CategoryApi);
+    const {server} = ServerRepo(ctx);
+    const api = server.getApi(CategoryApi);
+    if (uri) {
+        category = await api.getUri(uri as string);
+    } else if (id) {
         category = await api.get(id as string as unknown as number);
     }
     return {category}
-}
+};
 
 export default CategoryEdit;

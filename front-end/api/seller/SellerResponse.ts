@@ -1,6 +1,7 @@
 import IResponse from "../IResponse";
+import HateoasResponse from "../HateoasResponse";
 
-export default class SellerResponse implements IResponse {
+export default class SellerResponse extends HateoasResponse implements IResponse {
     public id: number;
     public name: string;
     public website: string;
@@ -8,6 +9,7 @@ export default class SellerResponse implements IResponse {
 
 
     constructor(id: number, name: string, website: string, email: string) {
+        super();
         this.id = id;
         this.name = name;
         this.website = website;

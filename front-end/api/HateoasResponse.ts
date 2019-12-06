@@ -1,6 +1,7 @@
 import Link from "./Link";
+import IResponse from "./IResponse";
 
-export default class HateoasResponse {
+export default class HateoasResponse implements IResponse {
 
     private _links!: Array<Link>;
 

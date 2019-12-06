@@ -81,6 +81,7 @@ public class ProductResource implements ProductWebService {
     protected ProductRepresentation withLinks(ProductRepresentation productRepresentation) {
         productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(ProductResource.class, "getProduct").withSelfRel().build(productRepresentation.getId()));
         productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(ProductResource.class, "search").withRel("all").build());
+        productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(OrderResource.class, "allOrders").withRel("orders").build());
         productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(CategoryResource.class, "getCategory").withRel("category").build(productRepresentation.getCategory().getId()));
         productRepresentation.add(LinkBuilder.get(uriInfo).linkTo(SellerResource.class, "getSeller").withRel("seller").build(productRepresentation.getSeller().getId()));
         return productRepresentation;

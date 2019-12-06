@@ -44,6 +44,10 @@ export default class Server {
     }
 
     public async sendRequest(uri: string, method: string, body: any): Promise<Response> {
+        return await this.sendURIRequest(this.baseUri + uri, method, body);
+    }
+
+    public async sendURIRequest(uri: string, method: string, body: any): Promise<Response> {
         if (body && (method.toUpperCase() == HttpMethods.GET || method.toUpperCase() == HttpMethods.DELETE)) {
             throw new Error("This request cannot be send via " + method);
         }
@@ -63,6 +67,6 @@ export default class Server {
         // @ts-ignore
         requestInfo["headers"] = header;
 
-        return await fetch(this.baseUri + uri, requestInfo);
+        return await fetch(uri, requestInfo);
     }
 }

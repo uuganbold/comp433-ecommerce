@@ -6,7 +6,6 @@ import {ChangeEvent, useContext, useState} from "react";
 import AppContext from "../../../components/AppContext/AppContext";
 import Router, {useRouter} from "next/router";
 import SellerApi from "../../../api/seller/SellerApi";
-import Link from "next/link";
 import AddressResponse from "../../../api/valueobjects/AddressResponse";
 import AddressRequest from "../../../api/valueobjects/AddressRequest";
 
@@ -52,10 +51,17 @@ const AddressNew: NextPage<Props> = (props) => {
     };
 
     const sellerId = useRouter().query.id as string as unknown as number;
+    const uri = useRouter().query.uri;
+
+    const handleCancel = () => {
+        let url = `/seller/address/list?id=${sellerId}`;
+        if (uri) url += `&uri=${uri}`;
+        Router.push(url, `/seller/address/list?id=${sellerId}`);
+    }
 
     const handleSave = () => {
         const api = server.getApi(SellerApi);
-        api.addAddress(sellerId, new AddressRequest(
+        const request = new AddressRequest(
             country,
             street,
             unit,
@@ -63,8 +69,13 @@ const AddressNew: NextPage<Props> = (props) => {
             state,
             zipcode as unknown as number,
             phonenumber
-        )).then((cat: AddressResponse) => {
-            Router.push(`/seller/address/list?id=${sellerId}`)
+        );
+        let response: Promise<AddressResponse>;
+        if (uri) response = api.addAddressUri(uri as string, request);
+        else response = api.addAddress(sellerId, request);
+
+        response.then((cat: AddressResponse) => {
+            Router.push(`/seller/address/list?id=${sellerId}&uri=${api.getLink(cat, 'all').href}`, `/seller/address/list?id=${sellerId}`)
         }).catch((error) => {
             setError(error.message)
         });
@@ -145,8 +156,8 @@ const AddressNew: NextPage<Props> = (props) => {
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleSave} color={'primary'}>Save</Button>
-                        <Link href={{pathname: '/seller/address/list', query: {id: sellerId}}}><Button
-                            color={'secondary'}>Cancel</Button></Link>
+                        <Button onClick={handleCancel}
+                                color={'secondary'}>Cancel</Button>
                     </Toolbar>
                 </Container>
             </div>

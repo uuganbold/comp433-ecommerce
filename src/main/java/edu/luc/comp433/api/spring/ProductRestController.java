@@ -62,6 +62,7 @@ public class ProductRestController implements ProductWebService {
     protected ProductRepresentation withLinks(ProductRepresentation productRepresentation) {
         productRepresentation.add(linkTo(methodOn(ProductRestController.class).getProduct(productRepresentation.getId())).withSelfRel());
         productRepresentation.add(linkTo(methodOn(ProductRestController.class).allProducts()).withRel("all"));
+        productRepresentation.add(linkTo(methodOn(OrderRestController.class).allOrders()).withRel("orders"));
         productRepresentation.add(linkTo(methodOn(CategoryRestController.class).getCategory(productRepresentation.getCategory().getId())).withRel("category"));
         productRepresentation.add(linkTo(methodOn(SellerRestController.class).getSeller(productRepresentation.getSeller().getId())).withRel("seller"));
         return productRepresentation;

@@ -19,13 +19,25 @@ export default class SellerApi extends CrudApi<SellerRequest, SellerResponse> {
         return this.sendRequest<AddressResponse>(SellerApi.SINGULAR_BASEURI + "/" + id + "/addresses", HttpMethods.POST, request);
     }
 
+    public async addAddressUri(uri: string, request: AddressRequest): Promise<AddressResponse> {
+        return this.sendURIRequest<AddressResponse>(uri, HttpMethods.POST, request);
+    }
+
     public async removeAddress(id: number, addressid: number): Promise<void> {
         return this.sendRequestWithVoidResponse(SellerApi.SINGULAR_BASEURI + "/" + id + "/address/" + addressid,
             HttpMethods.DELETE);
     }
 
+    async removeAddressObject(address: AddressResponse) {
+        return this.sendURIRequestWithVoidResponse(this.getLink(address, 'remove').href, HttpMethods.DELETE);
+    }
+
     public async getAddress(id: number, addressid: number): Promise<AddressResponse> {
         return this.sendRequest<AddressResponse>(SellerApi.SINGULAR_BASEURI + "/" + id + "/address/" + addressid);
+    }
+
+    async getAddressesUri(uri: string) {
+        return this.sendURIRequest<Array<AddressResponse>>(uri);
     }
 
     public async getAddresses(id: number): Promise<Array<AddressResponse>> {

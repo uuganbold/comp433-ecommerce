@@ -8,7 +8,6 @@ import Toolbar from "../../components/ToolBar";
 import {ChangeEvent, useContext, useState} from "react";
 import AppContext from "../../components/AppContext/AppContext";
 import Router from "next/router";
-import Link from "next/link";
 import ReviewResponse from "../../api/review/ReviewResponse";
 import CustomerResponse from "../../api/customer/CustomerResponse";
 import ReviewApi from "../../api/review/ReviewApi";
@@ -33,6 +32,7 @@ const ReviewEdit: NextPage<Props> = ({
     const [customerId, setCustomerId] = useState(review ? review.customer.id : 0);
     const [error, setError] = useState('');
     const {server} = useContext(AppContext);
+    const api = server.getApi(ReviewApi);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         switch (e.target.name) {
@@ -51,23 +51,26 @@ const ReviewEdit: NextPage<Props> = ({
         }
     };
 
+    const handleCancel = () => {
+        if (review == null) {
+            Router.push('/review/list');
+        } else {
+            Router.push('/review/list?uri=' + api.getLink(review, 'all').href, '/review/list');
+        }
+    }
+
     const handleSave = () => {
-        const api = server.getApi(ReviewApi);
-        if (review) {
-            const id = review.id;
-            api.update(id, new ReviewRequest(productId,
-                customerId,
-                star as unknown as number,
-                comment)).then(() => {
-                Router.push(`/review/[id]`, `/review/${id}`)
-            }).catch((error) => {
-                setError(error.message)
-            });
-        } else api.create(new ReviewRequest(productId,
+        let response: Promise<ReviewResponse>;
+        const request = new ReviewRequest(productId,
             customerId,
             star as unknown as number,
-            comment)).then((cat: ReviewResponse) => {
-            Router.push(`/review/[id]`, `/review/${cat.id}`)
+            comment);
+        if (review) {
+            response = api.updateUri(api.getLink(review, 'self').href, request)
+        } else response = api.create(request);
+
+        response.then((cat: ReviewResponse) => {
+            Router.push(`/review/[id]?uri=${api.getLink(cat, 'self').href}`, `/review/${cat.id}`)
         }).catch((error) => {
             setError(error.message)
         });
@@ -145,7 +148,7 @@ const ReviewEdit: NextPage<Props> = ({
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleSave} color={'primary'}>Save</Button>
-                        <Link href={'/review/list'}><Button color={'secondary'}>Cancel</Button></Link>
+                        <Button color={'secondary'} onClick={handleCancel}>Cancel</Button>
                     </Toolbar>
                 </Container>
             </div>
@@ -155,12 +158,13 @@ const ReviewEdit: NextPage<Props> = ({
 
 ReviewEdit.getInitialProps = async (ctx) => {
     const id = ctx.query.id;
+    const uri = ctx.query.uri;
     const {server} = ServerRepo(ctx);
+    const api = server.getApi(ReviewApi);
+
     let review;
-    if (id) {
-        const api = server.getApi(ReviewApi);
-        review = await api.get(id as string as unknown as number);
-    }
+    if (uri) review = await api.getUri(uri as string);
+    else if (id) review = await api.get(id as string as unknown as number);
 
     const products = await server.getApi(ProductApi).list();
     const customers = await server.getApi(CustomerApi).list();

@@ -7,6 +7,7 @@ import edu.luc.comp433.api.payload.SellerRequest;
 import edu.luc.comp433.api.workflow.SellerActivity;
 import edu.luc.comp433.api.ws.SellerWebService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,9 +76,9 @@ public class SellerRestController implements SellerWebService {
 
     @Override
     @DeleteMapping("/seller/{id}/address/{addressId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
+    public ResponseEntity<Void> removeAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
             sellerActivity.removeAddress(id, addressId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -95,6 +96,7 @@ public class SellerRestController implements SellerWebService {
     }
 
     protected AddressRepresentation withLinks(long sellerId, AddressRepresentation address) {
+        address.add(linkTo(methodOn(SellerRestController.class).removeAddress(sellerId, address.getId())).withRel("remove"));
         address.add(linkTo(methodOn(SellerRestController.class).getAddress(sellerId, address.getId())).withSelfRel());
         address.add(linkTo(methodOn(SellerRestController.class).getSeller(sellerId)).withRel("seller"));
         address.add(linkTo(methodOn(SellerRestController.class).getAddresses(sellerId)).withRel("all"));

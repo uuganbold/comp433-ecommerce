@@ -1,8 +1,9 @@
 import IResponse from "../IResponse";
 import CategoryResponse from "../category/CategoryResponse";
 import SellerResponse from "../seller/SellerResponse";
+import HateoasResponse from "../HateoasResponse";
 
-export default class ProductResponse implements IResponse {
+export default class ProductResponse extends HateoasResponse implements IResponse {
     private _id: number;
     private _name: string;
     private _description: string;
@@ -13,6 +14,7 @@ export default class ProductResponse implements IResponse {
 
 
     constructor(id: number, name: string, description: string, listPrice: number, availableQuantity: number, category: CategoryResponse, seller: SellerResponse) {
+        super();
         this._id = id;
         this._name = name;
         this._description = description;

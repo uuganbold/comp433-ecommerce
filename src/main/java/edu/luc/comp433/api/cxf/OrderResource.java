@@ -80,6 +80,10 @@ public class OrderResource implements OrderWebService {
     protected OrderRepresentation withLinks(OrderRepresentation order) {
         order.add(LinkBuilder.get(uriInfo).linkTo(OrderResource.class, "getOrder").withSelfRel().build(order.getId()));
         order.add(LinkBuilder.get(uriInfo).linkTo(CustomerResource.class, "getCustomer").withRel("customer").build(order.getCustomer().getId()));
+        order.add(LinkBuilder.get(uriInfo).linkTo(OrderResource.class, "ship").withRel("ship").build(order.getId()));
+        order.add(LinkBuilder.get(uriInfo).linkTo(OrderResource.class, "deliver").withRel("deliver").build(order.getId()));
+        order.add(LinkBuilder.get(uriInfo).linkTo(OrderResource.class, "cancel").withRel("cancel").build(order.getId()));
+        order.add(LinkBuilder.get(uriInfo).linkTo(OrderResource.class, "allOrders").withRel("all").build());
         order.getItems().forEach(i -> {
             i.add(LinkBuilder.get(uriInfo).linkTo(ProductResource.class, "getProduct").withRel("product").build(i.getProduct().getId()));
         });

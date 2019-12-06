@@ -4,6 +4,7 @@ import edu.luc.comp433.api.payload.*;
 import edu.luc.comp433.api.workflow.CustomerActivity;
 import edu.luc.comp433.api.ws.CustomerWebService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,9 +66,9 @@ public class CustomerRestController implements CustomerWebService {
 
     @Override
     @DeleteMapping("/customer/{id}/address/{addressId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
+    public ResponseEntity<Void> removeAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
         customerActivity.removeAddress(id, addressId);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -87,9 +88,9 @@ public class CustomerRestController implements CustomerWebService {
 
     @Override
     @DeleteMapping("/customer/{id}/payment/{paymentId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removePayment(@PathVariable("id") long id, @PathVariable("paymentId") long paymentId) {
+    public ResponseEntity<Void> removePayment(@PathVariable("id") long id, @PathVariable("paymentId") long paymentId) {
         customerActivity.removePayment(id, paymentId);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -113,6 +114,7 @@ public class CustomerRestController implements CustomerWebService {
     }
 
     protected AddressRepresentation withLinks(long customerId, AddressRepresentation address) {
+        address.add(linkTo(methodOn(CustomerRestController.class).removeAddress(customerId, address.getId())).withRel("remove"));
         address.add(linkTo(methodOn(CustomerRestController.class).getCustomer(customerId)).withRel("customer"));
         address.add(linkTo(methodOn(CustomerRestController.class).getAddresses(customerId)).withRel("all"));
         return address;
@@ -126,6 +128,7 @@ public class CustomerRestController implements CustomerWebService {
     protected PaymentRepresentation withLinks(long customerId, PaymentRepresentation payment) {
         payment.add(linkTo(methodOn(CustomerRestController.class).getCustomer(customerId)).withRel("customer"));
         payment.add(linkTo(methodOn(CustomerRestController.class).getPayments(customerId)).withRel("all"));
+        payment.add(linkTo(methodOn(CustomerRestController.class).removePayment(customerId, payment.getId())).withRel("remove"));
         return payment;
     }
 

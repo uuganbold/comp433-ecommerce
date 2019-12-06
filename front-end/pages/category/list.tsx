@@ -6,12 +6,17 @@ import CategoryApi from "../../api/category/CategoryApi";
 import CategoryResponse from "../../api/category/CategoryResponse";
 import Link from "next/link";
 import Toolbar from "../../components/ToolBar";
+import {useContext} from "react";
+import AppContext from "../../components/AppContext/AppContext";
 
 type Props = {
     categories: Array<CategoryResponse>
 }
 
 const CategoryList: NextPage<Props> = (props) => {
+
+    const {server} = useContext(AppContext);
+    const api = server.getApi(CategoryApi);
 
     return (
         <Layout>
@@ -31,9 +36,10 @@ const CategoryList: NextPage<Props> = (props) => {
                             props.categories.map((row, i) =>
                                 <tr key={row.id}>
                                     <td>{i + 1}</td>
-                                    <td><Link href={'/category/[id]'} as={'/category/' + row.id}><a>{row.id}</a></Link>
+                                    <td><Link href={'/category/[id]?uri=' + api.getLink(row, 'self').href}
+                                              as={'/category/' + row.id}><a>{row.id}</a></Link>
                                     </td>
-                                    <td><Link href={'/category/[id]'}
+                                    <td><Link href={'/category/[id]?uri=' + api.getLink(row, 'self').href}
                                               as={'/category/' + row.id}><a>{row.name}</a></Link></td>
                                 </tr>
                             )
@@ -41,7 +47,7 @@ const CategoryList: NextPage<Props> = (props) => {
                         </tbody>
                     </Table>
                     <Toolbar>
-                        <Link href={'edit'}><Button color={'primary'}>New</Button></Link>
+                        <Link href={`edit`}><Button color={'primary'}>New</Button></Link>
                     </Toolbar>
                 </Container>
             </div>
@@ -50,10 +56,15 @@ const CategoryList: NextPage<Props> = (props) => {
 };
 
 CategoryList.getInitialProps = async (ctx) => {
+    const uri = ctx.query.uri;
     const {server} = ServerRepo(ctx);
     const api = server.getApi(CategoryApi);
-    const categories = await api.list();
+    let categories;
+
+    if (uri) {
+        categories = await api.listUri(uri as string);
+    } else categories = await api.list();
     return {categories};
-}
+};
 
 export default CategoryList;

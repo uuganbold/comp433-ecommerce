@@ -1,6 +1,7 @@
 import IResponse from "../IResponse";
+import HateoasResponse from "../HateoasResponse";
 
-export default class AddressResponse implements IResponse {
+export default class AddressResponse extends HateoasResponse implements IResponse {
     private _id: number;
     private _country: string;
     private _street: string;
@@ -12,6 +13,7 @@ export default class AddressResponse implements IResponse {
 
 
     constructor(id: number, country: string, street: string, unit: string, city: string, state: string, zipcode: number, phonenumber: string) {
+        super();
         this._id = id;
         this._country = country;
         this._street = street;

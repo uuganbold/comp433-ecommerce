@@ -6,7 +6,6 @@ import {ChangeEvent, useContext, useState} from "react";
 import AppContext from "../../../components/AppContext/AppContext";
 import Router, {useRouter} from "next/router";
 import CustomerApi from "../../../api/customer/CustomerApi";
-import Link from "next/link";
 import PaymentResponse from "../../../api/valueobjects/PaymentResponse";
 import PaymentRequest from "../../../api/valueobjects/PaymentRequest";
 import ServerRepo from "../../../util/ServerRepo";
@@ -48,17 +47,30 @@ const PaymentNew: NextPage<Props> = (props) => {
     };
 
     const customerId = useRouter().query.id as string as unknown as number;
+    const uri = useRouter().query.uri;
+
+    const handleCancel = () => {
+        let url = `/customer/payment/list?id=${customerId}`;
+        if (uri) url += `&uri=${uri}`;
+        Router.push(url, `/customer/payment/list?id=${customerId}`);
+    }
 
     const handleSave = () => {
         const api = server.getApi(CustomerApi);
-        api.addPayment(customerId, new PaymentRequest(
+        const request = new PaymentRequest(
             nameOnCard,
             cardNumber,
             expireMonth as unknown as number,
             expireYear as unknown as number,
             addressId as unknown as number
-        )).then((cat: PaymentResponse) => {
-            Router.push(`/customer/payment/list?id=${customerId}`)
+        );
+        let response: Promise<PaymentResponse>;
+        if (uri) {
+            response = api.addPaymentUri(uri as string, request);
+        } else response = api.addPayment(customerId, request);
+
+        response.then((cat: PaymentResponse) => {
+            Router.push(`/customer/payment/list?id=${customerId}&uri=${api.getLink(cat, 'all').href}`, `/customer/payment/list?id=${customerId}`)
         }).catch((error) => {
             setError(error.message)
         });
@@ -119,7 +131,7 @@ const PaymentNew: NextPage<Props> = (props) => {
                                     <option value={0} key={0}>Select Address</option>
                                     {
                                         props.addresses.map(a =>
-                                            <option value={a.id} key={a.id}>a.street</option>)
+                                            <option value={a.id} key={a.id}>{a.street}</option>)
                                     }
                                 </Input>
                             </td>
@@ -129,8 +141,8 @@ const PaymentNew: NextPage<Props> = (props) => {
                     {error.length > 0 ? <Alert color="danger">{error}</Alert> : ''}
                     <Toolbar>
                         <Button onClick={handleSave} color={'primary'}>Save</Button>
-                        <Link href={{pathname: '/customer/payment/list', query: {id: customerId}}}><Button
-                            color={'secondary'}>Cancel</Button></Link>
+                        <Button onClick={handleCancel}
+                                color={'secondary'}>Cancel</Button>
                     </Toolbar>
                 </Container>
             </div>

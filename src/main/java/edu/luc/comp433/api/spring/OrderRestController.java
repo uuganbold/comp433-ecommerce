@@ -61,6 +61,10 @@ public class OrderRestController implements OrderWebService {
     protected OrderRepresentation withLinks(OrderRepresentation order) {
         order.add(linkTo(methodOn(OrderRestController.class).getOrder(order.getId())).withSelfRel());
         order.add(linkTo(methodOn(CustomerRestController.class).getCustomer(order.getCustomer().getId())).withRel("customer"));
+        order.add(linkTo(methodOn(OrderRestController.class).ship(order.getId())).withRel("ship"));
+        order.add(linkTo(methodOn(OrderRestController.class).cancel(order.getId())).withRel("cancel"));
+        order.add(linkTo(methodOn(OrderRestController.class).deliver(order.getId())).withRel("deliver"));
+        order.add(linkTo(methodOn(OrderRestController.class).allOrders()).withRel("all"));
         order.getItems().forEach(i -> {
             i.add(linkTo(methodOn(ProductRestController.class).getProduct(i.getProduct().getId())).withRel("product"));
         });
