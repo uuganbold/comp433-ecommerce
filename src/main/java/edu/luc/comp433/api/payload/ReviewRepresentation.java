@@ -1,18 +1,20 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.luc.comp433.business.dto.ReviewDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.time.Instant;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "review")
-public class ReviewRepresentation {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ReviewRepresentation extends RepresentationModel<ReviewRepresentation> {
 
     private long id;
 
@@ -20,6 +22,7 @@ public class ReviewRepresentation {
 
     private String comment;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Instant date;
 
     private ProductRepresentation product;

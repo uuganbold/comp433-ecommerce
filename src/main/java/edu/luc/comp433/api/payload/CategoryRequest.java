@@ -1,14 +1,13 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@XmlRootElement(name = "category")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoryRequest {
 
     @NonNull

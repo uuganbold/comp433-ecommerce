@@ -52,6 +52,7 @@ public class AddressDTO {
     }
 
     public static AddressDTO of(Address a) {
+        if (a == null) return null;
         return new AddressDTO(a.getId(), a.getCountry(), a.getStreet(), a.getUnit(), a.getCity(), a.getState(), a.getZipcode(), a.getPhonenumber());
     }
 

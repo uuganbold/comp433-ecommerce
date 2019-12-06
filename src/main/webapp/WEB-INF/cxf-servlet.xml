@@ -30,6 +30,7 @@
             <bean class="edu.luc.comp433.api.cxf.exception.ServerSideExceptionHandler"/>
             <bean class="edu.luc.comp433.api.cxf.exception.QuantityNotSufficientHandler"/>
             <bean class="edu.luc.comp433.api.cxf.exception.InvalidStatusExceptionHandler"/>
+            <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/>
         </jaxrs:providers>
 
         <jaxrs:schemaLocations>

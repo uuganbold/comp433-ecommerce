@@ -7,10 +7,14 @@ import edu.luc.comp433.api.payload.SellerRequest;
 import edu.luc.comp433.api.workflow.SellerActivity;
 import edu.luc.comp433.api.ws.SellerWebService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class SellerRestController implements SellerWebService {
@@ -24,25 +28,29 @@ public class SellerRestController implements SellerWebService {
     @Override
     @GetMapping("/seller/{id}")
     public SellerRepresentation getSeller(@PathVariable long id) {
-        return sellerActivity.getSeller(id);
+        SellerRepresentation seller = sellerActivity.getSeller(id);
+        return withLinks(seller);
     }
 
     @Override
-    @PostMapping(value = "/sellers", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/sellers", consumes = {"application/json"}, produces = {"application/hal+json"})
     public SellerRepresentation createSeller(@Validated @RequestBody SellerRequest sellerRequest) {
-            return sellerActivity.createSeller(sellerRequest);
+        SellerRepresentation seller = sellerActivity.createSeller(sellerRequest);
+        return withLinks(seller);
     }
 
     @Override
-    @GetMapping(value = "/sellers", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/sellers", produces = {"application/hal+json"})
     public List<SellerRepresentation> allSellers() {
-        return sellerActivity.listSeller();
+        List<SellerRepresentation> sellers = sellerActivity.listSeller();
+        return withLinks(sellers);
     }
 
     @Override
-    @PutMapping(value = "/seller/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/seller/{id}", consumes = {"application/json"}, produces = {"application/hal+json"})
     public SellerRepresentation updateSeller(@PathVariable("id") long id, @Validated @RequestBody SellerRequest sellerRequest) {
-            return sellerActivity.update(id, sellerRequest);
+        SellerRepresentation seller = sellerActivity.update(id, sellerRequest);
+        return withLinks(seller);
     }
 
     @Override
@@ -53,22 +61,56 @@ public class SellerRestController implements SellerWebService {
     }
 
     @Override
-    @PostMapping(value = "/seller/{id}/addresses", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/seller/{id}/addresses", consumes = {"application/json"}, produces = {"application/hal+json"})
     public AddressRepresentation addAddress(@PathVariable("id") long id, @RequestBody @Validated AddressRequest addressRequest) {
-            return sellerActivity.addAddress(id, addressRequest);
+        AddressRepresentation address = sellerActivity.addAddress(id, addressRequest);
+        return withLinks(id, address);
+    }
+
+    @Override
+    @GetMapping(value = "/seller/{id}/address/{addressId}", produces = {"application/hal+json"})
+    public AddressRepresentation getAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
+        AddressRepresentation address = sellerActivity.getAddress(id, addressId);
+        return withLinks(id, address);
     }
 
     @Override
     @DeleteMapping("/seller/{id}/address/{addressId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
+    public ResponseEntity<Void> removeAddress(@PathVariable("id") long id, @PathVariable("addressId") long addressId) {
             sellerActivity.removeAddress(id, addressId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    @GetMapping(value = "/seller/{id}/addresses", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/seller/{id}/addresses", produces = {"application/hal+json"})
     public List<AddressRepresentation> getAddresses(@PathVariable("id") long id) {
-            return sellerActivity.getAddresses(id);
+        List<AddressRepresentation> addresses = sellerActivity.getAddresses(id);
+        return withLinks(id, addresses);
+    }
+
+    protected SellerRepresentation withLinks(SellerRepresentation seller) {
+        seller.add(linkTo(methodOn(SellerRestController.class).getSeller(seller.getId())).withSelfRel());
+        seller.add(linkTo(methodOn(SellerRestController.class).allSellers()).withRel("all"));
+        seller.add(linkTo(methodOn(SellerRestController.class).getAddresses(seller.getId())).withRel("addresses"));
+        return seller;
+    }
+
+    protected AddressRepresentation withLinks(long sellerId, AddressRepresentation address) {
+        address.add(linkTo(methodOn(SellerRestController.class).removeAddress(sellerId, address.getId())).withRel("remove"));
+        address.add(linkTo(methodOn(SellerRestController.class).getAddress(sellerId, address.getId())).withSelfRel());
+        address.add(linkTo(methodOn(SellerRestController.class).getSeller(sellerId)).withRel("seller"));
+        address.add(linkTo(methodOn(SellerRestController.class).getAddresses(sellerId)).withRel("all"));
+        return address;
+    }
+
+    protected List<AddressRepresentation> withLinks(long id, List<AddressRepresentation> addresses) {
+        addresses.forEach(a -> withLinks(id, a));
+        return addresses;
+    }
+
+    protected List<SellerRepresentation> withLinks(List<SellerRepresentation> sellers) {
+        sellers.forEach(this::withLinks);
+        return sellers;
     }
 }
 

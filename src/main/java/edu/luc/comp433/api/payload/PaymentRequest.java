@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.luc.comp433.business.dto.AddressDTO;
 import edu.luc.comp433.business.dto.PaymentDTO;
 import edu.luc.comp433.util.Patterns;
@@ -9,12 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.validation.constraints.*;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "payment")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PaymentRequest {
 
     @NonNull

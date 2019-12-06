@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 public class ReviewRestController implements ReviewWebService {
 
@@ -20,27 +23,27 @@ public class ReviewRestController implements ReviewWebService {
     }
 
     @Override
-    @GetMapping("/review/{id}")
+    @GetMapping(value = "/review/{id}", produces = {"application/hal+json"})
     public ReviewRepresentation getReview(@PathVariable long id) {
-        return reviewActivity.getReview(id);
+        return withLinks(reviewActivity.getReview(id));
     }
 
     @Override
-    @PostMapping(value = "/reviews", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/reviews", consumes = {"application/json"}, produces = {"application/hal+json"})
     public ReviewRepresentation createReview(@RequestBody @Validated ReviewRequest ReviewRequest) {
-        return reviewActivity.createReview(ReviewRequest);
+        return withLinks(reviewActivity.createReview(ReviewRequest));
     }
 
     @Override
-    @PutMapping(value = "/review/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/review/{id}", consumes = {"application/json"}, produces = {"application/hal+json"})
     public ReviewRepresentation updateReview(@PathVariable long id, @RequestBody @Validated ReviewRequest reviewRequest) {
-        return reviewActivity.update(id, reviewRequest);
+        return withLinks(reviewActivity.update(id, reviewRequest));
     }
 
     @Override
-    @GetMapping(value = "/reviews", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/reviews", produces = {"application/hal+json"})
     public List<ReviewRepresentation> allReviews() {
-        return reviewActivity.list();
+        return withLinks(reviewActivity.list());
     }
 
     @Override
@@ -48,5 +51,18 @@ public class ReviewRestController implements ReviewWebService {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteReview(@PathVariable long id) {
         reviewActivity.delete(id);
+    }
+
+    protected ReviewRepresentation withLinks(ReviewRepresentation review) {
+        review.add(linkTo(methodOn(ReviewRestController.class).getReview(review.getId())).withSelfRel());
+        review.add(linkTo(methodOn(ReviewRestController.class).allReviews()).withRel("all"));
+        review.add(linkTo(methodOn(ProductRestController.class).getProduct(review.getProduct().getId())).withRel("product"));
+        review.add(linkTo(methodOn(CustomerRestController.class).getCustomer(review.getCustomer().getId())).withRel("customer"));
+        return review;
+    }
+
+    protected List<ReviewRepresentation> withLinks(List<ReviewRepresentation> reviews) {
+        reviews.forEach(this::withLinks);
+        return reviews;
     }
 }

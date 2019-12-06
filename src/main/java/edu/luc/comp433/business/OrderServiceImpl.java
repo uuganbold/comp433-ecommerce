@@ -92,7 +92,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     public List<OrderDTO> list() {
         List<OrderDTO> list = new ArrayList<>();
-        orderRepository.findAll().forEach(c -> list.add(OrderDTO.of(c)));
+        orderRepository.findAll().forEach(c -> list.add(OrderDTO.of(c)
+                .setCustomer(CustomerDTO.of(c.getCustomer()))
+                .setAddress(AddressDTO.of(c.getAddress()))
+                .setPayment(PaymentDTO.of(c.getPayment()))));
         return list;
     }
 
@@ -110,7 +113,9 @@ public class OrderServiceImpl implements OrderService {
         });
         order.setUpdateDate(Instant.now());
         orderRepository.save(order);
-        return OrderDTO.of(order);
+        return OrderDTO.of(order).setCustomer(CustomerDTO.of(order.getCustomer()))
+                .setAddress(AddressDTO.of(order.getAddress()))
+                .setPayment(PaymentDTO.of(order.getPayment()));
     }
 
     @Override
@@ -122,7 +127,9 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.Shipped);
         order.setUpdateDate(Instant.now());
         orderRepository.save(order);
-        return OrderDTO.of(order);
+        return OrderDTO.of(order).setCustomer(CustomerDTO.of(order.getCustomer()))
+                .setAddress(AddressDTO.of(order.getAddress()))
+                .setPayment(PaymentDTO.of(order.getPayment()));
     }
 
     @Override
@@ -134,6 +141,8 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.Delivered);
         order.setUpdateDate(Instant.now());
         orderRepository.save(order);
-        return OrderDTO.of(order);
+        return OrderDTO.of(order).setCustomer(CustomerDTO.of(order.getCustomer()))
+                .setAddress(AddressDTO.of(order.getAddress()))
+                .setPayment(PaymentDTO.of(order.getPayment()));
     }
 }

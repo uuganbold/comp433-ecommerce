@@ -3,18 +3,17 @@ package edu.luc.comp433.api.payload;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.luc.comp433.business.dto.SellerDTO;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@XmlRootElement(name = "seller")
-public class SellerRepresentation {
+public class SellerRepresentation extends RepresentationModel<SellerRepresentation> {
 
     @NonNull
     @NotNull

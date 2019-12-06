@@ -21,13 +21,13 @@ public interface CustomerWebService {
 
     AddressRepresentation addAddress(long id, AddressRequest addressRequest);
 
-    void removeAddress(long id, long addressId);
+    Object removeAddress(long id, long addressId);
 
     List<AddressRepresentation> getAddresses(long id);
 
     PaymentRepresentation addPayment(long id, PaymentRequest paymentRequest);
 
-    void removePayment(long id, long paymentId);
+    Object removePayment(long id, long paymentId);
 
     List<PaymentRepresentation> getPayments(long id);
 

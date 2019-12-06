@@ -29,4 +29,6 @@ public interface SellerService {
     AddressDTO addAddress(long id, AddressDTO dto) throws EntryNotFoundException;
 
     void removeAddress(long id, long addressId) throws EntryNotFoundException, NotRemovableException;
+
+    AddressDTO getAddress(long id, long addressId);
 }

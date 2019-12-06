@@ -101,7 +101,7 @@
         /**
          * Testing category web services;
          */
-        const HEADER = {'Accept': 'application/json', 'Content-Type': 'application/json'};
+        const HEADER = {'Accept': 'application/hal+json', 'Content-Type': 'application/json'};
         let response;
         let json;
         let temp;

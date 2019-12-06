@@ -6,15 +6,14 @@ import edu.luc.comp433.util.Patterns;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.*;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@XmlRootElement(name = "payment")
 @NoArgsConstructor
-public class PaymentRepresentation {
+public class PaymentRepresentation extends RepresentationModel<PaymentRepresentation> {
 
     private Long id;
 

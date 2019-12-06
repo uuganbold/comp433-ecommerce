@@ -1,5 +1,6 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.luc.comp433.business.dto.CustomerDTO;
 import edu.luc.comp433.business.dto.ProductDTO;
 import edu.luc.comp433.business.dto.ReviewDTO;
@@ -12,12 +13,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "review")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ReviewRequest {
 
 

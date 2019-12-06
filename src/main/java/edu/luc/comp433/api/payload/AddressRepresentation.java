@@ -7,18 +7,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@XmlRootElement(name = "address")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddressRepresentation {
+public class AddressRepresentation extends RepresentationModel<AddressRepresentation> {
 
     private long id;
 

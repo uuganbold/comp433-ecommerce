@@ -4,11 +4,15 @@ import edu.luc.comp433.api.payload.CategoryRepresentation;
 import edu.luc.comp433.api.payload.CategoryRequest;
 import edu.luc.comp433.api.workflow.CategoryActivity;
 import edu.luc.comp433.api.ws.CategoryWebService;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class CategoryRestController implements CategoryWebService {
@@ -20,27 +24,30 @@ public class CategoryRestController implements CategoryWebService {
     }
 
     @Override
-    @GetMapping("/category/{id}")
+    @GetMapping(value = "/category/{id}", produces = {"application/hal+json"})
     public CategoryRepresentation getCategory(@PathVariable long id) {
-        return categoryActivity.getCategory(id);
+        CategoryRepresentation categoryRepresentation=categoryActivity.getCategory(id);
+        return withLinks(categoryRepresentation);
     }
 
     @Override
-    @PostMapping(value = "/categories", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PostMapping(value = "/categories", consumes = {"application/json"}, produces = {"application/hal+json"})
     public CategoryRepresentation createCategory(@RequestBody @Validated CategoryRequest categoryRequest) {
-            return categoryActivity.createCategory(categoryRequest);
+        CategoryRepresentation category = categoryActivity.createCategory(categoryRequest);
+        return withLinks(category);
     }
 
     @Override
-    @PutMapping(value = "/category/{id}", consumes = {"text/xml", "application/json"}, produces = {"text/xml", "application/json"})
+    @PutMapping(value = "/category/{id}", consumes = {"application/json"}, produces = {"application/hal+json"})
     public CategoryRepresentation updateCategory(@PathVariable long id, @RequestBody @Validated CategoryRequest categoryRequest) {
-            return categoryActivity.update(id, categoryRequest);
+        CategoryRepresentation category = categoryActivity.update(id, categoryRequest);
+        return withLinks(category);
     }
 
     @Override
-    @GetMapping(value = "/categories", produces = {"text/xml", "application/json"})
+    @GetMapping(value = "/categories", produces = {"application/hal+json"})
     public List<CategoryRepresentation> allCategories() {
-        return categoryActivity.list();
+        return withLinks(categoryActivity.list());
     }
 
     @Override
@@ -49,4 +56,18 @@ public class CategoryRestController implements CategoryWebService {
     public void deleteCategory(@PathVariable long id) {
             categoryActivity.delete(id);
     }
+
+    protected CategoryRepresentation withLinks(CategoryRepresentation category) {
+        Link selfLink = linkTo(methodOn(CategoryRestController.class).getCategory(category.getId())).withSelfRel();
+        category.add(selfLink);
+        category.add(linkTo(methodOn(CategoryRestController.class).allCategories()).withRel("all"));
+        return category;
+    }
+
+    protected List<CategoryRepresentation> withLinks(List<CategoryRepresentation> categories) {
+        categories.forEach(this::withLinks);
+        return categories;
+    }
+
+
 }

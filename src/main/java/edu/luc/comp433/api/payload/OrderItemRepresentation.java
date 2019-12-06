@@ -1,17 +1,17 @@
 package edu.luc.comp433.api.payload;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.luc.comp433.business.dto.OrderItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "item")
-public class OrderItemRepresentation {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class OrderItemRepresentation extends RepresentationModel<OrderItemRepresentation> {
 
     private Long id;
 
