@@ -1,31 +1,28 @@
-# LUC-COMP433 - Ecommerce project
+# Project - 4
 
-It is a project which is developed during the Web Services Programming course taught at Loyola University Chicago.
+## Contributors
+* Uuganbold Tsegmed ([utsegmed@luc.edu](mailto:utsegmed@luc.edu)) (http://github.com/uuganbold)
+* Wei Zhang ([wzhang5@luc.edu](mailto:wzhang5@luc.edu)) (http://github.com/clutchfactor94941)
+* Nigel Castelino ([ncastelino@luc.edu](mailto:ncastelino@luc.edu)) (https://github.com/ncastelino)
+
+## Goal 
+In this project, we implemented our eCommerce systems's web api. 
 
 This project is hosted on github.com : [Github.com Repository](https://github.com/uuganbold/comp433-ecommerce)
 
 The client is deployed on the AWS : http://18.223.188.97/ 
-The webservice is deployed on the AWS : http://18.223.188.97:8080/ecommerce/ 
-
-## Course Assignments
-1. You can find a report for Assignment-2 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw2-domain/docs/class/project2.md)
-2. You can find a report for Assignment-3 [here](https://github.com/uuganbold/comp433-ecommerce/blob/hw3-ws/docs/class/project3.md)
-3. You can find a report for Assignment-4 [here](https://github.com/uuganbold/comp433-ecommerce/blob/master/docs/class/project4.md)
-
-## Goal 
-In this project, we are developing eCommerce system which would connect to the parties concerned through
-RESTful web api. 
+The webservice is deployed on the AWS : http://18.223.188.97:8080/ecommerce/   
 
 ## State diagram
 State of creating order functionality would be below.
-![State](docs/dev/state.png)
+![State](../dev/state.png)
 
 ## Architecture
 
 We are using springframework as an architectural framework and Hibernate as an ORM framework.
 This webapp's architecture would be seen like below so far.
 
-![Architecure](docs/dev/architecture.png)
+![Architecure](../dev/architecture.png)
 
 The application has three layers: Service, Domain, and Data access layer<br/>
 
@@ -44,7 +41,7 @@ This layer contains three kinds of objects.
 
 Entity Relationship Diagram would look like below.
 
-![ERD](docs/dev/COMP433-Ecommerce.png)
+![ERD](../dev/COMP433-Ecommerce.png)
 
 * DTO (Data Transfer Objects) - Represents information sent to service layer and received from service layer.
 We use this objects for that purpose instead of using Entities for reasons listed below. 
@@ -99,6 +96,7 @@ These Repositories are responsible for accessing Database and persisting the ent
 | `/product/{id}` | DELETE | | Deletes a product having id received |
 | `/products?q={query}`| GET | | Search product with query received |
 
+
 4. Customer
 
 | URI  |  METHOD | PAYLOAD  | PURPOSE  |
@@ -135,12 +133,3 @@ These Repositories are responsible for accessing Database and persisting the ent
 | `/order/{id}/cancel` | PUT | | Cancels a order having id received |
 | `/order/{id}/ship` | DELETE | | Updates order status to shipped |
 | `/order/{id}/deliver` | DELETE | | Updates order status to delivered     |
-
-
-## Development
-
-1. We are using [Draw.io](http://draw.io) as UML Modeling tool. 
-
-2. We are using [Springframework](spring.io) as Architectural Framework.
-
-3. We are using [Hibernate](http://hibernate.org) as ORM framework
